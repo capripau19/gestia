@@ -1,0 +1,814 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Gestia - Servicios</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f6f8;
+            color: #222;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 0 20px;
+        }
+
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .cabecera h1 {
+            margin: 0;
+            font-size: 28px;
+        }
+
+        .boton {
+            border: none;
+            border-radius: 8px;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .boton-principal {
+            background: #222;
+            color: white;
+        }
+
+        .boton-secundario {
+            background: #e9e9e9;
+            color: #222;
+        }
+
+        .formulario {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+        }
+
+        .formulario h2 {
+            margin-top: 0;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        .campo label {
+            display: block;
+            margin-bottom: 7px;
+            font-weight: bold;
+        }
+
+        .campo input,
+        .campo textarea {
+            width: 100%;
+            padding: 11px;
+            border: 1px solid #ddd;
+            border-radius: 7px;
+            font-size: 14px;
+        }
+
+        .campo textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        .botones-formulario {
+            display: flex;
+            gap: 10px;
+        }
+
+        .tabla-contenedor {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+            overflow-x: auto;
+        }
+
+        .buscador {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 14px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 13px;
+            border-bottom: 1px solid #eee;
+            text-align: left;
+        }
+
+        th {
+            background: #f7f7f7;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 8px;
+        }
+
+        .boton-editar {
+            background: #e9e9e9;
+            color: #222;
+        }
+
+        .boton-eliminar {
+            background: #f1dede;
+            color: #8b1e1e;
+        }
+
+        .sin-datos {
+            text-align: center;
+            padding: 25px;
+            color: #777;
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="container">
+
+        <!-- CABECERA -->
+
+        <div class="cabecera">
+
+            <h1>Servicios</h1>
+
+            <button
+                type="button"
+                class="boton boton-principal"
+                id="nuevoServicio">
+
+                + Nuevo servicio
+
+            </button>
+
+        </div>
+
+
+        <!-- FORMULARIO -->
+
+        <div
+            class="formulario"
+            id="formularioServicio">
+
+            <h2 id="tituloFormulario">
+                Nuevo servicio
+            </h2>
+
+            <form id="servicioForm">
+
+                <div class="campo">
+
+                    <label for="servicioNombre">
+                        Nombre del servicio
+                    </label>
+
+                    <input
+                        type="text"
+                        id="servicioNombre"
+                        placeholder="Ej. Instalaciones eléctricas"
+                        required>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="servicioDescripcion">
+                        Descripción
+                    </label>
+
+                    <textarea
+                        id="servicioDescripcion"
+                        placeholder="Descripción del servicio...">
+                    </textarea>
+
+                </div>
+
+
+                <div class="botones-formulario">
+
+                    <button
+                        type="submit"
+                        class="boton boton-principal">
+
+                        Guardar servicio
+
+                    </button>
+
+                    <button
+                        type="button"
+                        class="boton boton-secundario"
+                        id="cancelarServicio">
+
+                        Cancelar
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+
+        <!-- LISTADO -->
+
+        <div class="tabla-contenedor">
+
+            <input
+                type="text"
+                id="buscarServicio"
+                class="buscador"
+                placeholder="Buscar servicio...">
+
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Nombre
+                        </th>
+
+                        <th>
+                            Descripción
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+                <tbody id="listaServicios">
+
+                </tbody>
+
+            </table>
+
+        </div>
+
+    </div>
+
+
+    <script>
+
+        /* =========================
+           MOSTRAR SERVICIOS
+        ========================== */
+
+        function mostrarServicios() {
+
+            const lista =
+                document.getElementById(
+                    "listaServicios"
+                );
+
+            const servicios =
+                JSON.parse(
+                    localStorage.getItem(
+                        "servicios"
+                    )
+                ) || [];
+
+            const textoBusqueda =
+                document.getElementById(
+                    "buscarServicio"
+                ).value
+                .toLowerCase()
+                .trim();
+
+            const serviciosFiltrados =
+                servicios.filter(
+                    function(servicio) {
+
+                        return (
+                            servicio.nombre
+                                .toLowerCase()
+                                .includes(textoBusqueda)
+                            ||
+                            servicio.descripcion
+                                .toLowerCase()
+                                .includes(textoBusqueda)
+                        );
+
+                    }
+                );
+
+            lista.innerHTML = "";
+
+            if (
+                serviciosFiltrados.length === 0
+            ) {
+
+                lista.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="3"
+                            class="sin-datos">
+
+                            No hay servicios registrados.
+
+                        </td>
+                    </tr>
+                `;
+
+                return;
+            }
+
+
+            serviciosFiltrados.forEach(
+                function(servicio) {
+
+                    const indice =
+                        servicios.indexOf(
+                            servicio
+                        );
+
+                    const fila =
+                        document.createElement(
+                            "tr"
+                        );
+
+                    fila.innerHTML = `
+
+                        <td>
+                            ${servicio.nombre}
+                        </td>
+
+                        <td>
+                            ${servicio.descripcion || "-"}
+                        </td>
+
+                        <td>
+
+                            <div class="acciones">
+
+                                <button
+                                    type="button"
+                                    class="boton boton-editar"
+                                    onclick="editarServicio(${indice})">
+
+                                    Editar
+
+                                </button>
+
+                                <button
+                                    type="button"
+                                    class="boton boton-eliminar"
+                                    onclick="eliminarServicio(${indice})">
+
+                                    Eliminar
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    `;
+
+                    lista.appendChild(
+                        fila
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           NUEVO SERVICIO
+        ========================== */
+
+        document
+            .getElementById("nuevoServicio")
+            .addEventListener(
+                "click",
+                function() {
+
+                    const formulario =
+                        document.getElementById(
+                            "formularioServicio"
+                        );
+
+                    const form =
+                        document.getElementById(
+                            "servicioForm"
+                        );
+
+                    form.reset();
+
+                    delete form.dataset.editando;
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nuevo servicio";
+
+                    formulario.style.display =
+                        "block";
+
+                }
+            );
+
+
+        /* =========================
+           GUARDAR SERVICIO
+        ========================== */
+
+        document
+            .getElementById("servicioForm")
+            .addEventListener(
+                "submit",
+                function(event) {
+
+                    event.preventDefault();
+
+                    const nombre =
+                        document
+                            .getElementById(
+                                "servicioNombre"
+                            )
+                            .value
+                            .trim();
+
+                    const descripcion =
+                        document
+                            .getElementById(
+                                "servicioDescripcion"
+                            )
+                            .value
+                            .trim();
+
+
+                    if (nombre === "") {
+
+                        alert(
+                            "Introduce el nombre del servicio."
+                        );
+
+                        return;
+                    }
+
+
+                    const servicios =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "servicios"
+                            )
+                        ) || [];
+
+
+                    const indiceEditando =
+                        this.dataset.editando !== undefined
+                            ? parseInt(
+                                this.dataset.editando
+                            )
+                            : null;
+
+
+                    /* =========================
+                       COMPROBAR DUPLICADOS
+                    ========================== */
+
+                    const nombreNormalizado =
+                        nombre
+                            .toLowerCase()
+                            .trim();
+
+
+                    const duplicado =
+                        servicios.some(
+                            function(servicio, indice) {
+
+                                if (
+                                    indiceEditando !== null &&
+                                    indice === indiceEditando
+                                ) {
+                                    return false;
+                                }
+
+                                return (
+                                    servicio.nombre
+                                        .toLowerCase()
+                                        .trim() ===
+                                    nombreNormalizado
+                                );
+
+                            }
+                        );
+
+
+                    if (duplicado) {
+
+                        alert(
+                            "Ya existe un servicio con ese nombre."
+                        );
+
+                        return;
+                    }
+
+
+                    const servicio = {
+
+                        nombre:
+                            nombre,
+
+                        descripcion:
+                            descripcion
+
+                    };
+
+
+                    if (
+                        indiceEditando !== null
+                    ) {
+
+                        servicios[
+                            indiceEditando
+                        ] = servicio;
+
+                    } else {
+
+                        servicios.push(
+                            servicio
+                        );
+
+                    }
+
+
+                    localStorage.setItem(
+                        "servicios",
+                        JSON.stringify(
+                            servicios
+                        )
+                    );
+
+
+                    alert(
+                        indiceEditando !== null
+                            ? "Servicio actualizado correctamente."
+                            : "Servicio guardado correctamente."
+                    );
+
+
+                    this.reset();
+
+                    delete this.dataset.editando;
+
+
+                    document
+                        .getElementById(
+                            "formularioServicio"
+                        )
+                        .style.display =
+                        "none";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nuevo servicio";
+
+
+                    mostrarServicios();
+
+                }
+            );
+
+
+        /* =========================
+           EDITAR SERVICIO
+        ========================== */
+
+        function editarServicio(indice) {
+
+            const servicios =
+                JSON.parse(
+                    localStorage.getItem(
+                        "servicios"
+                    )
+                ) || [];
+
+
+            const servicio =
+                servicios[indice];
+
+
+            if (!servicio) {
+                return;
+            }
+
+
+            document
+                .getElementById(
+                    "servicioNombre"
+                )
+                .value =
+                servicio.nombre;
+
+
+            document
+                .getElementById(
+                    "servicioDescripcion"
+                )
+                .value =
+                servicio.descripcion || "";
+
+
+            const form =
+                document.getElementById(
+                    "servicioForm"
+                );
+
+
+            form.dataset.editando =
+                indice;
+
+
+            document
+                .getElementById(
+                    "tituloFormulario"
+                )
+                .textContent =
+                "Editar servicio";
+
+
+            document
+                .getElementById(
+                    "formularioServicio"
+                )
+                .style.display =
+                "block";
+
+        }
+
+
+        /* =========================
+           ELIMINAR SERVICIO
+        ========================== */
+
+        function eliminarServicio(indice) {
+
+            const servicios =
+                JSON.parse(
+                    localStorage.getItem(
+                        "servicios"
+                    )
+                ) || [];
+
+
+            const servicio =
+                servicios[indice];
+
+
+            if (!servicio) {
+                return;
+            }
+
+
+            const confirmar =
+                confirm(
+                    '¿Quieres eliminar el servicio "' +
+                    servicio.nombre +
+                    '"?'
+                );
+
+
+            if (!confirmar) {
+                return;
+            }
+
+
+            servicios.splice(
+                indice,
+                1
+            );
+
+
+            localStorage.setItem(
+                "servicios",
+                JSON.stringify(
+                    servicios
+                )
+            );
+
+
+            mostrarServicios();
+
+        }
+
+
+        /* =========================
+           CANCELAR
+        ========================== */
+
+        document
+            .getElementById(
+                "cancelarServicio"
+            )
+            .addEventListener(
+                "click",
+                function() {
+
+                    const form =
+                        document.getElementById(
+                            "servicioForm"
+                        );
+
+                    form.reset();
+
+                    delete form.dataset.editando;
+
+
+                    document
+                        .getElementById(
+                            "formularioServicio"
+                        )
+                        .style.display =
+                        "none";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nuevo servicio";
+
+                }
+            );
+
+
+        /* =========================
+           BUSCADOR
+        ========================== */
+
+        document
+            .getElementById(
+                "buscarServicio"
+            )
+            .addEventListener(
+                "input",
+                mostrarServicios
+            );
+
+
+        /* =========================
+           INICIAR
+        ========================== */
+
+        mostrarServicios();
+
+    </script>
+
+</body>
+
+</html>

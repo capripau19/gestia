@@ -1,0 +1,2019 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Facturas recibidas</title>
+
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f5f6f8;
+        }
+
+
+        .contenedor {
+            max-width: 1300px;
+            margin: auto;
+        }
+
+
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+
+        h1 {
+            margin: 0;
+        }
+
+
+        .boton {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+
+        .boton-principal {
+            background-color: #2563eb;
+            color: white;
+        }
+
+
+        .boton-secundario {
+            background-color: #e5e7eb;
+            color: #111827;
+        }
+
+
+        .boton-eliminar {
+            background-color: #dc2626;
+            color: white;
+        }
+
+
+        .boton:hover {
+            opacity: 0.9;
+        }
+
+
+        .buscador {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+
+        .buscador input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+
+        #formularioFacturaRecibida {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+
+        #formularioFacturaRecibida h2 {
+            margin-top: 0;
+        }
+
+
+        #facturaRecibidaForm {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+
+        #facturaRecibidaForm div {
+            display: flex;
+            flex-direction: column;
+        }
+
+
+        #facturaRecibidaForm label {
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+
+        #facturaRecibidaForm input,
+        #facturaRecibidaForm select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+
+        .campo-completo {
+            grid-column: 1 / -1;
+        }
+
+
+        .botones-formulario {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+
+
+        .tabla-contenedor {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+
+        th {
+            background-color: #f3f4f6;
+        }
+
+
+        .acciones {
+            display: flex;
+            gap: 8px;
+        }
+
+
+        .enlace-volver {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+
+        @media (max-width: 800px) {
+
+            #facturaRecibidaForm {
+                grid-template-columns: 1fr;
+            }
+
+
+            .cabecera {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="contenedor">
+
+
+        <!-- VOLVER -->
+
+        <a
+            href="dashboard.html"
+            class="enlace-volver">
+
+            ← Volver al inicio
+
+        </a>
+
+
+        <!-- CABECERA -->
+
+        <div class="cabecera">
+
+
+            <h1>
+                Facturas recibidas
+            </h1>
+
+
+            <button
+                id="nuevaFacturaRecibida"
+                class="boton boton-principal">
+
+                + Nueva factura recibida
+
+            </button>
+
+
+        </div>
+
+
+        <!-- BUSCADOR -->
+
+        <div class="buscador">
+
+
+            <input
+                type="text"
+                id="buscarFacturaRecibida"
+                placeholder="Buscar por proveedor, nº de factura, concepto o estado...">
+
+
+        </div>
+
+
+        <!-- FORMULARIO -->
+
+        <div
+            id="formularioFacturaRecibida"
+            style="display: none;">
+
+
+            <h2 id="tituloFormulario">
+                Nueva factura recibida
+            </h2>
+
+
+            <form id="facturaRecibidaForm">
+
+
+                <!-- Nº FACTURA -->
+
+                <div>
+
+                    <label for="numeroFacturaRecibida">
+                        Nº de factura
+                    </label>
+
+                    <input
+                        type="text"
+                        id="numeroFacturaRecibida"
+                        placeholder="Ej. FAC-12345"
+                        required>
+
+                </div>
+
+
+                <!-- FECHA -->
+
+                <div>
+
+                    <label for="fechaFacturaRecibida">
+                        Fecha
+                    </label>
+
+                    <input
+                        type="date"
+                        id="fechaFacturaRecibida"
+                        required>
+
+                </div>
+
+
+                <!-- PROVEEDOR -->
+
+                <div class="grupo">
+    <label for="proveedorFacturaRecibida">Proveedor</label>
+
+    <div style="position: relative;">
+
+    <input
+        type="text"
+        id="proveedorFacturaRecibida"
+        placeholder="Escribe nombre o NIF/CIF..."
+        autocomplete="off"
+        required>
+
+    <div
+        id="resultadosProveedoresFacturaRecibida"
+        style="
+            display: none;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 5px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+            overflow: hidden;
+        ">
+    </div>
+
+</div>
+
+<div style="margin-top: 15px;">
+
+    <label for="servicioFacturaRecibida">
+        Servicio
+    </label>
+
+    <select
+        id="servicioFacturaRecibida"
+        required>
+
+        <option value="">
+            Selecciona un servicio
+        </option>
+
+    </select>
+
+</div>
+<div
+    id="formularioProveedorFacturaRecibida"
+    style="
+        display: none;
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #f9fafb;
+    ">
+
+    <h3 style="margin-top: 0;">
+        Nuevo proveedor
+    </h3>
+
+    <div style="
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    ">
+
+        <div>
+            <label for="nombreProveedorFacturaRecibida">
+                Nombre
+            </label>
+
+            <input
+                type="text"
+                id="nombreProveedorFacturaRecibida">
+        </div>
+
+        <div>
+            <label for="nifProveedorFacturaRecibida">
+                NIF/CIF
+            </label>
+
+            <input
+                type="text"
+                id="nifProveedorFacturaRecibida">
+        </div>
+
+        <div>
+            <label for="telefonoProveedorFacturaRecibida">
+                Teléfono
+            </label>
+
+            <input
+                type="text"
+                id="telefonoProveedorFacturaRecibida">
+        </div>
+
+        <div>
+            <label for="emailProveedorFacturaRecibida">
+                Correo electrónico
+            </label>
+
+            <input
+                type="email"
+                id="emailProveedorFacturaRecibida">
+        </div>
+
+        <div>
+            <label for="direccionProveedorFacturaRecibida">
+                Dirección
+            </label>
+
+            <input
+                type="text"
+                id="direccionProveedorFacturaRecibida">
+        </div>
+
+    </div>
+
+    <div style="
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    ">
+
+        <button
+            type="button"
+            id="guardarProveedorDesdeFacturaRecibida"
+            class="boton boton-principal">
+
+            Guardar proveedor
+
+        </button>
+
+        <button
+            type="button"
+            id="cancelarProveedorDesdeFacturaRecibida"
+            class="boton boton-secundario">
+
+            Cancelar
+
+        </button>
+
+    </div>
+
+</div>
+</div>
+
+                <!-- NIF -->
+
+                <div>
+
+                    <label for="nifProveedor">
+                        NIF / CIF
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nifProveedor"
+                        placeholder="Ej. B12345678">
+
+                </div>
+
+
+                <!-- CONCEPTO -->
+
+                <div class="campo-completo">
+
+                    <label for="conceptoFacturaRecibida">
+                        Concepto
+                    </label>
+
+                    <input
+                        type="text"
+                        id="conceptoFacturaRecibida"
+                        placeholder="Ej. Material eléctrico">
+
+                </div>
+
+
+                <!-- BASE -->
+
+                <div>
+
+                    <label for="baseFacturaRecibida">
+                        Base imponible (€)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="baseFacturaRecibida"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        required>
+
+                </div>
+
+
+                <!-- IVA -->
+
+                <div>
+
+                    <label for="ivaFacturaRecibida">
+                        IVA (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="ivaFacturaRecibida"
+                        value="21"
+                        min="0"
+                        step="0.01"
+                        required>
+
+                </div>
+
+
+                <!-- TOTAL -->
+
+                <div>
+
+                    <label for="totalFacturaRecibida">
+                        Total (€)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="totalFacturaRecibida"
+                        readonly>
+
+                </div>
+
+
+                <!-- ESTADO -->
+
+                <div>
+
+                    <label for="estadoFacturaRecibida">
+                        Estado
+                    </label>
+
+                    <select
+                        id="estadoFacturaRecibida">
+
+                        <option value="Pendiente">
+                            Pendiente
+                        </option>
+
+                        <option value="Pagada">
+                            Pagada
+                        </option>
+
+                    </select>
+
+                </div>
+                <div>
+    <label for="fechaPagoFacturaRecibida">
+        Fecha de pago
+    </label>
+
+    <input
+        type="date"
+        id="fechaPagoFacturaRecibida">
+</div>
+
+
+                <!-- BOTONES -->
+
+                <div class="botones-formulario">
+
+
+                    <button
+                        type="submit"
+                        class="boton boton-principal">
+
+                        Guardar factura
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="cancelarFacturaRecibida"
+                        class="boton boton-secundario">
+
+                        Cancelar
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+        <!-- TABLA -->
+
+        <div class="tabla-contenedor">
+
+
+            <table>
+
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Nº factura
+                        </th>
+
+                        <th>
+                            Fecha
+                        </th>
+
+                        <th>
+                            Proveedor
+                        </th>
+
+
+
+                        <th>
+                            NIF / CIF
+                        </th>
+
+                         <th>
+                            Servicio
+                        </th>
+
+                        <th>
+                            Concepto
+                        </th>
+
+                        <th>
+                            Base
+                        </th>
+
+                        <th>
+                            IVA
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="listaFacturasRecibidas">
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+    <script>
+
+
+        /* =========================
+           COMPROBAR SESIÓN
+        ========================= */
+
+        if (
+            localStorage.getItem("sesionIniciada")
+            !== "true"
+        ) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        /* =========================
+   CARGAR SERVICIOS
+========================= */
+
+function cargarServiciosEnFacturaRecibida() {
+
+    const select =
+        document.getElementById(
+            "servicioFacturaRecibida"
+        );
+
+    if (!select) {
+        return;
+    }
+
+    const servicios =
+        JSON.parse(
+            localStorage.getItem(
+                "servicios"
+            )
+        ) || [];
+
+    select.innerHTML = `
+        <option value="">
+            Selecciona un servicio
+        </option>
+    `;
+
+    servicios.forEach(
+        function(servicio) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                servicio.nombre;
+
+            option.textContent =
+                servicio.nombre;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+}
+        /* =========================
+   CARGAR PROVEEDORES
+========================= */
+
+function cargarProveedores() {
+
+    const input =
+        document.getElementById(
+            "proveedorFacturaRecibida"
+        );
+
+    const resultados =
+        document.getElementById(
+            "resultadosProveedoresFacturaRecibida"
+        );
+
+    if (
+        input.dataset.eventoProveedores === "true"
+    ) {
+        return;
+    }
+
+    input.dataset.eventoProveedores = "true";
+
+    input.addEventListener(
+        "input",
+        function() {
+
+            const texto =
+                input.value
+                    .trim()
+                    .toLowerCase();
+
+            resultados.innerHTML = "";
+
+            if (!texto) {
+
+                resultados.style.display =
+                    "none";
+
+                return;
+            }
+
+            const proveedores =
+                JSON.parse(
+                    localStorage.getItem(
+                        "proveedores"
+                    )
+                ) || [];
+
+            const coincidencias =
+                proveedores.filter(
+                    function(proveedor) {
+
+                        return (
+                            (proveedor.nombre || "")
+                                .toLowerCase()
+                                .includes(texto)
+                            ||
+                            (proveedor.nif || "")
+                                .toLowerCase()
+                                .includes(texto)
+                        );
+
+                    }
+                );
+
+            coincidencias.forEach(
+                function(proveedor) {
+
+                    const opcion =
+                        document.createElement(
+                            "div"
+                        );
+
+                    opcion.style.padding =
+                        "12px";
+
+                    opcion.style.cursor =
+                        "pointer";
+
+                    opcion.style.borderBottom =
+                        "1px solid #eee";
+
+                    opcion.innerHTML =
+                        "<strong>" +
+                        proveedor.nombre +
+                        "</strong>" +
+
+                        (
+                            proveedor.nif
+                                ? "<br><small>NIF/CIF: " +
+                                  proveedor.nif +
+                                  "</small>"
+                                : ""
+                        );
+
+                    opcion.addEventListener(
+                        "click",
+                        function() {
+
+                            input.value =
+                                proveedor.nombre;
+
+                            document
+                                .getElementById(
+                                    "nifProveedor"
+                                )
+                                .value =
+                                proveedor.nif || "";
+
+                            resultados.style.display =
+                                "none";
+
+                        }
+                    );
+
+                    resultados.appendChild(
+                        opcion
+                    );
+
+                }
+            );
+
+            const crear =
+                document.createElement(
+                    "div"
+                );
+
+            crear.style.padding =
+                "12px";
+
+            crear.style.cursor =
+                "pointer";
+
+            crear.style.fontWeight =
+                "600";
+
+            crear.textContent =
+                "+ Crear nuevo proveedor";
+
+            crear.addEventListener(
+                "click",
+                function() {
+
+                    resultados.style.display =
+                        "none";
+
+                    document
+                        .getElementById(
+                            "formularioProveedorFacturaRecibida"
+                        )
+                        .style.display =
+                        "block";
+
+                    document
+                        .getElementById(
+                            "nombreProveedorFacturaRecibida"
+                        )
+                        .value =
+                        input.value;
+
+                    document
+                        .getElementById(
+                            "nombreProveedorFacturaRecibida"
+                        )
+                        .focus();
+
+                }
+            );
+
+            resultados.appendChild(
+                crear
+            );
+
+            resultados.style.display =
+                "block";
+
+        }
+    );
+}
+document
+    .getElementById(
+        "guardarProveedorDesdeFacturaRecibida"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            const nombre =
+                document
+                    .getElementById(
+                        "nombreProveedorFacturaRecibida"
+                    )
+                    .value
+                    .trim();
+
+            const nif =
+                document
+                    .getElementById(
+                        "nifProveedorFacturaRecibida"
+                    )
+                    .value
+                    .trim();
+
+            const telefono =
+                document
+                    .getElementById(
+                        "telefonoProveedorFacturaRecibida"
+                    )
+                    .value
+                    .trim();
+
+            const email =
+                document
+                    .getElementById(
+                        "emailProveedorFacturaRecibida"
+                    )
+                    .value
+                    .trim();
+
+            const direccion =
+                document
+                    .getElementById(
+                        "direccionProveedorFacturaRecibida"
+                    )
+                    .value
+                    .trim();
+
+            if (!nombre) {
+
+                alert(
+                    "Introduce el nombre del proveedor."
+                );
+
+                return;
+            }
+
+            let proveedores =
+                JSON.parse(
+                    localStorage.getItem(
+                        "proveedores"
+                    )
+                ) || [];
+
+            const nombreNormalizado =
+                nombre
+                    .toLowerCase()
+                    .trim();
+
+            const nifNormalizado =
+                nif
+                    .replace(/\s/g, "")
+                    .toUpperCase();
+
+            const proveedorDuplicado =
+                proveedores.find(
+                    function(proveedor) {
+
+                        const nombreExistente =
+                            (proveedor.nombre || "")
+                                .toLowerCase()
+                                .trim();
+
+                        const nifExistente =
+                            (proveedor.nif || "")
+                                .replace(/\s/g, "")
+                                .toUpperCase();
+
+                        return (
+                            (
+                                nombreNormalizado !== "" &&
+                                nombreExistente ===
+                                nombreNormalizado
+                            )
+                            ||
+                            (
+                                nifNormalizado !== "" &&
+                                nifExistente !== "" &&
+                                nifExistente ===
+                                nifNormalizado
+                            )
+                        );
+
+                    }
+                );
+
+            if (proveedorDuplicado) {
+
+                alert(
+                    "Ya existe un proveedor con este nombre o NIF/CIF:\n\n" +
+                    proveedorDuplicado.nombre
+                );
+
+                return;
+            }
+
+            const nuevoProveedor = {
+
+                nombre: nombre,
+
+                nif: nif,
+
+                telefono: telefono,
+
+                email: email,
+
+                direccion: direccion
+
+            };
+
+            proveedores.push(
+                nuevoProveedor
+            );
+
+            localStorage.setItem(
+                "proveedores",
+                JSON.stringify(
+                    proveedores
+                )
+            );
+
+            document
+                .getElementById(
+                    "proveedorFacturaRecibida"
+                )
+                .value =
+                nombre;
+
+            document
+                .getElementById(
+                    "nifProveedor"
+                )
+                .value =
+                nif;
+
+            document
+                .getElementById(
+                    "formularioProveedorFacturaRecibida"
+                )
+                .style.display =
+                "none";
+
+            document
+                .getElementById(
+                    "nombreProveedorFacturaRecibida"
+                )
+                .value =
+                "";
+
+            document
+                .getElementById(
+                    "nifProveedorFacturaRecibida"
+                )
+                .value =
+                "";
+
+            document
+                .getElementById(
+                    "telefonoProveedorFacturaRecibida"
+                )
+                .value =
+                "";
+
+            document
+                .getElementById(
+                    "emailProveedorFacturaRecibida"
+                )
+                .value =
+                "";
+
+            document
+                .getElementById(
+                    "direccionProveedorFacturaRecibida"
+                )
+                .value =
+                "";
+
+            alert(
+                "Proveedor guardado correctamente."
+            );
+
+        }
+    );
+    document
+    .getElementById(
+        "cancelarProveedorDesdeFacturaRecibida"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            document
+                .getElementById(
+                    "formularioProveedorFacturaRecibida"
+                )
+                .style.display =
+                "none";
+
+        }
+    );
+
+
+/* =========================
+   RELLENAR NIF
+========================= */
+
+document
+    .getElementById(
+        "proveedorFacturaRecibida"
+    )
+    .addEventListener(
+        "change",
+        function() {
+
+            const nombreProveedor =
+                this.value;
+
+            const proveedores =
+                JSON.parse(
+                    localStorage.getItem(
+                        "proveedores"
+                    )
+                ) || [];
+
+            const proveedor =
+                proveedores.find(
+                    function(p) {
+                        return p.nombre ===
+                            nombreProveedor;
+                    }
+                );
+
+
+            if (proveedor) {
+
+                document
+                    .getElementById(
+                        "nifProveedor"
+                    )
+                    .value =
+                    proveedor.nif;
+
+            } else {
+
+                document
+                    .getElementById(
+                        "nifProveedor"
+                    )
+                    .value =
+                    "";
+
+            }
+
+        }
+    );
+
+        /* =========================
+           NUEVA FACTURA
+        ========================= */
+
+        document
+            .getElementById("nuevaFacturaRecibida")
+            .addEventListener(
+                "click",
+                function() {
+
+
+                    document
+                        .getElementById(
+                            "formularioFacturaRecibida"
+                        )
+                        .style.display =
+                        "block";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nueva factura recibida";
+
+
+                    document
+                        .getElementById(
+                            "facturaRecibidaForm"
+                        )
+                        .reset();
+
+
+                    document
+                        .getElementById(
+                            "ivaFacturaRecibida"
+                        )
+                        .value =
+                        "21";
+
+
+                    document
+                        .getElementById(
+                            "totalFacturaRecibida"
+                        )
+                        .value =
+                        "";
+
+
+                    delete document
+                        .getElementById(
+                            "facturaRecibidaForm"
+                        )
+                        .dataset.editando;
+
+                }
+            );
+
+
+        /* =========================
+           CANCELAR
+        ========================= */
+
+        document
+            .getElementById(
+                "cancelarFacturaRecibida"
+            )
+            .addEventListener(
+                "click",
+                function() {
+
+
+                    document
+                        .getElementById(
+                            "formularioFacturaRecibida"
+                        )
+                        .style.display =
+                        "none";
+
+
+                    document
+                        .getElementById(
+                            "facturaRecibidaForm"
+                        )
+                        .reset();
+
+
+                    document
+                        .getElementById(
+                            "totalFacturaRecibida"
+                        )
+                        .value =
+                        "";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nueva factura recibida";
+
+
+                    delete document
+                        .getElementById(
+                            "facturaRecibidaForm"
+                        )
+                        .dataset.editando;
+
+                }
+            );
+
+
+        /* =========================
+           CALCULAR TOTAL
+        ========================= */
+
+        function calcularTotalFacturaRecibida() {
+
+
+            const base =
+                parseFloat(
+                    document.getElementById(
+                        "baseFacturaRecibida"
+                    ).value
+                ) || 0;
+
+
+            const iva =
+                parseFloat(
+                    document.getElementById(
+                        "ivaFacturaRecibida"
+                    ).value
+                ) || 0;
+
+
+            const total =
+                base +
+                (
+                    base *
+                    iva /
+                    100
+                );
+
+
+            document
+                .getElementById(
+                    "totalFacturaRecibida"
+                )
+                .value =
+                total.toFixed(2);
+
+        }
+
+
+        document
+            .getElementById(
+                "baseFacturaRecibida"
+            )
+            .addEventListener(
+                "input",
+                calcularTotalFacturaRecibida
+            );
+
+
+        document
+            .getElementById(
+                "ivaFacturaRecibida"
+            )
+            .addEventListener(
+                "input",
+                calcularTotalFacturaRecibida
+            );
+
+
+        /* =========================
+           GUARDAR / EDITAR
+        ========================= */
+
+        document
+            .getElementById(
+                "facturaRecibidaForm"
+            )
+            .addEventListener(
+                "submit",
+                function(event) {
+
+
+                    event.preventDefault();
+
+
+                    const numero =
+                        document.getElementById(
+                            "numeroFacturaRecibida"
+                        ).value;
+
+
+                    const fecha =
+                        document.getElementById(
+                            "fechaFacturaRecibida"
+                        ).value;
+
+
+                    const proveedor =
+                        document.getElementById(
+                            "proveedorFacturaRecibida"
+                        ).value;
+
+                    const servicio =
+                        document.getElementById(
+                            "servicioFacturaRecibida"
+                        ).value;
+
+
+                    const nif =
+                        document.getElementById(
+                            "nifProveedor"
+                        ).value;
+
+
+                    const concepto =
+                        document.getElementById(
+                            "conceptoFacturaRecibida"
+                        ).value;
+
+
+                    const base =
+                        parseFloat(
+                            document.getElementById(
+                                "baseFacturaRecibida"
+                            ).value
+                        );
+
+
+                    const iva =
+                        parseFloat(
+                            document.getElementById(
+                                "ivaFacturaRecibida"
+                            ).value
+                        );
+
+
+                    const total =
+                        parseFloat(
+                            document.getElementById(
+                                "totalFacturaRecibida"
+                            ).value
+                        );
+
+
+                    const estado =
+                        document.getElementById(
+                            "estadoFacturaRecibida"
+                        ).value;
+
+                    const fechaPago =
+                         document.getElementById(
+                             "fechaPagoFacturaRecibida"
+                         ).value;
+
+
+                    /* CREAR FACTURA */
+
+                    const factura = {           
+
+                         numero: numero,
+
+                         fecha: fecha,
+
+                         proveedor: proveedor,
+
+                         nif: nif,
+
+                         servicio:servicio,
+
+                         concepto: concepto,
+
+                         base: base,
+
+                         iva: iva,
+
+                         total: total,
+
+                         estado: estado,
+
+                        fechaPago: fechaPago
+
+                    };
+
+
+                    /* OBTENER FACTURAS */
+
+                    const facturas =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "facturasRecibidas"
+                            )
+                        ) || [];
+
+
+                    /* COMPROBAR EDICIÓN */
+
+                    const indiceEditando =
+                        this.dataset.editando;
+
+
+                    if (
+                        indiceEditando !==
+                        undefined
+                    ) {
+
+
+                        facturas[
+                            parseInt(
+                                indiceEditando
+                            )
+                        ] = factura;
+
+
+                    } else {
+
+
+                        facturas.push(
+                            factura
+                        );
+
+                    }
+
+
+                    /* GUARDAR */
+
+                    localStorage.setItem(
+                        "facturasRecibidas",
+                        JSON.stringify(
+                            facturas
+                        )
+                    );
+
+
+                    alert(
+                        indiceEditando !==
+                        undefined
+                            ? "Factura actualizada correctamente."
+                            : "Factura guardada correctamente."
+                    );
+
+
+                    /* LIMPIAR */
+
+                    this.reset();
+
+
+                    document
+                        .getElementById(
+                            "totalFacturaRecibida"
+                        )
+                        .value =
+                        "";
+
+
+                    document
+                        .getElementById(
+                            "formularioFacturaRecibida"
+                        )
+                        .style.display =
+                        "none";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nueva factura recibida";
+
+
+                    delete this.dataset.editando;
+
+
+                    mostrarFacturasRecibidas();
+
+                }
+            );
+
+
+        /* =========================
+           MOSTRAR FACTURAS
+        ========================= */
+
+        function mostrarFacturasRecibidas() {
+
+
+            const facturas =
+                JSON.parse(
+                    localStorage.getItem(
+                        "facturasRecibidas"
+                    )
+                ) || [];
+
+
+            const tabla =
+                document.getElementById(
+                    "listaFacturasRecibidas"
+                );
+
+
+            tabla.innerHTML = "";
+
+
+            if (
+                facturas.length === 0
+            ) {
+
+
+                tabla.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="10"
+                            style="text-align:center;">
+
+                            No hay facturas recibidas registradas.
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                return;
+
+            }
+
+
+            facturas.forEach(
+                function(
+                    factura,
+                    index
+                ) {
+
+
+                    const fila =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    fila.innerHTML = `
+
+                        <td>
+                            ${factura.numero}
+                        </td>
+
+
+                        <td>
+                            ${factura.fecha}
+                        </td>
+
+
+                        <td>
+                            ${factura.proveedor}
+                        </td>
+
+
+                        <td>
+                            ${factura.nif || "-"}
+                        </td>
+
+                         <td>
+                            ${factura.servicio || "-"}
+                        </td>
+
+                        <td>
+                            ${factura.concepto || "-"}
+                        </td>
+
+
+                        <td>
+                            ${Number(
+                                factura.base
+                            ).toFixed(2)} €
+                        </td>
+
+
+                        <td>
+                            ${factura.iva}%
+                        </td>
+
+
+                        <td>
+                            ${Number(
+                                factura.total
+                            ).toFixed(2)} €
+                        </td>
+
+
+                        <td>
+                            ${factura.estado}
+                        </td>
+
+
+                        <td>
+
+                            <div class="acciones">
+
+
+                                <button
+                                    class="boton boton-principal"
+                                    onclick="editarFacturaRecibida(${index})">
+
+                                    Editar
+
+                                </button>
+
+
+                                <button
+                                    class="boton boton-eliminar"
+                                    onclick="eliminarFacturaRecibida(${index})">
+
+                                    Eliminar
+
+                                </button>
+
+
+                            </div>
+
+                        </td>
+
+                    `;
+
+
+                    tabla.appendChild(
+                        fila
+                    );
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           EDITAR
+        ========================= */
+
+        function editarFacturaRecibida(index) {
+
+
+            const facturas =
+                JSON.parse(
+                    localStorage.getItem(
+                        "facturasRecibidas"
+                    )
+                ) || [];
+
+
+            const factura =
+                facturas[index];
+
+
+            if (!factura) {
+
+                return;
+
+            }
+
+
+            /* MOSTRAR FORMULARIO */
+
+            document
+                .getElementById(
+                    "formularioFacturaRecibida"
+                )
+                .style.display =
+                "block";
+
+
+            /* CAMBIAR TÍTULO */
+
+            document
+                .getElementById(
+                    "tituloFormulario"
+                )
+                .textContent =
+                "Editar factura recibida";
+
+
+            /* CARGAR DATOS */
+
+            document
+                .getElementById(
+                    "numeroFacturaRecibida"
+                )
+                .value =
+                factura.numero;
+
+
+            document
+                .getElementById(
+                    "fechaFacturaRecibida"
+                )
+                .value =
+                factura.fecha;
+
+
+            document
+                .getElementById(
+                    "proveedorFacturaRecibida"
+                )
+                .value =
+                factura.proveedor;
+
+
+            document
+                .getElementById(
+                    "nifProveedor"
+                )
+                .value =
+                factura.nif;
+
+            document.getElementById(
+                "servicioFacturaRecibida"
+            ).value =
+                factura.servicio || "";
+
+
+            document
+                .getElementById(
+                    "conceptoFacturaRecibida"
+                )
+                .value =
+                factura.concepto;
+
+
+            document
+                .getElementById(
+                    "baseFacturaRecibida"
+                )
+                .value =
+                factura.base;
+
+
+            document
+                .getElementById(
+                    "ivaFacturaRecibida"
+                )
+                .value =
+                factura.iva;
+
+
+            document
+                .getElementById(
+                    "totalFacturaRecibida"
+                )
+                .value =
+                Number(
+                    factura.total
+                ).toFixed(2);
+
+
+            document
+                .getElementById(
+                    "estadoFacturaRecibida"
+                )
+                .value =
+                factura.estado;
+            document
+                 .getElementById(
+                      "fechaPagoFacturaRecibida"
+                 )
+             .value =
+            factura.fechaPago || "";
+
+            /* GUARDAR ÍNDICE */
+
+            document
+                .getElementById(
+                    "facturaRecibidaForm"
+                )
+                .dataset.editando =
+                index;
+
+        }
+
+
+        /* =========================
+           ELIMINAR
+        ========================= */
+
+        function eliminarFacturaRecibida(index) {
+
+
+            const confirmar =
+                confirm(
+                    "¿Seguro que quieres eliminar esta factura recibida?"
+                );
+
+
+            if (!confirmar) {
+
+                return;
+
+            }
+
+
+            const facturas =
+                JSON.parse(
+                    localStorage.getItem(
+                        "facturasRecibidas"
+                    )
+                ) || [];
+
+
+            facturas.splice(
+                index,
+                1
+            );
+
+
+            localStorage.setItem(
+                "facturasRecibidas",
+                JSON.stringify(
+                    facturas
+                )
+            );
+
+
+            mostrarFacturasRecibidas();
+
+        }
+
+
+        /* =========================
+           BUSCAR
+        ========================= */
+
+        document
+            .getElementById(
+                "buscarFacturaRecibida"
+            )
+            .addEventListener(
+                "input",
+                function() {
+
+
+                    const texto =
+                        this.value
+                            .toLowerCase();
+
+
+                    const filas =
+                        document.querySelectorAll(
+                            "#listaFacturasRecibidas tr"
+                        );
+
+
+                    filas.forEach(
+                        function(fila) {
+
+
+                            const contenido =
+                                fila.textContent
+                                    .toLowerCase();
+
+
+                            if (
+                                contenido.includes(
+                                    texto
+                                )
+                            ) {
+
+                                fila.style.display =
+                                    "";
+
+                            } else {
+
+                                fila.style.display =
+                                    "none";
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =========================
+   CARGAR AL ABRIR
+========================= */
+
+cargarProveedores();
+
+mostrarFacturasRecibidas();
+cargarServiciosEnFacturaRecibida();
+
+
+    </script>
+
+
+</body>
+
+</html>

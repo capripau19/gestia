@@ -1,0 +1,474 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Crear cuenta - Gestia</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f1e9;
+            min-height: 100vh;
+
+            display: flex;
+            justify-content: center;
+            align-items: center;
+
+            padding: 30px;
+        }
+
+        .register-container {
+
+            width: 480px;
+
+            background: #fffdf9;
+
+            padding: 40px;
+
+            border-radius: 22px;
+
+            box-shadow:
+                0 15px 45px rgba(70, 60, 50, 0.12);
+        }
+
+        .logo {
+
+            text-align: center;
+
+            font-size: 32px;
+
+            font-weight: bold;
+
+            color: #6f6254;
+
+            margin-bottom: 8px;
+        }
+
+        .subtitle {
+
+            text-align: center;
+
+            color: #77716a;
+
+            font-size: 15px;
+
+            margin-bottom: 30px;
+        }
+
+        .form-group {
+
+            margin-bottom: 17px;
+        }
+
+        label {
+
+            display: block;
+
+            margin-bottom: 7px;
+
+            color: #4d4741;
+
+            font-size: 14px;
+
+            font-weight: bold;
+        }
+
+        input {
+
+            width: 100%;
+
+            padding: 13px;
+
+            border: 1px solid #ddd5cb;
+
+            border-radius: 10px;
+
+            font-size: 15px;
+
+            outline: none;
+
+            background: #fff;
+        }
+
+        input:focus {
+
+            border-color: #8c7761;
+        }
+
+        .two-columns {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 15px;
+        }
+
+        .terms {
+
+            display: flex;
+
+            align-items: flex-start;
+
+            gap: 9px;
+
+            margin-top: 20px;
+
+            margin-bottom: 20px;
+
+            font-size: 13px;
+
+            color: #77716a;
+
+            line-height: 1.4;
+        }
+
+        .terms input {
+
+            width: auto;
+
+            margin-top: 3px;
+        }
+
+        .terms a {
+
+            color: #8c7761;
+
+            text-decoration: none;
+
+            font-weight: bold;
+        }
+
+        .register-button {
+
+            width: 100%;
+
+            padding: 15px;
+
+            border: none;
+
+            border-radius: 11px;
+
+            background: #8c7761;
+
+            color: white;
+
+            font-size: 16px;
+
+            cursor: pointer;
+        }
+
+        .register-button:hover {
+
+            background: #756352;
+        }
+
+        .login {
+
+            text-align: center;
+
+            margin-top: 25px;
+
+            color: #77716a;
+
+            font-size: 14px;
+        }
+
+        .login a {
+
+            color: #8c7761;
+
+            font-weight: bold;
+
+            text-decoration: none;
+        }
+
+        .back {
+
+            display: block;
+
+            text-align: center;
+
+            margin-top: 20px;
+
+            color: #77716a;
+
+            text-decoration: none;
+
+            font-size: 14px;
+        }
+
+        @media (max-width: 600px) {
+
+            .register-container {
+
+                width: 100%;
+
+                padding: 30px 25px;
+            }
+
+            .two-columns {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="register-container">
+
+
+        <div class="logo">
+            gestia
+        </div>
+
+
+        <div class="subtitle">
+            Crea tu cuenta y empieza a gestionar tu negocio
+        </div>
+
+
+         <form id="registroForm">
+
+
+            <div class="form-group">
+
+                <label for="nombre">
+                    Nombre y apellidos
+                </label>
+
+                <input
+                    type="text"
+                    id="nombre"
+                    placeholder="Ej. Paula García"
+                    required
+                >
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="empresa">
+                    Nombre de la empresa
+                </label>
+
+                <input
+                    type="text"
+                    id="empresa"
+                    placeholder="Ej. Instalaciones García"
+                    required
+                >
+
+            </div>
+
+
+            <div class="two-columns">
+
+
+                <div class="form-group">
+
+                    <label for="nif">
+                        NIF / CIF
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nif"
+                        placeholder="B12345678"
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="telefono">
+                        Teléfono
+                    </label>
+
+                    <input
+                        type="tel"
+                        id="telefono"
+                        placeholder="600 000 000"
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="form-group">
+
+                <label for="email">
+                    Correo electrónico
+                </label>
+
+                <input
+                    type="email"
+                    id="email"
+                    placeholder="tu@email.com"
+                    required
+                >
+
+            </div>
+
+
+            <div class="two-columns">
+
+
+                <div class="form-group">
+
+                    <label for="password">
+                        Contraseña
+                    </label>
+
+                    <input
+                        type="password"
+                        id="password"
+                        placeholder="Contraseña"
+                        required
+                    >
+
+                </div>
+
+
+                <div class="form-group">
+
+                    <label for="confirm-password">
+                        Repetir contraseña
+                    </label>
+
+                    <input
+                        type="password"
+                        id="confirm-password"
+                        placeholder="Repetir contraseña"
+                        required
+                    >
+
+                </div>
+
+
+            </div>
+
+
+            <div class="terms">
+
+                <input
+                    type="checkbox"
+                    id="terms"
+                    required
+                >
+
+                <label for="terms">
+
+                    Acepto los
+                    <a href="#">
+                        términos y condiciones
+                    </a>
+                    y la
+                    <a href="#">
+                        política de privacidad
+                    </a>.
+
+                </label>
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="register-button">
+
+                Crear mi cuenta
+
+            </button>
+
+        </form>
+       
+
+            
+            
+
+
+        <div class="login">
+
+            ¿Ya tienes una cuenta?
+
+            <a href="login.html">
+                Iniciar sesión
+            </a>
+
+        </div>
+
+
+        <a
+            href="index.html"
+            class="back">
+
+            ← Volver a Gestia
+
+        </a>
+
+
+    </div>
+
+    <script src="app.js"></script>
+ <script>
+
+document.getElementById("registroForm").addEventListener("submit", function(event) {
+
+    event.preventDefault();
+
+    const nombre = document.getElementById("nombre").value;
+    const empresa = document.getElementById("empresa").value;
+    const nif = document.getElementById("nif").value;
+    const telefono = document.getElementById("telefono").value;
+    const email = document.getElementById("email").value;
+    const password = document.getElementById("password").value;
+    const confirmPassword = document.getElementById("confirm-password").value;
+
+    if (password !== confirmPassword) {
+        alert("Las contraseñas no coinciden.");
+        return;
+    }
+
+    const usuario = {
+        nombre: nombre,
+        empresa: empresa,
+        nif: nif,
+        telefono: telefono,
+        email: email,
+        password: password
+    };
+
+    localStorage.setItem("usuario", JSON.stringify(usuario));
+
+    alert("Cuenta creada correctamente.");
+
+    window.location.href = "login.html";
+
+});
+
+</script>   
+</body>
+
+</html>

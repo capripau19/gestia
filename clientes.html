@@ -1,0 +1,775 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Clientes</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            color: #222;
+        }
+
+        .contenedor {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 30px;
+        }
+
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+
+        .cabecera h1 {
+            margin: 0;
+            font-size: 30px;
+        }
+
+        .cabecera p {
+            margin: 8px 0 0;
+            color: #666;
+        }
+
+        .botones {
+            display: flex;
+            gap: 10px;
+        }
+
+        .boton {
+            padding: 12px 20px;
+            border: none;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 15px;
+            text-decoration: none;
+        }
+
+        .boton-principal {
+            background: #222;
+            color: white;
+        }
+
+        .boton-secundario {
+            background: white;
+            color: #222;
+            border: 1px solid #ddd;
+        }
+
+        .buscador {
+            background: white;
+            padding: 20px;
+            border-radius: 12px;
+            margin-bottom: 20px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        .buscador input {
+            width: 100%;
+            padding: 12px;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .tabla-contenedor {
+            background: white;
+            border-radius: 12px;
+            overflow-x: auto;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.05);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 16px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background: #fafafa;
+            font-size: 14px;
+        }
+
+        td {
+            font-size: 14px;
+        }
+
+        .sin-clientes {
+            text-align: center;
+            padding: 50px 20px;
+            color: #777;
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="contenedor">
+
+
+        <div class="cabecera">
+
+            <div>
+
+                <h1>Clientes</h1>
+
+                <p>
+                    Gestiona los clientes de tu empresa.
+                </p>
+
+            </div>
+
+
+            <div class="botones">
+
+                <a href="dashboard.html" class="boton boton-secundario">
+                    Volver al dashboard
+                </a>
+
+                <button class="boton boton-principal" id="nuevoCliente">
+                    + Nuevo cliente
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <div class="buscador">
+
+            <input
+                type="text"
+                id="buscarCliente"
+                placeholder="Buscar cliente por nombre, empresa o teléfono..."
+            >
+
+        </div>
+
+
+        <div class="tabla-contenedor">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>
+                            Nombre
+                        </th>
+
+                        <th>
+                            Empresa
+                        </th>
+
+                        <th>
+                            NIF / CIF
+                        </th>
+
+                        <th>
+                            Teléfono
+                        </th>
+
+                        <th>
+                            Correo electrónico
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="listaClientes">
+
+                    <tr>
+
+                        <td colspan="6">
+
+                            <div class="sin-clientes">
+
+                                Todavía no tienes clientes registrados.
+
+                            </div>
+
+                        </td>
+
+                    </tr>
+
+                </tbody>
+
+            </table>
+
+        
+
+
+    </div>
+        </tbody>
+
+    </table>
+
+</div>
+
+
+<!-- FORMULARIO NUEVO CLIENTE -->
+
+<div id="formularioCliente" style="display: none;">
+
+    <div class="buscador">
+
+        <h2>Nuevo cliente</h2>
+
+        <form id="clienteForm">
+
+            <div style="margin-bottom: 15px;">
+
+                <label for="clienteNombre">
+                    Nombre y apellidos
+                </label>
+
+                <input
+                    type="text"
+                    id="clienteNombre"
+                    required
+                    style="width: 100%; padding: 12px; margin-top: 5px;"
+                >
+
+            </div>
+
+
+            <div style="margin-bottom: 15px;">
+
+                <label for="clienteEmpresa">
+                    Empresa
+                </label>
+
+                <input
+                    type="text"
+                    id="clienteEmpresa"
+                    style="width: 100%; padding: 12px; margin-top: 5px;"
+                >
+
+            </div>
+
+
+            <div style="margin-bottom: 15px;">
+
+                <label for="clienteNif">
+                    NIF / CIF
+                </label>
+
+                <input
+                    type="text"
+                    id="clienteNif"
+                    style="width: 100%; padding: 12px; margin-top: 5px;"
+                >
+
+            </div>
+
+
+            <div style="margin-bottom: 15px;">
+
+                <label for="clienteTelefono">
+                    Teléfono
+                </label>
+
+                <input
+                    type="tel"
+                    id="clienteTelefono"
+                    style="width: 100%; padding: 12px; margin-top: 5px;"
+                >
+
+            </div>
+
+
+            <div style="margin-bottom: 20px;">
+
+                <label for="clienteEmail">
+                    Correo electrónico
+                </label>
+
+                <input
+                    type="email"
+                    id="clienteEmail"
+                    style="width: 100%; padding: 12px; margin-top: 5px;"
+                >
+
+            </div>
+
+
+            <button
+                type="submit"
+                class="boton boton-principal">
+
+                Guardar cliente
+
+            </button>
+
+
+            <button
+                type="button"
+                id="cancelarCliente"
+                class="boton boton-secundario">
+
+                Cancelar
+
+            </button>
+
+        </form>
+
+    </div>
+
+</div>
+
+    <script>
+
+        // Comprobar que existe una sesión iniciada
+
+        const sesionIniciada =
+            localStorage.getItem("sesionIniciada");
+
+        if (sesionIniciada !== "true") {
+
+            window.location.href = "login.html";
+
+        }
+
+
+        // Botón nuevo cliente
+
+       document.getElementById("nuevoCliente").addEventListener("click", function() {
+
+            document.getElementById("formularioCliente").style.display = "block";
+
+        });
+
+
+        document.getElementById("cancelarCliente").addEventListener("click", function() {
+
+            document.getElementById("formularioCliente").style.display = "none";
+
+        });
+
+
+        // Buscador
+
+        document.getElementById("buscarCliente").addEventListener("input", function() {
+
+            const texto = this.value.toLowerCase();
+
+            const filas =
+                document.querySelectorAll("#listaClientes tr");
+
+            filas.forEach(function(fila) {
+
+                if (fila.textContent.toLowerCase().includes(texto)) {
+
+                    fila.style.display = "";
+
+                } else {
+
+                    fila.style.display = "none";
+
+                }
+
+            });
+
+        });
+       
+
+        // Guardar nuevo cliente
+
+document
+    .getElementById("clienteForm")
+    .addEventListener(
+        "submit",
+        function(event) {
+
+            event.preventDefault();
+
+
+            const nombre =
+                document
+                    .getElementById("clienteNombre")
+                    .value
+                    .trim();
+
+
+            const empresa =
+                document
+                    .getElementById("clienteEmpresa")
+                    .value
+                    .trim();
+
+
+            const nif =
+                document
+                    .getElementById("clienteNif")
+                    .value
+                    .trim();
+
+
+            const telefono =
+                document
+                    .getElementById("clienteTelefono")
+                    .value
+                    .trim();
+
+
+            const email =
+                document
+                    .getElementById("clienteEmail")
+                    .value
+                    .trim();
+
+
+            /* =========================
+               CLIENTES EXISTENTES
+            ========================= */
+
+            let clientes =
+                JSON.parse(
+                    localStorage.getItem("clientes")
+                ) || [];
+
+
+            /* =========================
+               COMPROBAR DUPLICADOS
+            ========================= */
+
+            const indiceEditando =
+                this.dataset.editando;
+
+
+            const nifNormalizado =
+                nif
+                    .replace(/\s/g, "")
+                    .toUpperCase();
+
+
+            const nombreNormalizado =
+                nombre
+                    .toLowerCase()
+                    .trim();
+
+
+            const clienteDuplicado =
+                clientes.find(
+                    function(cliente, index) {
+
+                        /*
+                         * Si estamos editando,
+                         * ignoramos el propio cliente.
+                         */
+
+                        if (
+                            indiceEditando !== undefined &&
+                            index === parseInt(indiceEditando)
+                        ) {
+
+                            return false;
+
+                        }
+
+
+                        const nifExistente =
+                            (cliente.nif || "")
+                                .replace(/\s/g, "")
+                                .toUpperCase();
+
+
+                        const nombreExistente =
+                            (cliente.nombre || "")
+                                .toLowerCase()
+                                .trim();
+
+
+                        /*
+                         * Comprobar NIF/CIF
+                         */
+
+                        if (
+                            nifNormalizado !== "" &&
+                            nifExistente !== "" &&
+                            nifNormalizado === nifExistente
+                        ) {
+
+                            return true;
+
+                        }
+
+
+                        /*
+                         * Comprobar nombre
+                         */
+
+                        if (
+                            nombreNormalizado !== "" &&
+                            nombreExistente !== "" &&
+                            nombreNormalizado === nombreExistente
+                        ) {
+
+                            return true;
+
+                        }
+
+
+                        return false;
+
+                    }
+                );
+
+
+            /* =========================
+               SI EXISTE DUPLICADO
+            ========================= */
+
+            if (clienteDuplicado) {
+
+                const nifDuplicado =
+                    nifNormalizado !== "" &&
+                    (
+                        clienteDuplicado.nif || ""
+                    )
+                        .replace(/\s/g, "")
+                        .toUpperCase() ===
+                    nifNormalizado;
+
+
+                if (nifDuplicado) {
+
+                    alert(
+                        "Ya existe un cliente con este NIF/CIF:\n\n" +
+                        clienteDuplicado.nombre
+                    );
+
+                } else {
+
+                    alert(
+                        "Ya existe un cliente con este nombre:\n\n" +
+                        clienteDuplicado.nombre
+                    );
+
+                }
+
+
+                return;
+
+            }
+
+
+            /* =========================
+               CREAR / ACTUALIZAR CLIENTE
+            ========================= */
+
+            const cliente = {
+
+                nombre: nombre,
+
+                empresa: empresa,
+
+                nif: nif,
+
+                telefono: telefono,
+
+                email: email
+
+            };
+
+
+            if (
+                indiceEditando !== undefined
+            ) {
+
+                clientes[
+                    parseInt(indiceEditando)
+                ] = cliente;
+
+
+                delete this.dataset.editando;
+
+
+            } else {
+
+                clientes.push(cliente);
+
+            }
+
+
+            /* =========================
+               GUARDAR
+            ========================= */
+
+            localStorage.setItem(
+                "clientes",
+                JSON.stringify(clientes)
+            );
+
+
+            alert(
+                indiceEditando !== undefined
+                    ? "Cliente actualizado correctamente."
+                    : "Cliente guardado correctamente."
+            );
+
+
+            /* =========================
+               LIMPIAR
+            ========================= */
+
+            this.reset();
+
+
+            document
+                .getElementById(
+                    "formularioCliente"
+                )
+                .style.display =
+                "none";
+
+
+            /* =========================
+               ACTUALIZAR TABLA
+            ========================= */
+
+            mostrarClientes();
+
+        }
+    );
+    function mostrarClientes() {
+
+    const clientes = JSON.parse(localStorage.getItem("clientes")) || [];
+
+    const listaClientes = document.getElementById("listaClientes");
+
+    if (clientes.length === 0) {
+
+        listaClientes.innerHTML = `
+            <tr>
+                <td colspan="6">
+                    <div class="sin-clientes">
+                        Todavía no tienes clientes registrados.
+                    </div>
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+
+    listaClientes.innerHTML = "";
+
+
+    clientes.forEach(function(cliente, index) {
+
+        const fila = document.createElement("tr");
+
+        fila.innerHTML = `
+            <td>${cliente.nombre}</td>
+            <td>${cliente.empresa}</td>
+            <td>${cliente.nif}</td>
+            <td>${cliente.telefono}</td>
+            <td>${cliente.email}</td>
+            <td>
+                <button onclick="editarCliente(${index})">
+                    Editar
+                 </button>
+                <button onclick="eliminarCliente(${index})">
+                    Eliminar
+                </button>
+            </td>
+        `;
+
+        listaClientes.appendChild(fila);
+
+    });
+
+}
+
+    function eliminarCliente(index) {
+
+    const confirmar = confirm(
+        "¿Seguro que quieres eliminar este cliente?"
+    );
+
+    if (!confirmar) {
+        return;
+    }
+
+    let clientes =
+        JSON.parse(localStorage.getItem("clientes")) || [];
+
+    clientes.splice(index, 1);
+
+    localStorage.setItem(
+        "clientes",
+        JSON.stringify(clientes)
+    );
+
+    mostrarClientes();
+
+}
+    function editarCliente(index) {
+
+    const clientes =
+        JSON.parse(localStorage.getItem("clientes")) || [];
+
+    const cliente = clientes[index];
+
+    document.getElementById("clienteNombre").value =
+        cliente.nombre;
+
+    document.getElementById("clienteEmpresa").value =
+        cliente.empresa;
+
+    document.getElementById("clienteNif").value =
+        cliente.nif;
+
+    document.getElementById("clienteTelefono").value =
+        cliente.telefono;
+
+    document.getElementById("clienteEmail").value =
+        cliente.email;
+
+    document.getElementById("formularioCliente").style.display =
+        "block";
+
+    document.getElementById("clienteForm").dataset.editando =
+        index;
+
+}
+    mostrarClientes();
+
+    </script>
+
+
+</body>
+
+</html>
+

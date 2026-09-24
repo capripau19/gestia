@@ -1,0 +1,365 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestia - Gestión fácil para tu negocio</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f1e9;
+            color: #333333;
+        }
+
+        header {
+            width: 100%;
+            padding: 22px 7%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            background: #f6f1e9;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            color: #6f6254;
+        }
+
+        nav {
+            display: flex;
+            gap: 30px;
+            align-items: center;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: #4d4944;
+            font-size: 15px;
+        }
+
+        .btn-login {
+            padding: 11px 20px;
+            border: 1px solid #8c7a67;
+            border-radius: 10px;
+        }
+
+        .hero {
+            min-height: 650px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 70px 7%;
+            gap: 50px;
+        }
+
+        .hero-text {
+            max-width: 600px;
+        }
+
+        .hero-text h1 {
+            font-size: 55px;
+            line-height: 1.1;
+            color: #383531;
+            margin-bottom: 25px;
+        }
+
+        .hero-text h1 span {
+            color: #8c7761;
+        }
+
+        .hero-text p {
+            font-size: 19px;
+            line-height: 1.6;
+            color: #68625c;
+            margin-bottom: 35px;
+        }
+
+        .btn-main {
+            display: inline-block;
+            padding: 15px 27px;
+            background: #8c7761;
+            color: white;
+            text-decoration: none;
+            border-radius: 12px;
+            font-size: 16px;
+        }
+
+        .btn-main:hover {
+            background: #756352;
+        }
+
+        .dashboard-preview {
+            width: 500px;
+            background: #fffdf9;
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: 0 15px 45px rgba(70, 60, 50, 0.12);
+        }
+
+        .preview-title {
+            font-size: 18px;
+            font-weight: bold;
+            margin-bottom: 20px;
+            color: #49443f;
+        }
+
+        .cards {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .card {
+            background: #f4eee5;
+            padding: 20px;
+            border-radius: 14px;
+        }
+
+        .card small {
+            color: #77716a;
+        }
+
+        .card strong {
+            display: block;
+            font-size: 24px;
+            margin-top: 8px;
+            color: #514a43;
+        }
+
+        .invoice {
+            margin-top: 20px;
+            background: #f7f4ef;
+            padding: 16px;
+            border-radius: 12px;
+        }
+
+        .invoice-title {
+            font-weight: bold;
+            margin-bottom: 12px;
+        }
+
+        .invoice-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+            border-bottom: 1px solid #e5ded5;
+            font-size: 14px;
+        }
+
+        .features {
+            padding: 80px 7%;
+            background: #fffdf9;
+            text-align: center;
+        }
+
+        .features h2 {
+            font-size: 35px;
+            margin-bottom: 15px;
+            color: #3f3b37;
+        }
+
+        .features > p {
+            color: #77716a;
+            margin-bottom: 45px;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 25px;
+        }
+
+        .feature {
+            padding: 30px;
+            background: #f6f1e9;
+            border-radius: 16px;
+            text-align: left;
+        }
+
+        .feature h3 {
+            margin-bottom: 12px;
+            color: #4d4741;
+        }
+
+        .feature p {
+            color: #77716a;
+            line-height: 1.5;
+        }
+
+        footer {
+            padding: 30px 7%;
+            text-align: center;
+            color: #77716a;
+            background: #f6f1e9;
+        }
+
+        @media (max-width: 900px) {
+            .hero {
+                flex-direction: column;
+                text-align: center;
+            }
+
+            .dashboard-preview {
+                width: 100%;
+            }
+
+            .feature-grid {
+                grid-template-columns: 1fr;
+            }
+
+            nav {
+                display: none;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <header>
+
+        <div class="logo">
+            gestia
+        </div>
+
+        <nav>
+            <a href="#">Inicio</a>
+            <a href="#funciones">Funciones</a>
+            <a href="#">Precios</a>
+            <a href="#">Contacto</a>
+            <a href="login.html" class="btn-login">Iniciar sesión</a>
+        </nav>
+
+    </header>
+
+
+    <section class="hero">
+
+        <div class="hero-text">
+
+            <h1>
+                Gestiona tu negocio
+                <span>sin complicarte.</span>
+            </h1>
+
+            <p>
+                Gestia te ayuda a organizar clientes, proveedores,
+                presupuestos, facturas, gastos y trabajos desde un
+                mismo lugar.
+            </p>
+
+            <a href="login.html" class="btn-main">
+                Empieza ahora
+            </a>
+
+        </div>
+
+
+        <div class="dashboard-preview">
+
+            <div class="preview-title">
+                Resumen de tu negocio
+            </div>
+
+            <div class="cards">
+
+                <div class="card">
+                    <small>Facturado este mes</small>
+                    <strong>8.450 €</strong>
+                </div>
+
+                <div class="card">
+                    <small>Pendiente de cobro</small>
+                    <strong>2.350 €</strong>
+                </div>
+
+                <div class="card">
+                    <small>Gastos</small>
+                    <strong>3.120 €</strong>
+                </div>
+
+                <div class="card">
+                    <small>Beneficio estimado</small>
+                    <strong>5.330 €</strong>
+                </div>
+
+            </div>
+
+            <div class="invoice">
+
+                <div class="invoice-title">
+                    Facturas pendientes
+                </div>
+
+                <div class="invoice-row">
+                    <span>Factura #2026-034</span>
+                    <span>850 €</span>
+                </div>
+
+                <div class="invoice-row">
+                    <span>Factura #2026-041</span>
+                    <span>1.500 €</span>
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <section class="features" id="funciones">
+
+        <h2>
+            Todo lo que necesitas para gestionar tu negocio
+        </h2>
+
+        <p>
+            Menos tiempo con papeleo y más tiempo para tu negocio.
+        </p>
+
+        <div class="feature-grid">
+
+            <div class="feature">
+                <h3>Clientes</h3>
+                <p>
+                    Guarda toda la información de tus clientes
+                    y consulta rápidamente su historial.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Facturas</h3>
+                <p>
+                    Crea y controla tus facturas emitidas,
+                    cobros y facturas pendientes.
+                </p>
+            </div>
+
+            <div class="feature">
+                <h3>Trabajos</h3>
+                <p>
+                    Controla cada trabajo, sus ingresos,
+                    gastos y beneficio estimado.
+                </p>
+            </div>
+
+        </div>
+
+    </section>
+
+
+    <footer>
+        © 2026 Gestia · Gestión fácil para tu negocio
+    </footer>
+
+</body>
+</html>

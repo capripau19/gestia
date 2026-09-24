@@ -1,0 +1,1847 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Presupuestos</title>
+
+
+    <style>
+
+        body {
+
+            font-family: Arial, sans-serif;
+
+            margin: 0;
+
+            padding: 30px;
+
+            background-color: #f5f6f8;
+
+        }
+
+
+        .contenedor {
+
+            max-width: 1200px;
+
+            margin: auto;
+
+        }
+
+
+        .cabecera {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        h1 {
+
+            margin: 0;
+
+        }
+
+
+        .boton {
+
+            border: none;
+
+            padding: 10px 16px;
+
+            border-radius: 6px;
+
+            cursor: pointer;
+
+            font-size: 14px;
+
+        }
+
+
+        .boton-principal {
+
+            background-color: #2563eb;
+
+            color: white;
+
+        }
+
+
+        .boton-secundario {
+
+            background-color: #e5e7eb;
+
+            color: #111827;
+
+        }
+
+
+        .boton-eliminar {
+
+            background-color: #dc2626;
+
+            color: white;
+
+        }
+
+
+        .boton:hover {
+
+            opacity: 0.9;
+
+        }
+
+
+        .buscador {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            margin-bottom: 20px;
+
+        }
+
+
+        .buscador input {
+
+            width: 100%;
+
+            padding: 10px;
+
+            box-sizing: border-box;
+
+            border: 1px solid #ccc;
+
+            border-radius: 6px;
+
+        }
+
+
+        #formularioPresupuesto {
+
+            background: white;
+
+            padding: 25px;
+
+            border-radius: 10px;
+
+            margin-bottom: 25px;
+
+        }
+
+
+        #formularioPresupuesto h2 {
+
+            margin-top: 0;
+
+        }
+
+
+        #presupuestoForm {
+
+            display: grid;
+
+            grid-template-columns: repeat(2, 1fr);
+
+            gap: 15px;
+
+        }
+
+
+        #presupuestoForm div {
+
+            display: flex;
+
+            flex-direction: column;
+
+        }
+
+
+        #presupuestoForm label {
+
+            margin-bottom: 6px;
+
+            font-weight: bold;
+
+        }
+
+
+        #presupuestoForm input,
+
+        #presupuestoForm select {
+
+            padding: 10px;
+
+            border: 1px solid #ccc;
+
+            border-radius: 6px;
+
+            box-sizing: border-box;
+
+        }
+
+
+        .botones-formulario {
+
+            grid-column: 1 / -1;
+
+            display: flex;
+
+            gap: 10px;
+
+            margin-top: 10px;
+
+        }
+
+
+        .tabla-contenedor {
+
+            background: white;
+
+            padding: 20px;
+
+            border-radius: 10px;
+
+            overflow-x: auto;
+
+        }
+
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+
+        }
+
+
+        th,
+
+        td {
+
+            padding: 12px;
+
+            border-bottom: 1px solid #ddd;
+
+            text-align: left;
+
+        }
+
+
+        th {
+
+            background-color: #f3f4f6;
+
+        }
+
+
+        .acciones {
+
+            display: flex;
+
+            gap: 8px;
+
+        }
+
+
+        .enlace-volver {
+
+            display: inline-block;
+
+            margin-bottom: 20px;
+
+            color: #2563eb;
+
+            text-decoration: none;
+
+        }
+
+
+        @media (max-width: 700px) {
+
+            #presupuestoForm {
+
+                grid-template-columns: 1fr;
+
+            }
+
+
+            .cabecera {
+
+                flex-direction: column;
+
+                align-items: flex-start;
+
+                gap: 15px;
+
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+    <div class="contenedor">
+
+
+        <a
+            href="dashboard.html"
+            class="enlace-volver">
+
+            ← Volver al inicio
+
+        </a>
+
+
+        <div class="cabecera">
+
+
+            <h1>
+                Presupuestos
+            </h1>
+
+
+            <button
+                id="nuevoPresupuesto"
+                class="boton boton-principal">
+
+                + Nuevo presupuesto
+
+            </button>
+
+
+        </div>
+
+
+        <!-- BUSCADOR -->
+
+        <div class="buscador">
+
+
+            <input
+                type="text"
+                id="buscarPresupuesto"
+                placeholder="Buscar presupuesto, cliente o estado...">
+
+
+        </div>
+
+
+        <!-- FORMULARIO -->
+
+        <div
+            id="formularioPresupuesto"
+            style="display: none;">
+
+
+            <h2 id="tituloFormulario">
+                Nuevo presupuesto
+            </h2>
+
+
+            <form id="presupuestoForm">
+
+
+                <div>
+
+                    <label for="numeroPresupuesto">
+                        Nº de presupuesto
+                    </label>
+
+                    <input
+                        type="text"
+                        id="numeroPresupuesto"
+                        placeholder="Ej. P-2026-001"
+                        required>
+
+                </div>
+
+
+                <div>
+
+                    <label for="fechaPresupuesto">
+                        Fecha
+                    </label>
+
+                    <input
+                        type="date"
+                        id="fechaPresupuesto"
+                        required>
+
+                </div>
+
+
+                <div>
+
+                    <label for="clientePresupuesto">
+                        Cliente
+                    </label>
+
+                   <div style="position: relative;">
+
+  
+
+    <input
+        type="text"
+        id="clientePresupuesto"
+        placeholder="Escribe nombre, empresa o NIF/CIF..."
+        autocomplete="off"
+        required>
+
+    <div
+        id="resultadosClientesPresupuesto"
+        style="
+            display: none;
+            position: absolute;
+            left: 0;
+            right: 0;
+            top: 100%;
+            background: white;
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            margin-top: 5px;
+            z-index: 1000;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+            overflow: hidden;
+        ">
+    </div>
+    <div
+    id="formularioClientePresupuesto"
+    style="
+        display: none;
+        margin-top: 20px;
+        padding: 20px;
+        border: 1px solid #ddd;
+        border-radius: 8px;
+        background: #f9fafb;
+    ">
+
+    <h3 style="margin-top: 0;">
+        Nuevo cliente
+    </h3>
+
+    <div style="
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 15px;
+    ">
+
+        <div>
+            <label for="nombreClientePresupuesto">
+                Nombre
+            </label>
+
+            <input
+    type="text"
+    id="nombreClientePresupuesto">
+</div>
+
+        <div>
+            <label for="empresaClientePresupuesto">
+                Empresa
+            </label>
+
+            <input
+                type="text"
+                id="empresaClientePresupuesto">
+        </div>
+
+        <div>
+            <label for="nifClientePresupuesto">
+                NIF/CIF
+            </label>
+
+            <input
+                type="text"
+                id="nifClientePresupuesto">
+        </div>
+
+        <div>
+            <label for="telefonoClientePresupuesto">
+                Teléfono
+            </label>
+
+            <input
+                type="text"
+                id="telefonoClientePresupuesto">
+        </div>
+
+        <div>
+            <label for="emailClientePresupuesto">
+                Correo electrónico
+            </label>
+
+            <input
+                type="email"
+                id="emailClientePresupuesto">
+        </div>
+
+    </div>
+
+    <div style="
+        display: flex;
+        gap: 10px;
+        margin-top: 15px;
+    ">
+
+        <button
+            type="button"
+            id="guardarClienteDesdePresupuesto"
+            class="boton boton-principal">
+
+            Guardar cliente
+
+        </button>
+
+        <button
+            type="button"
+            id="cancelarClienteDesdePresupuesto"
+            class="boton boton-secundario">
+
+            Cancelar
+
+        </button>
+
+    </div>
+
+</div>
+
+</div>
+
+                </div>
+
+
+                <div>
+
+                    <label for="basePresupuesto">
+                        Base imponible (€)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="basePresupuesto"
+                        min="0"
+                        step="0.01"
+                        placeholder="0.00"
+                        required>
+
+                </div>
+
+
+                <div>
+
+                    <label for="ivaPresupuesto">
+                        IVA (%)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="ivaPresupuesto"
+                        value="21"
+                        min="0"
+                        step="0.01"
+                        required>
+
+                </div>
+
+
+                <div>
+
+                    <label for="totalPresupuesto">
+                        Total (€)
+                    </label>
+
+                    <input
+                        type="number"
+                        id="totalPresupuesto"
+                        readonly>
+
+                </div>
+
+
+                <div>
+
+                    <label for="estadoPresupuesto">
+                        Estado
+                    </label>
+
+                    <select
+                        id="estadoPresupuesto">
+
+
+                        <option value="Pendiente">
+                            Pendiente
+                        </option>
+
+
+                        <option value="Aceptado">
+                            Aceptado
+                        </option>
+
+
+                        <option value="Rechazado">
+                            Rechazado
+                        </option>
+
+
+                    </select>
+
+                </div>
+
+
+                <div class="botones-formulario">
+
+
+                    <button
+                        type="submit"
+                        class="boton boton-principal">
+
+                        Guardar presupuesto
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="cancelarPresupuesto"
+                        class="boton boton-secundario">
+
+                        Cancelar
+
+                    </button>
+
+
+                </div>
+
+
+            </form>
+
+
+        </div>
+
+
+        <!-- TABLA -->
+
+        <div class="tabla-contenedor">
+
+
+            <table>
+
+
+                <thead>
+
+
+                    <tr>
+
+                        <th>
+                            Nº presupuesto
+                        </th>
+
+                        <th>
+                            Fecha
+                        </th>
+
+                        <th>
+                            Cliente
+                        </th>
+
+                        <th>
+                            Base imponible
+                        </th>
+
+                        <th>
+                            IVA
+                        </th>
+
+                        <th>
+                            Total
+                        </th>
+
+                        <th>
+                            Estado
+                        </th>
+
+                        <th>
+                            Acciones
+                        </th>
+
+                    </tr>
+
+
+                </thead>
+
+
+                <tbody id="listaPresupuestos">
+
+                </tbody>
+
+
+            </table>
+
+
+        </div>
+
+
+    </div>
+
+
+    <script>
+
+
+        /* =========================
+           COMPROBAR SESIÓN
+        ========================= */
+
+        if (
+            localStorage.getItem("sesionIniciada")
+            !== "true"
+        ) {
+
+            window.location.href =
+                "login.html";
+
+        }
+
+
+        /* =========================
+           NUEVO PRESUPUESTO
+        ========================= */
+
+        document
+            .getElementById("nuevoPresupuesto")
+            .addEventListener(
+                "click",
+                function() {
+
+
+
+
+                    document
+                        .getElementById(
+                            "formularioPresupuesto"
+                        )
+                        .style.display =
+                        "block";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nuevo presupuesto";
+
+
+                    document
+                        .getElementById(
+                            "presupuestoForm"
+                        )
+                        .reset();
+
+
+                    document
+                        .getElementById(
+                            "ivaPresupuesto"
+                        )
+                        .value =
+                        "21";
+
+
+                    document
+                        .getElementById(
+                            "totalPresupuesto"
+                        )
+                        .value =
+                        "";
+
+
+                    delete document
+                        .getElementById(
+                            "presupuestoForm"
+                        )
+                        .dataset.editando;
+
+
+                }
+            );
+
+
+        /* =========================
+           CARGAR CLIENTES
+        ========================= */
+
+       /* =========================
+   CLIENTES EN PRESUPUESTO
+========================= */
+
+function cargarClientesEnPresupuesto() {
+
+    const input =
+        document.getElementById(
+            "clientePresupuesto"
+        );
+
+    const resultados =
+        document.getElementById(
+            "resultadosClientesPresupuesto"
+        );
+
+    if (
+        input.dataset.eventoClientes === "true"
+    ) {
+        return;
+    }
+
+    input.dataset.eventoClientes = "true";
+
+    input.addEventListener(
+        "input",
+        function() {
+
+            const texto =
+                input.value
+                    .trim()
+                    .toLowerCase();
+
+            resultados.innerHTML = "";
+
+            if (!texto) {
+
+                resultados.style.display =
+                    "none";
+
+                return;
+
+            }
+
+            const clientes =
+                JSON.parse(
+                    localStorage.getItem(
+                        "clientes"
+                    )
+                ) || [];
+
+            const coincidencias =
+                clientes.filter(
+                    function(cliente) {
+
+                        return (
+                            (cliente.nombre || "")
+                                .toLowerCase()
+                                .includes(texto)
+                            ||
+                            (cliente.empresa || "")
+                                .toLowerCase()
+                                .includes(texto)
+                            ||
+                            (cliente.nif || "")
+                                .toLowerCase()
+                                .includes(texto)
+                        );
+
+                    }
+                );
+
+            coincidencias.forEach(
+                function(cliente) {
+
+                    const opcion =
+                        document.createElement(
+                            "div"
+                        );
+
+                    opcion.style.padding =
+                        "12px";
+
+                    opcion.style.cursor =
+                        "pointer";
+
+                    opcion.style.borderBottom =
+                        "1px solid #eee";
+
+                    opcion.innerHTML =
+                        "<strong>" +
+                        cliente.nombre +
+                        "</strong>" +
+
+                        (
+                            cliente.empresa
+                                ? "<br><small>Empresa: " +
+                                  cliente.empresa +
+                                  "</small>"
+                                : ""
+                        ) +
+
+                        (
+                            cliente.nif
+                                ? "<br><small>NIF/CIF: " +
+                                  cliente.nif +
+                                  "</small>"
+                                : ""
+                        );
+
+                    opcion.addEventListener(
+                        "click",
+                        function() {
+
+                            input.value =
+                                cliente.nombre;
+
+                            resultados.style.display =
+                                "none";
+
+                        }
+                    );
+
+                    resultados.appendChild(
+                        opcion
+                    );
+
+                }
+            );
+
+            const crear =
+                document.createElement(
+                    "div"
+                );
+
+            crear.style.padding =
+                "12px";
+
+            crear.style.cursor =
+                "pointer";
+
+            crear.style.fontWeight =
+                "600";
+
+            crear.textContent =
+                "+ Crear nuevo cliente";
+
+            crear.addEventListener(
+                "click",
+                function() {
+
+                    document
+                        .getElementById(
+                            "formularioClientePresupuesto"
+                        )
+                        .style.display =
+                        "block";
+
+                    document
+                        .getElementById(
+                            "nombreClientePresupuesto"
+                        )
+                        .value =
+                        input.value;
+
+                    document
+                        .getElementById(
+                            "nombreClientePresupuesto"
+                        )
+                        .focus();
+
+                    resultados.style.display =
+                        "none";
+
+                }
+            );
+
+            resultados.appendChild(
+                crear
+            );
+
+            resultados.style.display =
+                "block";
+
+        }
+    );
+
+}
+
+/* =========================
+   GUARDAR CLIENTE DESDE PRESUPUESTO
+========================= */
+
+document
+    .getElementById(
+        "guardarClienteDesdePresupuesto"
+    )
+    .addEventListener(
+        "click",
+        function() {
+
+            const nombre =
+                document
+                    .getElementById(
+                        "nombreClientePresupuesto"
+                    )
+                    .value
+                    .trim();
+
+            const empresa =
+                document
+                    .getElementById(
+                        "empresaClientePresupuesto"
+                    )
+                    .value
+                    .trim();
+
+            const nif =
+                document
+                    .getElementById(
+                        "nifClientePresupuesto"
+                    )
+                    .value
+                    .trim();
+
+            const telefono =
+                document
+                    .getElementById(
+                        "telefonoClientePresupuesto"
+                    )
+                    .value
+                    .trim();
+
+            const email =
+                document
+                    .getElementById(
+                        "emailClientePresupuesto"
+                    )
+                    .value
+                    .trim();
+
+            if (!nombre) {
+
+                alert(
+                    "Introduce el nombre del cliente."
+                );
+
+                return;
+
+            }
+
+            let clientes =
+                JSON.parse(
+                    localStorage.getItem(
+                        "clientes"
+                    )
+                ) || [];
+
+            const nifNormalizado =
+                nif
+                    .replace(/\s/g, "")
+                    .toUpperCase();
+
+            const nombreNormalizado =
+                nombre
+                    .toLowerCase()
+                    .trim();
+
+            const clienteDuplicado =
+                clientes.find(
+                    function(cliente) {
+
+                        const nifExistente =
+                            (cliente.nif || "")
+                                .replace(/\s/g, "")
+                                .toUpperCase();
+
+                        const nombreExistente =
+                            (cliente.nombre || "")
+                                .toLowerCase()
+                                .trim();
+
+                        return (
+                            (
+                                nifNormalizado !== "" &&
+                                nifExistente !== "" &&
+                                nifNormalizado ===
+                                nifExistente
+                            )
+                            ||
+                            (
+                                nombreNormalizado !== "" &&
+                                nombreExistente !== "" &&
+                                nombreNormalizado ===
+                                nombreExistente
+                            )
+                        );
+
+                    }
+                );
+
+            if (clienteDuplicado) {
+
+                alert(
+                    "Ya existe un cliente con este nombre o NIF/CIF:\n\n" +
+                    clienteDuplicado.nombre
+                );
+
+                return;
+
+            }
+
+            const nuevoCliente = {
+
+                nombre: nombre,
+
+                empresa: empresa,
+
+                nif: nif,
+
+                telefono: telefono,
+
+                email: email
+
+            };
+
+            clientes.push(
+                nuevoCliente
+            );
+
+            localStorage.setItem(
+                "clientes",
+                JSON.stringify(
+                    clientes
+                )
+            );
+
+            document
+                .getElementById(
+                    "clientePresupuesto"
+                )
+                .value =
+                nombre;
+
+            document
+                .getElementById(
+                    "formularioClientePresupuesto"
+                )
+                .style.display =
+                "none";
+
+            document
+                .getElementById(
+                    "nombreClientePresupuesto"
+                )
+                .value =
+                "";
+
+            document
+                .getElementById(
+                    "empresaClientePresupuesto"
+                )
+                .value =
+                "";
+
+            document
+                .getElementById(
+                    "nifClientePresupuesto"
+                )
+                .value =
+                "";
+
+            document
+                .getElementById(
+                    "telefonoClientePresupuesto"
+                )
+                .value =
+                "";
+
+            document
+                .getElementById(
+                    "emailClientePresupuesto"
+                )
+                .value =
+                "";
+
+            alert(
+                "Cliente guardado correctamente."
+            );
+
+        }
+    );
+   
+
+
+        /* =========================
+           CANCELAR
+        ========================= */
+
+        document
+            .getElementById(
+                "cancelarPresupuesto"
+            )
+            .addEventListener(
+                "click",
+                function() {
+
+
+                    document
+                        .getElementById(
+                            "formularioPresupuesto"
+                        )
+                        .style.display =
+                        "none";
+
+
+                    document
+                        .getElementById(
+                            "presupuestoForm"
+                        )
+                        .reset();
+
+
+                    document
+                        .getElementById(
+                            "totalPresupuesto"
+                        )
+                        .value =
+                        "";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nuevo presupuesto";
+
+
+                    delete document
+                        .getElementById(
+                            "presupuestoForm"
+                        )
+                        .dataset.editando;
+
+
+                }
+            );
+
+
+        /* =========================
+           CALCULAR TOTAL
+        ========================= */
+
+        function calcularTotalPresupuesto() {
+
+
+            const base =
+                parseFloat(
+                    document.getElementById(
+                        "basePresupuesto"
+                    ).value
+                ) || 0;
+
+
+            const iva =
+                parseFloat(
+                    document.getElementById(
+                        "ivaPresupuesto"
+                    ).value
+                ) || 0;
+
+
+            const total =
+                base +
+                (
+                    base *
+                    iva /
+                    100
+                );
+
+
+            document
+                .getElementById(
+                    "totalPresupuesto"
+                )
+                .value =
+                total.toFixed(2);
+
+
+        }
+
+
+        document
+            .getElementById(
+                "basePresupuesto"
+            )
+            .addEventListener(
+                "input",
+                calcularTotalPresupuesto
+            );
+
+
+        document
+            .getElementById(
+                "ivaPresupuesto"
+            )
+            .addEventListener(
+                "input",
+                calcularTotalPresupuesto
+            );
+
+
+        /* =========================
+           GUARDAR / EDITAR
+        ========================= */
+
+        document
+            .getElementById(
+                "presupuestoForm"
+            )
+            .addEventListener(
+                "submit",
+                function(event) {
+
+
+                    event.preventDefault();
+
+
+                    const numero =
+                        document.getElementById(
+                            "numeroPresupuesto"
+                        ).value;
+
+
+                    const fecha =
+                        document.getElementById(
+                            "fechaPresupuesto"
+                        ).value;
+
+
+                    const cliente =
+                         document.getElementById(
+                             "clientePresupuesto"
+                        ).value.trim();
+
+
+                    const base =
+                        parseFloat(
+                            document.getElementById(
+                                "basePresupuesto"
+                            ).value
+                        );
+
+
+                    const iva =
+                        parseFloat(
+                            document.getElementById(
+                                "ivaPresupuesto"
+                            ).value
+                        );
+
+
+                    const total =
+                        parseFloat(
+                            document.getElementById(
+                                "totalPresupuesto"
+                            ).value
+                        );
+
+
+                    const estado =
+                        document.getElementById(
+                            "estadoPresupuesto"
+                        ).value;
+
+
+                    if (cliente === "") {
+
+    alert(
+        "Selecciona o introduce un cliente."
+    );
+
+    return;
+
+}
+
+                    const presupuesto = {
+
+                        numero: numero,
+
+                        fecha: fecha,
+
+                        cliente: cliente,
+
+                        base: base,
+
+                        iva: iva,
+
+                        total: total,
+
+                        estado: estado
+
+                    };
+
+
+                    const presupuestos =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "presupuestos"
+                            )
+                        ) || [];
+
+
+                    const indiceEditando =
+    this.dataset.editando !== undefined
+        ? parseInt(this.dataset.editando)
+        : null;
+
+
+if (
+    indiceEditando !== null
+) {
+
+    presupuestos[
+        indiceEditando
+    ] = presupuesto;
+
+} else {
+
+    presupuestos.push(
+        presupuesto
+    );
+
+}
+
+
+                    localStorage.setItem(
+                        "presupuestos",
+                        JSON.stringify(
+                            presupuestos
+                        )
+                    );
+
+
+                    alert(
+                        indiceEditando !== null
+            
+                            ? "Presupuesto actualizado correctamente."
+                            : "Presupuesto guardado correctamente."
+                    );
+
+
+                    this.reset();
+
+
+                    document
+                        .getElementById(
+                            "totalPresupuesto"
+                        )
+                        .value =
+                        "";
+
+
+                    document
+                        .getElementById(
+                            "formularioPresupuesto"
+                        )
+                        .style.display =
+                        "none";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nuevo presupuesto";
+
+
+                    delete this.dataset.editando;
+
+
+                    mostrarPresupuestos();
+
+
+                }
+            );
+
+
+        /* =========================
+           MOSTRAR PRESUPUESTOS
+        ========================= */
+
+        function mostrarPresupuestos() {
+
+
+            const presupuestos =
+                JSON.parse(
+                    localStorage.getItem(
+                        "presupuestos"
+                    )
+                ) || [];
+
+
+            const tabla =
+                document.getElementById(
+                    "listaPresupuestos"
+                );
+
+
+            tabla.innerHTML = "";
+
+
+            if (
+                presupuestos.length === 0
+            ) {
+
+
+                tabla.innerHTML = `
+
+                    <tr>
+
+                        <td
+                            colspan="8"
+                            style="text-align:center;">
+
+                            No hay presupuestos registrados.
+
+                        </td>
+
+                    </tr>
+
+                `;
+
+
+                return;
+
+            }
+
+
+            presupuestos.forEach(
+                function(
+                    presupuesto,
+                    index
+                ) {
+
+
+                    const fila =
+                        document.createElement(
+                            "tr"
+                        );
+
+
+                    fila.innerHTML = `
+
+                        <td>
+                            ${presupuesto.numero}
+                        </td>
+
+
+                        <td>
+                            ${presupuesto.fecha}
+                        </td>
+
+
+                        <td>
+                            ${presupuesto.cliente}
+                        </td>
+
+
+                        <td>
+                            ${Number(
+                                presupuesto.base
+                            ).toFixed(2)} €
+                        </td>
+
+
+                        <td>
+                            ${presupuesto.iva}%
+                        </td>
+
+
+                        <td>
+                            ${Number(
+                                presupuesto.total
+                            ).toFixed(2)} €
+                        </td>
+
+
+                        <td>
+                            ${presupuesto.estado}
+                        </td>
+
+
+                        <td>
+
+                            <div class="acciones">
+
+
+                                <button
+                                    class="boton boton-principal"
+                                    onclick="editarPresupuesto(${index})">
+
+                                    Editar
+
+                                </button>
+
+
+                                <button
+                                    class="boton boton-eliminar"
+                                    onclick="eliminarPresupuesto(${index})">
+
+                                    Eliminar
+
+                                </button>
+
+
+                            </div>
+
+                        </td>
+
+                    `;
+
+
+                    tabla.appendChild(
+                        fila
+                    );
+
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           EDITAR PRESUPUESTO
+        ========================= */
+
+        /* =========================
+   EDITAR PRESUPUESTO
+========================= */
+
+function editarPresupuesto(index) {
+
+    const presupuestos =
+        JSON.parse(
+            localStorage.getItem(
+                "presupuestos"
+            )
+        ) || [];
+
+    const presupuesto =
+        presupuestos[index];
+
+    if (!presupuesto) {
+        return;
+    }
+
+    document
+        .getElementById(
+            "formularioPresupuesto"
+        )
+        .style.display =
+        "block";
+
+    document
+        .getElementById(
+            "tituloFormulario"
+        )
+        .textContent =
+        "Editar presupuesto";
+
+    document
+        .getElementById(
+            "numeroPresupuesto"
+        )
+        .value =
+        presupuesto.numero;
+
+    document
+        .getElementById(
+            "fechaPresupuesto"
+        )
+        .value =
+        presupuesto.fecha;
+
+    document
+        .getElementById(
+            "clientePresupuesto"
+        )
+        .value =
+        presupuesto.cliente;
+
+    document
+        .getElementById(
+            "basePresupuesto"
+        )
+        .value =
+        presupuesto.base;
+
+    document
+        .getElementById(
+            "ivaPresupuesto"
+        )
+        .value =
+        presupuesto.iva;
+
+    document
+        .getElementById(
+            "totalPresupuesto"
+        )
+        .value =
+        Number(
+            presupuesto.total
+        ).toFixed(2);
+
+    document
+        .getElementById(
+            "estadoPresupuesto"
+        )
+        .value =
+        presupuesto.estado;
+
+    document
+        .getElementById(
+            "presupuestoForm"
+        )
+        .dataset.editando =
+        index;
+
+}
+
+
+        /* =========================
+           ELIMINAR
+        ========================= */
+
+        function eliminarPresupuesto(index) {
+
+
+            const confirmar =
+                confirm(
+                    "¿Seguro que quieres eliminar este presupuesto?"
+                );
+
+
+            if (!confirmar) {
+
+                return;
+
+            }
+
+
+            const presupuestos =
+                JSON.parse(
+                    localStorage.getItem(
+                        "presupuestos"
+                    )
+                ) || [];
+
+
+            presupuestos.splice(
+                index,
+                1
+            );
+
+
+            localStorage.setItem(
+                "presupuestos",
+                JSON.stringify(
+                    presupuestos
+                )
+            );
+
+
+            mostrarPresupuestos();
+
+        }
+
+
+        /* =========================
+           BUSCAR
+        ========================= */
+
+        document
+            .getElementById(
+                "buscarPresupuesto"
+            )
+            .addEventListener(
+                "input",
+                function() {
+
+
+                    const texto =
+                        this.value
+                            .toLowerCase();
+
+
+                    const filas =
+                        document.querySelectorAll(
+                            "#listaPresupuestos tr"
+                        );
+
+
+                    filas.forEach(
+                        function(fila) {
+
+
+                            const contenido =
+                                fila.textContent
+                                    .toLowerCase();
+
+
+                            if (
+                                contenido.includes(
+                                    texto
+                                )
+                            ) {
+
+                                fila.style.display =
+                                    "";
+
+                            } else {
+
+                                fila.style.display =
+                                    "none";
+
+                            }
+
+
+                        }
+                    );
+
+
+                }
+            );
+
+
+        /* =========================
+           CARGAR AL ABRIR
+        ========================= */
+
+        cargarClientesEnPresupuesto();
+
+        mostrarPresupuestos();
+
+
+    </script>
+
+
+</body>
+
+</html>

@@ -1,0 +1,1944 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Facturas</title>
+
+    <style>
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 30px;
+            background-color: #f5f6f8;
+        }
+
+        .contenedor {
+            max-width: 1200px;
+            margin: auto;
+        }
+
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        h1 {
+            margin: 0;
+        }
+
+        .boton {
+            border: none;
+            padding: 10px 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .boton-principal {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .boton-secundario {
+            background-color: #e5e7eb;
+            color: #111827;
+        }
+
+        .boton-eliminar {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .boton:hover {
+            opacity: 0.9;
+        }
+
+        .buscador {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            margin-bottom: 20px;
+        }
+
+        .buscador input {
+            width: 100%;
+            padding: 10px;
+            box-sizing: border-box;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+        }
+
+        #formularioFactura {
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+        }
+
+        #facturaForm {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+        }
+
+        #facturaForm div {
+            display: flex;
+            flex-direction: column;
+        }
+
+        #facturaForm label {
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        #facturaForm input,
+        #facturaForm select {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            box-sizing: border-box;
+        }
+
+        #facturaForm button {
+            margin-top: 10px;
+        }
+
+        .botones-formulario {
+            grid-column: 1 / -1;
+            display: flex;
+            gap: 10px;
+        }
+
+        .tabla-contenedor {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            overflow-x: auto;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f3f4f6;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 8px;
+        }
+
+        .enlace-volver {
+            display: inline-block;
+            margin-bottom: 20px;
+            color: #2563eb;
+            text-decoration: none;
+        }
+
+        @media (max-width: 700px) {
+
+            #facturaForm {
+                grid-template-columns: 1fr;
+            }
+
+            .cabecera {
+                flex-direction: column;
+                align-items: flex-start;
+                gap: 15px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+    <div class="contenedor">
+
+        <a href="dashboard.html" class="enlace-volver">
+            ← Volver al inicio
+        </a>
+
+
+        <div class="cabecera">
+
+            <h1>Facturas</h1>
+
+            <button
+                id="nuevaFactura"
+                class="boton boton-principal">
+                + Nueva factura
+            </button>
+
+        </div>
+
+
+        <!-- BUSCADOR -->
+
+        <div class="buscador">
+
+            <input
+                type="text"
+                id="buscarFactura"
+                placeholder="Buscar factura, cliente o estado...">
+
+        </div>
+
+
+        <!-- FORMULARIO DE FACTURA -->
+
+        <div
+            id="formularioFactura"
+            style="display: none;">
+
+            <h2 id="tituloFormulario">
+                Nueva factura
+            </h2>
+
+
+            <form id="facturaForm">
+
+                <div>
+
+                    <label for="numeroFactura">
+                        Nº de factura
+                    </label>
+
+                    <input
+                        type="text"
+                        id="numeroFactura"
+                        placeholder="Ej. F-2026-001"
+                        required>
+
+                </div>
+
+
+                <div>
+
+                    <label for="fechaFactura">
+                        Fecha
+                    </label>
+
+                    <input
+                        type="date"
+                        id="fechaFactura"
+                        required>
+
+                    <label for="fechaVencimientoFactura">
+                        Fecha de vencimiento
+
+                    </label>
+                    <input type="date" 
+                    
+                    id="fechaVencimientoFactura" 
+                    required>
+
+                </div>
+                
+
+
+            <div style="position: relative;">
+
+                <label for="clienteFactura">
+                    Cliente
+                </label>
+
+                <input
+                    type="text"
+                    id="clienteFactura"
+                    placeholder="Escribe el nombre del cliente..."
+                    autocomplete="off"
+                    required
+                >
+
+                <div
+                    id="resultadosClientesFactura"
+                    style="
+                        display: none;
+                        position: absolute;
+                        left: 0;
+                        right: 0;
+                        top: 100%;
+                        background: white;
+                        border: 1px solid #ddd;
+                        border-radius: 8px;
+                        margin-top: 5px;
+                        z-index: 1000;
+                        box-shadow: 0 4px 12px rgba(0,0,0,0.10);
+                        overflow: hidden;
+                    ">
+                </div>
+
+        </div>
+
+<div style="margin-top: 15px;">
+
+    <label for="servicioFactura">
+        Servicio
+    </label>
+
+    <select
+        id="servicioFactura"
+        required>
+
+        <option value="">
+            Selecciona un servicio
+        </option>
+
+    </select>
+
+</div>
+
+<div
+    id="formularioClienteFactura"
+    style="
+        display: none;
+        margin-top: 15px;
+        padding: 20px;
+        border-radius: 10px;
+        background: #f5f5f5;
+    ">
+
+    <h3>Nuevo cliente</h3>
+
+    <div>
+        <label for="nombreClienteFactura">
+            Nombre / Razón social
+        </label>
+
+        <input
+            type="text"
+            id="nombreClienteFactura">
+    </div>
+
+    <div>
+        <label for="empresaClienteFactura">
+            Empresa
+        </label>
+
+        <input
+            type="text"
+            id="empresaClienteFactura">
+    </div>
+
+    <div>
+        <label for="nifClienteFactura">
+            NIF / CIF
+        </label>
+
+        <input
+            type="text"
+            id="nifClienteFactura">
+    </div>
+
+    <div>
+        <label for="telefonoClienteFactura">
+            Teléfono
+        </label>
+
+        <input
+            type="text"
+            id="telefonoClienteFactura">
+    </div>
+
+    <div>
+        <label for="emailClienteFactura">
+            Correo electrónico
+        </label>
+
+        <input
+            type="email"
+            id="emailClienteFactura">
+    </div>
+
+    <div style="margin-top: 15px;">
+
+        <button
+            type="button"
+            id="guardarClienteDesdeFactura">
+            Guardar cliente
+        </button>
+
+        <button
+            type="button"
+            id="cancelarClienteDesdeFactura">
+            Cancelar
+        </button>
+
+    </div>
+
+</div>
+
+
+                <div>
+
+                    <label>Base imponible</label>
+<input type="number" id="baseFactura" step="0.01" readonly>
+
+                        </div>
+
+
+                        <div>
+
+                            <h3 style="margin-top:20px;">Líneas de factura</h3>
+
+        <table id="tablaLineasFactura" style="width:100%; margin-top:10px; border-collapse:collapse;">
+            <thead>
+                <tr>
+                    <th>Concepto</th>
+                    <th style="width:100px;">Cantidad</th>
+                    <th style="width:120px;">Precio</th>
+                    <th style="width:120px;">Total</th>
+                    <th style="width:50px;"></th>
+                </tr>
+            </thead>
+
+            <tbody id="lineasFactura">
+            </tbody>
+        </table>
+
+        <button type="button" id="anadirLineaFactura" style="margin-top:10px;">
+            + Añadir línea
+        </button>
+                    <label for="ivaFactura">
+    IVA (%)
+</label>
+
+<input
+    type="number"
+    id="ivaFactura"
+    value="21"
+    step="0.01">
+
+<label for="importeIVAFactura">
+    Importe IVA
+</label>
+
+<input
+    type="number"
+    id="importeIVAFactura"
+    readonly>
+
+<label for="totalFactura">
+    Total
+</label>
+
+<input
+    type="number"
+    id="totalFactura"
+    readonly>
+
+
+
+
+                <div>
+
+                    <label for="estadoFactura">
+                        Estado
+                    </label>
+
+                    <select id="estadoFactura">
+
+                        <option value="Pendiente">
+                            Pendiente
+                        </option>
+
+                        <option value="Pagada">
+                            Pagada
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <div class="botones-formulario">
+
+                    <button
+                        type="submit"
+                        class="boton boton-principal">
+
+                        Guardar factura
+
+                    </button>
+
+
+                    <button
+                        type="button"
+                        id="cancelarFactura"
+                        class="boton boton-secundario">
+
+                        Cancelar
+
+                    </button>
+
+                </div>
+
+            </form>
+
+        </div>
+
+</div>
+        <!-- TABLA -->
+
+        <div class="tabla-contenedor">
+
+            <table>
+
+                <thead>
+
+                    <tr>
+
+                        <th>Nº factura</th>
+
+                        <th>Fecha</th>
+
+                        <th>Vencimiento</th>
+
+                        <th>Cliente</th>
+                        <th>Servicio</th>
+
+                        <th>Base imponible</th>
+
+                        <th>IVA</th>
+
+                        <th>Total</th>
+
+                        <th>Estado</th>
+
+                        <th>Acciones</th>
+
+                    </tr>
+
+                </thead>
+
+
+                <tbody id="listaFacturas">
+
+                </tbody>
+
+            </table>
+
+        
+
+    </div>
+
+
+    <script>
+
+        /* =========================
+           COMPROBAR SESIÓN
+        ========================= */
+
+        if (
+            localStorage.getItem("sesionIniciada")
+            !== "true"
+        ) {
+
+            window.location.href = "login.html";
+
+        }
+
+
+        /* =========================
+           BOTÓN NUEVA FACTURA
+        ========================= */
+
+        document
+            .getElementById("nuevaFactura")
+            .addEventListener("click", function() {
+
+                cargarClientesEnFactura();
+
+                document
+                    .getElementById("formularioFactura")
+                    .style.display = "block";
+
+                document.getElementById("lineasFactura").innerHTML = "";
+contadorLineas = 0;
+
+anadirLineaFactura();
+
+
+                document
+                    .getElementById("tituloFormulario")
+                    .textContent = "Nueva factura";
+                
+                document
+                    .getElementById("fechaVencimientoFactura").value = "";
+
+                document
+                    .getElementById("facturaForm")
+                    .reset();
+
+                document
+                    .getElementById("ivaFactura")
+                    .value = "21";
+
+                document
+                    .getElementById("importeIVAFactura")
+                    .value = "";
+
+                document
+                    .getElementById("totalFactura")
+                    .value = "";
+
+                delete document
+                    .getElementById("facturaForm")
+                    .dataset.editando;
+
+            });
+
+
+        /* =========================
+           CARGAR CLIENTES
+        ========================= */
+
+        function cargarClientesEnFactura() {
+
+    const clientes =
+        JSON.parse(
+            localStorage.getItem("clientes")
+        ) || [];
+
+    const input =
+        document.getElementById(
+            "clienteFactura"
+        );
+
+    const resultados =
+        document.getElementById(
+            "resultadosClientesFactura"
+        );
+
+    /* EVITAR DUPLICAR EL EVENTO */
+
+    if (input.dataset.eventoClientes === "true") {
+        return;
+    }
+
+    input.dataset.eventoClientes = "true";
+
+
+    input.addEventListener(
+        "input",
+        function() {
+
+            const texto =
+                input.value
+                    .trim()
+                    .toLowerCase();
+
+            resultados.innerHTML = "";
+
+
+            if (!texto) {
+
+                resultados.style.display =
+                    "none";
+
+                return;
+
+            }
+
+
+            const clientesActualizados =
+                JSON.parse(
+                    localStorage.getItem(
+                        "clientes"
+                    )
+                ) || [];
+
+
+            const coincidencias =
+                clientesActualizados.filter(
+                    function(cliente) {
+
+                        return (
+
+                            (cliente.nombre || "")
+                                .toLowerCase()
+                                .includes(texto)
+
+                            ||
+
+                            (cliente.empresa || "")
+                                .toLowerCase()
+                                .includes(texto)
+
+                            ||
+
+                            (cliente.nif || "")
+                                .toLowerCase()
+                                .includes(texto)
+
+                        );
+
+                    }
+                );
+
+
+            coincidencias.forEach(
+                function(cliente) {
+
+                    const opcion =
+                        document.createElement(
+                            "div"
+                        );
+
+                    opcion.style.padding =
+                        "12px";
+
+                    opcion.style.cursor =
+                        "pointer";
+
+                    opcion.style.borderBottom =
+                        "1px solid #eee";
+
+
+                    opcion.innerHTML =
+
+    "<strong>" +
+    cliente.nombre +
+    "</strong>" +
+
+    (
+        cliente.empresa
+            ? "<br><small>Empresa: " +
+              cliente.empresa +
+              "</small>"
+            : ""
+    ) +
+
+    (
+        cliente.nif
+            ? "<br><small>NIF/CIF: " +
+              cliente.nif +
+              "</small>"
+            : ""
+    );
+
+
+                    opcion.addEventListener(
+                        "click",
+                        function() {
+
+                            input.value =
+                                cliente.nombre;
+
+                            resultados.style.display =
+                                "none";
+
+                        }
+                    );
+
+
+                    resultados.appendChild(
+                        opcion
+                    );
+
+                }
+            );
+
+
+            const crear =
+                document.createElement(
+                    "div"
+                );
+
+
+            crear.style.padding =
+                "12px";
+
+            crear.style.cursor =
+                "pointer";
+
+            crear.style.fontWeight =
+                "600";
+
+
+            crear.textContent =
+                "+ Crear nuevo cliente";
+
+
+            crear.addEventListener(
+                "click",
+                function() {
+
+                    document
+                        .getElementById(
+                            "formularioClienteFactura"
+                        )
+                        .style.display =
+                        "block";
+
+
+                    document
+                        .getElementById(
+                            "nombreClienteFactura"
+                        )
+                        .value =
+                        input.value;
+
+
+                    document
+                        .getElementById(
+                            "nombreClienteFactura"
+                        )
+                        .focus();
+
+
+                    resultados.style.display =
+                        "none";
+
+                }
+            );
+
+
+            resultados.appendChild(
+                crear
+            );
+
+
+            resultados.style.display =
+                "block";
+
+        }
+    );
+
+}
+
+/* =========================
+   CARGAR SERVICIOS
+========================= */
+
+function cargarServiciosEnFactura() {
+
+    const select =
+        document.getElementById(
+            "servicioFactura"
+        );
+
+    if (!select) {
+        return;
+    }
+
+    const servicios =
+        JSON.parse(
+            localStorage.getItem(
+                "servicios"
+            )
+        ) || [];
+
+    select.innerHTML = `
+        <option value="">
+            Selecciona un servicio
+        </option>
+    `;
+
+    servicios.forEach(
+        function(servicio) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                servicio.nombre;
+
+            option.textContent =
+                servicio.nombre;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+}
+            
+
+
+        /* =========================
+           CANCELAR NUEVO CLIENTE
+        ========================= */
+
+        document
+            .getElementById(
+                "cancelarClienteDesdeFactura"
+            )
+            .addEventListener(
+                "click",
+                function() {
+
+                    document
+                        .getElementById(
+                            "formularioClienteFactura"
+                        )
+                        .style.display = "none";
+
+
+                    limpiarFormularioClienteFactura();
+
+                }
+            );
+
+
+        /* =========================
+           GUARDAR NUEVO CLIENTE
+        ========================= */
+
+        document
+            .getElementById(
+                "guardarClienteDesdeFactura"
+            )
+            .addEventListener(
+                "click",
+                function() {
+
+                    const nombre =
+                        document
+                            .getElementById(
+                                "nombreClienteFactura"
+                            )
+                            .value
+                            .trim();
+
+
+                    const empresa =
+                        document
+                            .getElementById(
+                                "empresaClienteFactura"
+                            )
+                            .value
+                            .trim();
+
+
+                    const nif =
+                        document
+                            .getElementById(
+                                "nifClienteFactura"
+                            )
+                            .value
+                            .trim();
+
+
+                    const telefono =
+                        document
+                            .getElementById(
+                                "telefonoClienteFactura"
+                            )
+                            .value
+                            .trim();
+
+
+                    const email =
+                        document
+                            .getElementById(
+                                "emailClienteFactura"
+                            )
+                            .value
+                            .trim();
+
+
+                    if (!nombre) {
+
+                        alert(
+                            "Introduce el nombre o razón social del cliente."
+                        );
+
+                        return;
+
+                    }
+
+
+                    const clientes =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "clientes"
+                            )
+                        ) || [];
+
+
+                    const nuevoCliente = {
+
+                        nombre: nombre,
+
+                        empresa: empresa,
+
+                        nif: nif,
+
+                        telefono: telefono,
+
+                        email: email
+
+                    };
+                    const nifNormalizado =
+    nif
+        .replace(/\s/g, "")
+        .toUpperCase();
+
+const nombreNormalizado =
+    nombre
+        .trim()
+        .toLowerCase();
+
+
+const clienteDuplicado =
+    clientes.find(
+        function(cliente) {
+
+            const nifExistente =
+                (cliente.nif || "")
+                    .replace(/\s/g, "")
+                    .toUpperCase();
+
+            const nombreExistente =
+                (cliente.nombre || "")
+                    .trim()
+                    .toLowerCase();
+
+
+            return (
+
+                (
+                    nifNormalizado !== "" &&
+                    nifExistente !== "" &&
+                    nifNormalizado === nifExistente
+                )
+
+                ||
+
+                (
+                    nombreNormalizado !== "" &&
+                    nombreExistente !== "" &&
+                    nombreNormalizado === nombreExistente
+                )
+
+            );
+
+        }
+    );
+
+
+if (clienteDuplicado) {
+
+    let mensaje =
+        "Este cliente ya existe.";
+
+    if (
+        nifNormalizado !== "" &&
+        clienteDuplicado.nif
+            .replace(/\s/g, "")
+            .toUpperCase() ===
+        nifNormalizado
+    ) {
+
+        mensaje =
+            "Ya existe un cliente con este NIF/CIF:\n\n" +
+            clienteDuplicado.nombre;
+
+    } else {
+
+        mensaje =
+            "Ya existe un cliente con este nombre:\n\n" +
+            clienteDuplicado.nombre;
+
+    }
+
+    alert(mensaje);
+
+    return;
+
+}
+
+
+                    clientes.push(
+                        nuevoCliente
+                    );
+
+
+                    localStorage.setItem(
+                        "clientes",
+                        JSON.stringify(
+                            clientes
+                        )
+                    );
+
+
+                    /*
+                     * Volvemos a cargar el desplegable
+                     * utilizando la función que ya existe.
+                     */
+
+                    cargarClientesEnFactura();
+
+
+                    /*
+                     * El nuevo cliente está en la última
+                     * posición del array.
+                     */
+
+                    document
+    .getElementById(
+        "clienteFactura"
+    )
+    .value =
+    nombre;
+
+
+                    /*
+                     * Cerramos el formulario.
+                     */
+
+                    document
+                        .getElementById(
+                            "formularioClienteFactura"
+                        )
+                        .style.display = "none";
+
+
+                    limpiarFormularioClienteFactura();
+
+
+                    alert(
+                        "Cliente creado correctamente."
+                    );
+
+                }
+            );
+
+
+        /* =========================
+           LIMPIAR FORMULARIO CLIENTE
+        ========================= */
+
+        function limpiarFormularioClienteFactura() {
+
+            document
+                .getElementById(
+                    "nombreClienteFactura"
+                )
+                .value = "";
+
+
+            document
+                .getElementById(
+                    "empresaClienteFactura"
+                )
+                .value = "";
+
+
+            document
+                .getElementById(
+                    "nifClienteFactura"
+                )
+                .value = "";
+
+
+            document
+                .getElementById(
+                    "telefonoClienteFactura"
+                )
+                .value = "";
+
+
+            document
+                .getElementById(
+                    "emailClienteFactura"
+                )
+                .value = "";
+
+        }
+
+
+        /* =========================
+           CANCELAR
+        ========================= */
+
+        document
+            .getElementById("cancelarFactura")
+            .addEventListener(
+                "click",
+                function() {
+
+                    document
+                        .getElementById(
+                            "formularioFactura"
+                        )
+                        .style.display = "none";
+
+
+                    document
+                        .getElementById(
+                            "facturaForm"
+                        )
+                        .reset();
+
+
+                    document
+                        .getElementById(
+                            "totalFactura"
+                        )
+                        .value = "";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nueva factura";
+
+
+                    delete document
+                        .getElementById(
+                            "facturaForm"
+                        )
+                        .dataset.editando;
+
+                }
+            );
+
+
+        /* =========================
+           CALCULAR IVA
+        ========================= */
+
+        function calcularTotalFactura() {
+
+            const base = parseFloat(
+                document.getElementById("baseFactura").value
+            ) || 0;
+
+            const iva = parseFloat(
+                document.getElementById("ivaFactura").value
+            ) || 0;
+
+            const importeIVA = base * iva / 100;
+
+            const total = base + importeIVA;
+
+            document.getElementById("importeIVAFactura").value =
+                importeIVA.toFixed(2);
+
+            document.getElementById("totalFactura").value =
+                total.toFixed(2);
+        }
+
+
+        document
+            .getElementById("baseFactura")
+            .addEventListener(
+                "input",
+                calcularTotalFactura
+            );
+
+
+        document
+            .getElementById("ivaFactura")
+            .addEventListener(
+                "input",
+                calcularTotalFactura
+            );
+
+
+        /* =========================
+           GUARDAR / EDITAR FACTURA
+        ========================= */
+
+        let contadorLineas = 0;
+
+function anadirLineaFactura(concepto = "", cantidad = 1, precio = 0) {
+
+    const tbody = document.getElementById("lineasFactura");
+
+    const fila = document.createElement("tr");
+
+    fila.innerHTML = `
+        <td>
+            <input type="text" class="concepto-linea" value="${concepto}" placeholder="Concepto">
+        </td>
+
+        <td>
+            <input type="number" class="cantidad-linea" value="${cantidad}" min="0" step="0.01">
+        </td>
+
+        <td>
+            <input type="number" class="precio-linea" value="${precio}" min="0" step="0.01">
+        </td>
+
+        <td>
+            <input type="text" class="total-linea" value="0.00" readonly>
+        </td>
+
+        <td>
+            <button type="button" class="eliminar-linea">✕</button>
+        </td>
+    `;
+
+    tbody.appendChild(fila);
+
+    const cantidadInput = fila.querySelector(".cantidad-linea");
+    const precioInput = fila.querySelector(".precio-linea");
+    const totalInput = fila.querySelector(".total-linea");
+    const eliminar = fila.querySelector(".eliminar-linea");
+
+    function calcularLinea() {
+        const cantidad = parseFloat(cantidadInput.value) || 0;
+        const precio = parseFloat(precioInput.value) || 0;
+
+        const total = cantidad * precio;
+
+        totalInput.value = total.toFixed(2);
+
+        calcularBaseDesdeLineas();
+    }
+
+    cantidadInput.addEventListener("input", calcularLinea);
+    precioInput.addEventListener("input", calcularLinea);
+
+    eliminar.addEventListener("click", function() {
+        fila.remove();
+        calcularBaseDesdeLineas();
+    });
+
+    calcularLinea();
+
+    contadorLineas++;
+}
+
+function calcularBaseDesdeLineas() {
+
+    const filas = document.querySelectorAll("#lineasFactura tr");
+
+    let base = 0;
+
+    filas.forEach(fila => {
+        const total = parseFloat(
+            fila.querySelector(".total-linea").value
+        ) || 0;
+
+        base += total;
+    });
+
+    document.getElementById("baseFactura").value = base.toFixed(2);
+
+    calcularTotalFactura();
+}
+
+document
+    .getElementById("anadirLineaFactura")
+    .addEventListener("click", function() {
+        anadirLineaFactura();
+    });
+        document
+            .getElementById("facturaForm")
+            .addEventListener(
+                "submit",
+                function(event) {
+
+                    event.preventDefault();
+
+
+                    const numero =
+                        document.getElementById(
+                            "numeroFactura"
+                        ).value;
+
+
+                    const fecha =
+                        document.getElementById(
+                            "fechaFactura"
+                        ).value;
+
+                    const vencimiento = 
+                    document.getElementById(
+                        "fechaVencimientoFactura"
+                    ).value;
+
+
+                    
+
+
+                    const base =
+                        parseFloat(
+                        document.getElementById(
+                            "baseFactura"
+                        ).value
+                    ) || 0;
+
+
+                const iva =
+                    parseFloat(
+                        document.getElementById(
+                            "ivaFactura"
+                        ).value
+                    ) || 0;
+
+
+                const importeIVA =
+                    parseFloat(
+                        document.getElementById(
+                            "importeIVAFactura"
+                        ).value
+                    ) || 0;
+
+
+                const total =
+                    parseFloat(
+                        document.getElementById(
+                            "totalFactura"
+                        ).value
+                    ) || 0;
+
+
+                    const estado =
+                        document.getElementById(
+                            "estadoFactura"
+                        ).value;
+
+
+                    /* CLIENTE */
+
+                    const cliente =
+                        document.getElementById(
+                            "clienteFactura"
+                        ).value.trim();
+                    
+                    const servicio =
+                         document.getElementById("servicioFactura").value;
+
+
+
+if (cliente === "") {
+
+    alert(
+        "Selecciona o introduce un cliente."
+    );
+
+    return;
+
+}
+
+
+                    /* CREAR OBJETO */
+
+                    const lineas = [];
+
+document.querySelectorAll("#lineasFactura tr").forEach(fila => {
+
+    const concepto = fila.querySelector(".concepto-linea").value.trim();
+    const cantidad = parseFloat(fila.querySelector(".cantidad-linea").value) || 0;
+    const precio = parseFloat(fila.querySelector(".precio-linea").value) || 0;
+    const totalLinea = parseFloat(fila.querySelector(".total-linea").value) || 0;
+
+    if (concepto || cantidad || precio) {
+        lineas.push({
+            concepto: concepto,
+            cantidad: cantidad,
+            precio: precio,
+            total: totalLinea
+        });
+    }
+});
+
+const factura = {
+    numero: numero,
+    fecha: fecha,
+    vencimiento: vencimiento,
+    cliente: cliente,
+    servicio: servicio,
+    lineas: lineas,
+    base: base,
+    iva: iva,
+    importeIVA: importeIVA,
+    total: total,
+    estado: estado
+};
+
+
+                    /* FACTURAS */
+
+                    const facturas =
+                        JSON.parse(
+                            localStorage.getItem(
+                                "facturas"
+                            )
+                        ) || [];
+
+
+                    /* COMPROBAR SI ESTAMOS EDITANDO */
+
+                    const indiceEditando =
+                        this.dataset.editando;
+
+
+                    if (
+                        indiceEditando !== undefined
+                    ) {
+
+                        facturas[
+                            parseInt(indiceEditando)
+                        ] = factura;
+
+
+                    } else {
+
+                        facturas.push(factura);
+
+                    }
+
+
+                    /* GUARDAR */
+
+                    localStorage.setItem(
+                        "facturas",
+                        JSON.stringify(
+                            facturas
+                        )
+                    );
+
+
+                    alert(
+                        indiceEditando !== undefined
+                            ? "Factura actualizada correctamente."
+                            : "Factura guardada correctamente."
+                    );
+
+
+                    /* LIMPIAR */
+
+                    this.reset();
+
+
+                    document
+                        .getElementById(
+                            "totalFactura"
+                        )
+                        .value = "";
+
+
+                    document
+                        .getElementById(
+                            "formularioFactura"
+                        )
+                        .style.display = "none";
+
+
+                    document
+                        .getElementById(
+                            "tituloFormulario"
+                        )
+                        .textContent =
+                        "Nueva factura";
+
+
+                    delete this.dataset.editando;
+
+
+                    /* ACTUALIZAR TABLA */
+
+                    mostrarFacturas();
+
+                }
+            );
+
+
+        /* =========================
+           MOSTRAR FACTURAS
+        ========================= */
+
+        function mostrarFacturas() {
+
+            const facturas =
+                JSON.parse(
+                    localStorage.getItem(
+                        "facturas"
+                    )
+                ) || [];
+
+
+            const tabla =
+                document.getElementById(
+                    "listaFacturas"
+                );
+
+
+            tabla.innerHTML = "";
+
+
+            if (facturas.length === 0) {
+
+                tabla.innerHTML = `
+                    <tr>
+                        <td
+                            colspan="8"
+                            style="text-align:center;">
+                            No hay facturas registradas.
+                        </td>
+                    </tr>
+                `;
+
+                return;
+
+            }
+
+
+            facturas.forEach(
+                function(factura, index) {
+
+                    const fila =
+                        document.createElement("tr");
+
+
+                    fila.innerHTML = `
+
+                        <td>
+                            ${factura.numero}
+                        </td>
+
+                        <td>
+                            ${factura.fecha}
+                        </td>
+                        <td>
+                            ${factura.vencimiento || ""}
+                        </td>
+
+                        <td>
+                            ${factura.cliente}
+                        </td>
+                        <td>${factura.servicio}
+                        </td>
+
+                        <td>
+                            ${Number(
+                                factura.base
+                            ).toFixed(2)} €
+                        </td>
+
+                        <td>
+                            ${factura.iva}%
+                        </td>
+
+                        <td>
+                            ${Number(
+                                factura.total
+                            ).toFixed(2)} €
+                        </td>
+
+                        <td>
+                            ${factura.estado}
+                        </td>
+
+                        <td>
+
+                            <div class="acciones">
+
+                                <button
+                                    class="boton boton-principal"
+                                    onclick="verFactura(${index})">
+
+                                    Ver
+
+                                </button>
+
+                                <button
+                                    class="boton boton-principal"
+                                    onclick="editarFactura(${index})">
+
+                                    Editar
+
+                                </button>
+
+
+                                <button
+                                    class="boton boton-eliminar"
+                                    onclick="eliminarFactura(${index})">
+
+                                    Eliminar
+
+                                </button>
+
+                            </div>
+
+                        </td>
+
+                    `;
+
+
+                    tabla.appendChild(fila);
+
+                }
+            );
+
+        }
+
+
+        /* =========================
+           EDITAR FACTURA
+        ========================= */
+
+        function editarFactura(index) {
+
+            const facturas =
+                JSON.parse(
+                    localStorage.getItem(
+                        "facturas"
+                    )
+                ) || [];
+
+
+            const factura =
+                facturas[index];
+
+
+            if (!factura) {
+
+                return;
+
+            }
+
+
+            /* CARGAR CLIENTES */
+
+            cargarClientesEnFactura();
+
+
+            /* MOSTRAR FORMULARIO */
+
+            document
+                .getElementById(
+                    "formularioFactura"
+                )
+                .style.display = "block";
+
+
+            /* CAMBIAR TÍTULO */
+
+            document
+                .getElementById(
+                    "tituloFormulario"
+                )
+                .textContent =
+                "Editar factura";
+
+
+            /* CARGAR DATOS */
+
+            document
+                .getElementById(
+                    "numeroFactura"
+                )
+                .value =
+                factura.numero;
+
+
+            document
+                .getElementById(
+                    "fechaFactura"
+                )
+                .value =
+                factura.fecha;
+
+            document
+                .getElementById(
+                    "fechaVencimientoFactura"
+                )
+                .value = 
+                factura.vencimiento || "";
+
+
+            document
+                .getElementById(
+                    "baseFactura"
+                )
+                .value =
+                factura.base;
+
+
+            document
+                .getElementById(
+                    "ivaFactura"
+                )
+                .value =
+                factura.iva;
+
+
+            document
+                .getElementById(
+                    "totalFactura"
+                )
+                .value =
+                Number(
+                    factura.total
+                ).toFixed(2);
+
+
+            document
+                .getElementById(
+                    "estadoFactura"
+                )
+                .value =
+                factura.estado;
+
+
+            /* CARGAR CLIENTE */
+
+document
+    .getElementById(
+        "clienteFactura"
+    )
+    .value =
+    factura.cliente;
+
+
+            /* GUARDAR ÍNDICE */
+
+            document
+                .getElementById(
+                    "facturaForm"
+                )
+                .dataset.editando =
+                index;
+
+        }
+
+
+        /* =========================
+           ELIMINAR FACTURA
+        ========================= */
+
+        function verFactura(index) {
+
+            window.location.href =
+                "ver-factura.html?index=" + index;
+
+        }
+
+        function eliminarFactura(index) {
+
+            const confirmar =
+                confirm(
+                    "¿Seguro que quieres eliminar esta factura?"
+                );
+
+
+            if (!confirmar) {
+
+                return;
+
+            }
+
+
+            const facturas =
+                JSON.parse(
+                    localStorage.getItem(
+                        "facturas"
+                    )
+                ) || [];
+
+
+            facturas.splice(
+                index,
+                1
+            );
+
+
+            localStorage.setItem(
+                "facturas",
+                JSON.stringify(
+                    facturas
+                )
+            );
+
+
+            mostrarFacturas();
+
+        }
+
+
+        /* =========================
+           BUSCAR FACTURAS
+        ========================= */
+
+        document
+            .getElementById(
+                "buscarFactura"
+            )
+            .addEventListener(
+                "input",
+                function() {
+
+                    const texto =
+                        this.value.toLowerCase();
+
+
+                    const filas =
+                        document.querySelectorAll(
+                            "#listaFacturas tr"
+                        );
+
+
+                    filas.forEach(
+                        function(fila) {
+
+                            const contenido =
+                                fila.textContent
+                                    .toLowerCase();
+
+
+                            if (
+                                contenido.includes(
+                                    texto
+                                )
+                            ) {
+
+                                fila.style.display =
+                                    "";
+
+                            } else {
+
+                                fila.style.display =
+                                    "none";
+
+                            }
+
+                        }
+                    );
+
+                }
+            );
+
+
+        /* =========================
+           CARGAR FACTURAS AL ABRIR
+        ========================= */
+
+        cargarServiciosEnFactura();
+        mostrarFacturas();
+
+    </script>
+
+</body>
+
+</html>

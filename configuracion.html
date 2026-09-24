@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestia - Configuración</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f0e8;
+            color: #4a4038;
+        }
+
+        /* SIDEBAR */
+        .sidebar {
+            width: 245px;
+            height: 100vh;
+            background: #5a4636;
+            color: white;
+            position: fixed;
+            left: 0;
+            top: 0;
+            padding: 25px 15px;
+        }
+
+        .logo {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .menu {
+            display: flex;
+            flex-direction: column;
+            gap: 7px;
+        }
+
+        .menu a {
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            border-radius: 8px;
+            display: block;
+            transition: 0.2s;
+        }
+
+        .menu a:hover {
+            background: #725b47;
+        }
+
+        .menu a.activo {
+            background: #80674f;
+        }
+
+        .separador {
+            height: 1px;
+            background: rgba(255,255,255,0.2);
+            margin: 15px 0;
+        }
+
+        /* CONTENIDO */
+        .main {
+            margin-left: 245px;
+            padding: 35px;
+            min-height: 100vh;
+        }
+
+        .titulo {
+            margin-bottom: 30px;
+        }
+
+        .titulo h1 {
+            font-size: 30px;
+            margin-bottom: 8px;
+        }
+
+        .titulo p {
+            color: #7b7067;
+        }
+
+        /* TARJETAS */
+        .card {
+            background: white;
+            border-radius: 12px;
+            padding: 25px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+        }
+
+        .card h2 {
+            margin-bottom: 8px;
+            color: #5a4636;
+        }
+
+        .card-descripcion {
+            color: #7b7067;
+            margin-bottom: 25px;
+            font-size: 14px;
+        }
+
+        /* FORMULARIO */
+        .form-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 18px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group.full {
+            grid-column: 1 / -1;
+        }
+
+        label {
+            margin-bottom: 7px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        input {
+            padding: 11px 12px;
+            border: 1px solid #d8cec3;
+            border-radius: 7px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        input:focus {
+            border-color: #8b6f55;
+        }
+
+        /* LOGO */
+        .logo-section {
+            display: flex;
+            gap: 25px;
+            align-items: center;
+        }
+
+        .logo-preview {
+            width: 130px;
+            height: 90px;
+            border: 1px dashed #c8b9aa;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            overflow: hidden;
+            background: #faf8f5;
+            color: #9a8d82;
+            font-size: 13px;
+            text-align: center;
+        }
+
+        .logo-preview img {
+            max-width: 100%;
+            max-height: 100%;
+            object-fit: contain;
+        }
+
+        .logo-info {
+            color: #7b7067;
+            font-size: 13px;
+            line-height: 1.5;
+        }
+
+        /* BOTONES */
+        .acciones {
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+            margin-top: 25px;
+        }
+
+        button {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 20px;
+            font-size: 14px;
+            cursor: pointer;
+        }
+
+        .btn-guardar {
+            background: #5a4636;
+            color: white;
+        }
+
+        .btn-guardar:hover {
+            background: #725b47;
+        }
+
+        .btn-borrar {
+            background: #eee8e1;
+            color: #5a4636;
+        }
+
+        .mensaje {
+            margin-top: 15px;
+            padding: 12px;
+            border-radius: 7px;
+            display: none;
+            background: #e8f3e8;
+            color: #38613d;
+        }
+
+        /* RESPONSIVE */
+        @media (max-width: 800px) {
+            .sidebar {
+                width: 200px;
+            }
+
+            .main {
+                margin-left: 200px;
+                padding: 20px;
+            }
+
+            .form-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .form-group.full {
+                grid-column: auto;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- BARRA LATERAL -->
+    <aside class="sidebar">
+
+        <div class="logo">
+            gestia
+        </div>
+
+        <nav class="menu">
+
+            <a href="dashboard.html">Inicio</a>
+
+            <a href="clientes.html">Clientes</a>
+
+            <a href="proveedores.html">Proveedores</a>
+
+            <a href="presupuestos.html">Presupuestos</a>
+
+            <a href="facturas.html">Facturas</a>
+
+            <a href="gastos.html">Gastos</a>
+
+            <a href="albaranes.html">Albaranes</a>
+
+            <a href="trabajos.html">Trabajos</a>
+
+            <a href="informes.html">Informes</a>
+
+            <div class="separador"></div>
+
+            <a href="configuracion.html" class="activo">Configuración</a>
+
+            <a href="#" onclick="cerrarSesion()">Salir</a>
+
+        </nav>
+
+    </aside>
+
+
+    <!-- CONTENIDO -->
+    <main class="main">
+
+        <div class="titulo">
+
+            <h1>Configuración</h1>
+
+            <p>
+                Gestiona los datos de tu empresa y la información que aparecerá en tus documentos.
+            </p>
+
+        </div>
+
+
+        <!-- DATOS DE LA EMPRESA -->
+        <section class="card">
+
+            <h2>Datos de mi empresa</h2>
+
+            <p class="card-descripcion">
+                Estos datos se utilizarán automáticamente en facturas, presupuestos y otros documentos.
+            </p>
+
+
+            <div class="form-grid">
+
+                <div class="form-group">
+                    <label for="nombreEmpresa">
+                        Nombre / Razón social
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nombreEmpresa"
+                        placeholder="Nombre de la empresa"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="nifEmpresa">
+                        NIF / CIF
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nifEmpresa"
+                        placeholder="NIF / CIF"
+                    >
+                </div>
+
+
+                <div class="form-group full">
+                    <label for="direccionEmpresa">
+                        Dirección
+                    </label>
+
+                    <input
+                        type="text"
+                        id="direccionEmpresa"
+                        placeholder="Calle, número, piso..."
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="cpEmpresa">
+                        Código postal
+                    </label>
+
+                    <input
+                        type="text"
+                        id="cpEmpresa"
+                        placeholder="03000"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="poblacionEmpresa">
+                        Población
+                    </label>
+
+                    <input
+                        type="text"
+                        id="poblacionEmpresa"
+                        placeholder="Población"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="provinciaEmpresa">
+                        Provincia
+                    </label>
+
+                    <input
+                        type="text"
+                        id="provinciaEmpresa"
+                        placeholder="Provincia"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="telefonoEmpresa">
+                        Teléfono
+                    </label>
+
+                    <input
+                        type="text"
+                        id="telefonoEmpresa"
+                        placeholder="Teléfono"
+                    >
+                </div>
+
+
+                <div class="form-group">
+                    <label for="emailEmpresa">
+                        Email
+                    </label>
+
+                    <input
+                        type="email"
+                        id="emailEmpresa"
+                        placeholder="correo@empresa.com"
+                    >
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- LOGO -->
+        <section class="card">
+
+            <h2>Logo de la empresa</h2>
+
+            <p class="card-descripcion">
+                Añade el logo que quieres utilizar en tus facturas y presupuestos.
+            </p>
+
+
+            <div class="logo-section">
+
+                <div class="logo-preview" id="logoPreview">
+                    Sin logo
+                </div>
+
+
+                <div>
+
+                    <input
+                        type="file"
+                        id="logoEmpresa"
+                        accept="image/png, image/jpeg, image/webp"
+                    >
+
+                    <p class="logo-info">
+                        Recomendado: imagen PNG o JPG con fondo transparente.
+                        <br>
+                        El logo se guardará para utilizarlo en tus documentos.
+                    </p>
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- DATOS BANCARIOS -->
+        <section class="card">
+
+            <h2>Datos bancarios</h2>
+
+            <p class="card-descripcion">
+                Opcional. Estos datos podrán aparecer posteriormente en tus facturas.
+            </p>
+
+
+            <div class="form-grid">
+
+                <div class="form-group full">
+
+                    <label for="ibanEmpresa">
+                        IBAN
+                    </label>
+
+                    <input
+                        type="text"
+                        id="ibanEmpresa"
+                        placeholder="ES00 0000 0000 0000 0000 0000"
+                    >
+
+                </div>
+
+            </div>
+
+        </section>
+
+
+        <!-- BOTONES -->
+        <div class="acciones">
+
+            <button
+                class="btn-borrar"
+                onclick="borrarDatos()"
+            >
+                Borrar datos
+            </button>
+
+            <button
+                class="btn-guardar"
+                onclick="guardarDatos()"
+            >
+                Guardar cambios
+            </button>
+
+        </div>
+
+
+        <div
+            class="mensaje"
+            id="mensajeGuardado"
+        >
+            Los datos de la empresa se han guardado correctamente.
+        </div>
+
+    </main>
+
+
+    <script>
+
+        // COMPROBAR SESIÓN
+        if (localStorage.getItem("sesionIniciada") !== "true") {
+            window.location.href = "login.html";
+        }
+
+
+        // LOGO EN MEMORIA
+        let logoBase64 = "";
+
+
+        // CARGAR DATOS AL ABRIR
+        document.addEventListener("DOMContentLoaded", function() {
+
+            cargarDatos();
+
+        });
+
+
+        // CARGAR DATOS DE LA EMPRESA
+        function cargarDatos() {
+
+            const datos = JSON.parse(
+                localStorage.getItem("datosEmpresa")
+            );
+
+            if (!datos) {
+                return;
+            }
+
+
+            document.getElementById("nombreEmpresa").value =
+                datos.nombre || "";
+
+            document.getElementById("nifEmpresa").value =
+                datos.nif || "";
+
+            document.getElementById("direccionEmpresa").value =
+                datos.direccion || "";
+
+            document.getElementById("cpEmpresa").value =
+                datos.cp || "";
+
+            document.getElementById("poblacionEmpresa").value =
+                datos.poblacion || "";
+
+            document.getElementById("provinciaEmpresa").value =
+                datos.provincia || "";
+
+            document.getElementById("telefonoEmpresa").value =
+                datos.telefono || "";
+
+            document.getElementById("emailEmpresa").value =
+                datos.email || "";
+
+            document.getElementById("ibanEmpresa").value =
+                datos.iban || "";
+
+
+            logoBase64 = datos.logo || "";
+
+
+            if (logoBase64) {
+
+                document.getElementById("logoPreview").innerHTML =
+                    `<img src="${logoBase64}" alt="Logo de la empresa">`;
+
+            }
+
+        }
+
+
+        // SELECCIONAR LOGO
+        document
+            .getElementById("logoEmpresa")
+            .addEventListener("change", function(event) {
+
+                const archivo = event.target.files[0];
+
+                if (!archivo) {
+                    return;
+                }
+
+
+                const lector = new FileReader();
+
+
+                lector.onload = function(e) {
+
+                    logoBase64 = e.target.result;
+
+
+                    document.getElementById("logoPreview").innerHTML =
+                        `<img src="${logoBase64}" alt="Logo de la empresa">`;
+
+                };
+
+
+                lector.readAsDataURL(archivo);
+
+            });
+
+
+        // GUARDAR DATOS
+        function guardarDatos() {
+
+            const datosEmpresa = {
+
+                nombre:
+                    document.getElementById("nombreEmpresa").value.trim(),
+
+                nif:
+                    document.getElementById("nifEmpresa").value.trim(),
+
+                direccion:
+                    document.getElementById("direccionEmpresa").value.trim(),
+
+                cp:
+                    document.getElementById("cpEmpresa").value.trim(),
+
+                poblacion:
+                    document.getElementById("poblacionEmpresa").value.trim(),
+
+                provincia:
+                    document.getElementById("provinciaEmpresa").value.trim(),
+
+                telefono:
+                    document.getElementById("telefonoEmpresa").value.trim(),
+
+                email:
+                    document.getElementById("emailEmpresa").value.trim(),
+
+                iban:
+                    document.getElementById("ibanEmpresa").value.trim(),
+
+                logo:
+                    logoBase64
+
+            };
+
+
+            localStorage.setItem(
+                "datosEmpresa",
+                JSON.stringify(datosEmpresa)
+            );
+
+
+            const mensaje =
+                document.getElementById("mensajeGuardado");
+
+            mensaje.style.display = "block";
+
+
+            setTimeout(function() {
+
+                mensaje.style.display = "none";
+
+            }, 3000);
+
+        }
+
+
+        // BORRAR DATOS
+        function borrarDatos() {
+
+            const confirmar = confirm(
+                "¿Seguro que quieres borrar todos los datos de la empresa?"
+            );
+
+
+            if (!confirmar) {
+                return;
+            }
+
+
+            localStorage.removeItem("datosEmpresa");
+
+
+            document
+                .querySelectorAll("input")
+                .forEach(function(input) {
+
+                    input.value = "";
+
+                });
+
+
+            logoBase64 = "";
+
+
+            document.getElementById("logoPreview").innerHTML =
+                "Sin logo";
+
+        }
+
+
+        // CERRAR SESIÓN
+        function cerrarSesion() {
+
+            localStorage.removeItem("sesionIniciada");
+
+            window.location.href = "login.html";
+
+        }
+
+    </script>
+
+</body>
+</html>

@@ -1,0 +1,2549 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gestia - Plantillas de factura</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f0e8;
+            color: #4a4038;
+        }
+
+        /* =========================
+           SIDEBAR
+        ========================= */
+
+        .sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 245px;
+            height: 100vh;
+            background: #5a4636;
+            color: white;
+            padding: 25px 15px;
+            overflow-y: auto;
+        }
+
+        .logo-gestia {
+            font-size: 28px;
+            font-weight: bold;
+            text-align: center;
+            margin-bottom: 35px;
+        }
+
+        .sidebar a {
+            display: block;
+            color: white;
+            text-decoration: none;
+            padding: 12px 15px;
+            margin-bottom: 5px;
+            border-radius: 8px;
+            font-size: 15px;
+        }
+
+        .sidebar a:hover,
+        .sidebar a.active {
+            background: #735b48;
+        }
+
+        .cerrar-sesion {
+            margin-top: 30px;
+            border-top: 1px solid rgba(255,255,255,0.2);
+            padding-top: 20px;
+        }
+
+        /* =========================
+           CONTENIDO
+        ========================= */
+
+        .main {
+            margin-left: 245px;
+            padding: 35px;
+        }
+
+        .titulo {
+            margin-bottom: 25px;
+        }
+
+        .titulo h1 {
+            font-size: 30px;
+            color: #4a4038;
+            margin-bottom: 7px;
+        }
+
+        .titulo p {
+            color: #7c7065;
+        }
+
+        /* =========================
+           AVISO EMPRESA
+        ========================= */
+
+        .info-empresa {
+            background: #eee5d9;
+            border-left: 5px solid #8c7058;
+            padding: 16px 20px;
+            border-radius: 8px;
+            margin-bottom: 25px;
+        }
+
+        .info-empresa strong {
+            color: #5a4636;
+        }
+
+        /* =========================
+           BOTONES
+        ========================= */
+
+        .boton {
+            border: none;
+            border-radius: 7px;
+            padding: 11px 18px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: 0.2s;
+        }
+
+        .boton-principal {
+            background: #5a4636;
+            color: white;
+        }
+
+        .boton-principal:hover {
+            background: #735b48;
+        }
+
+        .boton-secundario {
+            background: #e7ddd2;
+            color: #4a4038;
+        }
+
+        .boton-secundario:hover {
+            background: #d8ccbf;
+        }
+
+        .boton-peligro {
+            background: #b75d5d;
+            color: white;
+        }
+
+        .boton-peligro:hover {
+            background: #9f4c4c;
+        }
+
+        /* =========================
+           PLANTILLAS
+        ========================= */
+
+        .seccion {
+            margin-bottom: 35px;
+        }
+
+        .seccion-titulo {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+        }
+
+        .seccion-titulo h2 {
+            font-size: 21px;
+        }
+
+        .plantillas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 20px;
+        }
+
+        .plantilla-card {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            box-shadow: 0 3px 12px rgba(0,0,0,0.07);
+            border: 1px solid #e6ddd3;
+        }
+
+        .plantilla-card h3 {
+            margin-bottom: 8px;
+            color: #4a4038;
+        }
+
+        .plantilla-card p {
+            color: #7c7065;
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .plantilla-color {
+            width: 100%;
+            height: 7px;
+            border-radius: 5px;
+            margin-bottom: 18px;
+        }
+
+        .etiqueta {
+            display: inline-block;
+            background: #eee5d9;
+            color: #6b594a;
+            padding: 5px 9px;
+            border-radius: 20px;
+            font-size: 12px;
+            margin-top: 12px;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 8px;
+            margin-top: 18px;
+            flex-wrap: wrap;
+        }
+
+        /* =========================
+           MODAL
+        ========================= */
+
+        .modal {
+            display: none;
+            position: fixed;
+            inset: 0;
+            background: rgba(0,0,0,0.45);
+            z-index: 1000;
+            padding: 25px;
+            overflow-y: auto;
+        }
+
+        .modal-contenido {
+            background: #f8f5f1;
+            max-width: 1250px;
+            margin: auto;
+            border-radius: 14px;
+            padding: 25px;
+            position: relative;
+        }
+
+        .modal-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+        }
+
+        .modal-cabecera h2 {
+            font-size: 24px;
+        }
+
+        .cerrar-modal {
+            background: none;
+            border: none;
+            font-size: 28px;
+            cursor: pointer;
+            color: #6d6259;
+        }
+
+        .editor {
+            display: grid;
+            grid-template-columns: 380px 1fr;
+            gap: 25px;
+        }
+
+        /* =========================
+           FORMULARIO
+        ========================= */
+
+        .formulario {
+            background: white;
+            border-radius: 12px;
+            padding: 20px;
+            height: fit-content;
+        }
+
+        .campo {
+            margin-bottom: 18px;
+        }
+
+        .campo label {
+            display: block;
+            font-size: 14px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .campo input[type="text"],
+        .campo input[type="color"],
+        .campo select,
+        .campo textarea {
+            width: 100%;
+            border: 1px solid #d9cec2;
+            border-radius: 7px;
+            padding: 10px;
+            background: white;
+            color: #4a4038;
+        }
+
+        .campo input[type="color"] {
+            height: 42px;
+            padding: 4px;
+            cursor: pointer;
+        }
+
+        .campo textarea {
+            min-height: 80px;
+            resize: vertical;
+        }
+
+        .checks {
+            border-top: 1px solid #eee4da;
+            border-bottom: 1px solid #eee4da;
+            padding: 15px 0;
+            margin: 15px 0;
+        }
+
+        .check {
+            display: flex;
+            align-items: center;
+            gap: 9px;
+            margin-bottom: 10px;
+            font-size: 14px;
+        }
+
+        .check:last-child {
+            margin-bottom: 0;
+        }
+
+        .check input {
+            width: 16px;
+            height: 16px;
+        }
+
+        .datos-config {
+            background: #f2ece5;
+            border-radius: 8px;
+            padding: 13px;
+            font-size: 13px;
+            line-height: 1.5;
+            margin-bottom: 18px;
+        }
+
+        .datos-config strong {
+            color: #5a4636;
+        }
+
+        .botones-formulario {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        /* =========================
+           PREVISUALIZACIÓN
+        ========================= */
+
+        .preview-contenedor {
+            background: #ddd7d0;
+            border-radius: 12px;
+            padding: 25px;
+            min-height: 700px;
+        }
+
+        .preview-titulo {
+            font-size: 13px;
+            color: #71675f;
+            margin-bottom: 12px;
+        }
+
+        .factura-preview {
+            background: white;
+            width: 100%;
+            max-width: 800px;
+            min-height: 1000px;
+            margin: auto;
+            padding: 45px;
+            box-shadow: 0 4px 20px rgba(0,0,0,0.12);
+            position: relative;
+        }
+
+        /* CABECERA FACTURA */
+
+        .factura-cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 30px;
+            padding-bottom: 25px;
+            border-bottom: 3px solid #5a4636;
+            margin-bottom: 30px;
+        }
+
+        .empresa {
+            flex: 1;
+        }
+
+        .empresa-logo {
+            max-width: 150px;
+            max-height: 80px;
+            object-fit: contain;
+            margin-bottom: 12px;
+            display: block;
+        }
+
+        .empresa-nombre {
+            font-size: 22px;
+            font-weight: bold;
+            margin-bottom: 7px;
+        }
+
+        .empresa-datos {
+            font-size: 12px;
+            line-height: 1.6;
+            color: #665c54;
+        }
+
+        .datos-factura {
+            min-width: 180px;
+            text-align: right;
+        }
+
+        .datos-factura-titulo {
+            font-size: 25px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .datos-factura div {
+            font-size: 12px;
+            line-height: 1.7;
+        }
+
+        /* LOGO */
+
+        .logo-left {
+            justify-content: flex-start;
+        }
+
+        .logo-center {
+            justify-content: center;
+        }
+
+        .logo-right {
+            justify-content: flex-end;
+        }
+
+        .logo-center .empresa,
+        .logo-right .empresa {
+            text-align: center;
+        }
+
+        .logo-right .empresa {
+            text-align: right;
+        }
+
+        .logo-center .empresa-logo {
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .logo-right .empresa-logo {
+            margin-left: auto;
+        }
+
+        /* CLIENTE */
+
+        .cliente {
+            border: 1px solid #e2d9d0;
+            border-radius: 7px;
+            padding: 15px;
+            margin-bottom: 30px;
+        }
+
+        .cliente-titulo {
+            font-size: 11px;
+            font-weight: bold;
+            color: #806c5a;
+            margin-bottom: 7px;
+        }
+
+        .cliente-linea {
+            font-size: 13px;
+            margin-bottom: 4px;
+        }
+
+        /* TABLA */
+
+        .tabla-factura {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+
+        .tabla-factura th {
+            background: #5a4636;
+            color: white;
+            padding: 10px;
+            font-size: 11px;
+            text-align: left;
+        }
+
+        .tabla-factura td {
+            padding: 12px 10px;
+            border-bottom: 1px solid #eee6df;
+            font-size: 12px;
+        }
+
+        .tabla-factura th:nth-child(2),
+        .tabla-factura th:nth-child(3),
+        .tabla-factura th:nth-child(4),
+        .tabla-factura td:nth-child(2),
+        .tabla-factura td:nth-child(3),
+        .tabla-factura td:nth-child(4) {
+            text-align: right;
+        }
+
+        /* TOTALES */
+
+        .totales {
+            width: 280px;
+            margin-left: auto;
+            margin-bottom: 35px;
+        }
+
+        .total-linea {
+            display: flex;
+            justify-content: space-between;
+            padding: 7px 0;
+            font-size: 12px;
+        }
+
+        .total-final {
+            border-top: 2px solid #5a4636;
+            margin-top: 5px;
+            padding-top: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        /* INFORMACIÓN FINAL */
+
+        .bloque-final {
+            margin-top: 25px;
+            font-size: 11px;
+            line-height: 1.6;
+        }
+
+        .bloque-final strong {
+            display: block;
+            font-size: 12px;
+            margin-bottom: 5px;
+        }
+
+        .pie-factura {
+            position: absolute;
+            bottom: 25px;
+            left: 45px;
+            right: 45px;
+            border-top: 1px solid #ddd3ca;
+            padding-top: 10px;
+            text-align: center;
+            font-size: 10px;
+            color: #8b8178;
+        }
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1000px) {
+            .editor {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 700px) {
+            .sidebar {
+                position: relative;
+                width: 100%;
+                height: auto;
+            }
+
+            .main {
+                margin-left: 0;
+                padding: 20px;
+            }
+
+            .factura-preview {
+                padding: 25px;
+            }
+
+            .factura-cabecera {
+                flex-direction: column;
+            }
+
+            .datos-factura {
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+
+<body>
+
+<!-- =========================
+     SIDEBAR
+========================= -->
+
+<div class="sidebar">
+
+    <div class="logo-gestia">GESTIA</div>
+
+    <a href="dashboard.html">Inicio</a>
+    <a href="clientes.html">Clientes</a>
+    <a href="proveedores.html">Proveedores</a>
+    <a href="presupuestos.html">Presupuestos</a>
+    <a href="facturas.html">Facturas</a>
+    <a href="gastos.html">Gastos</a>
+    <a href="albaranes.html">Albaranes</a>
+    <a href="trabajos.html">Trabajos</a>
+    <a href="informes.html">Informes</a>
+    <a href="plantillas.html" class="active">Plantillas</a>
+    <a href="configuracion.html">Configuración</a>
+
+    <div class="cerrar-sesion">
+        <a href="#" onclick="cerrarSesion()">Cerrar sesión</a>
+    </div>
+
+</div>
+
+
+<!-- =========================
+     CONTENIDO
+========================= -->
+
+<div class="main">
+
+    <div class="titulo">
+        <h1>Plantillas de factura</h1>
+        <p>Personaliza el diseño de tus facturas y documentos.</p>
+    </div>
+
+
+    <div class="info-empresa">
+        <strong>Datos de empresa:</strong>
+        Los datos fiscales, teléfono, email, IBAN y logo se toman
+        automáticamente de <strong>Configuración</strong>.
+        Si modificas esos datos allí, se actualizarán también en las facturas.
+    </div>
+
+
+    <!-- PLANTILLAS ESTÁNDAR -->
+
+    <div class="seccion">
+
+        <div class="seccion-titulo">
+            <h2>Plantillas estándar</h2>
+        </div>
+
+        <div class="plantillas-grid" id="plantillasEstandar"></div>
+
+    </div>
+
+
+    <!-- PLANTILLAS PERSONALIZADAS -->
+
+    <div class="seccion">
+
+        <div class="seccion-titulo">
+
+            <h2>Mis plantillas</h2>
+
+            <button class="boton boton-principal" onclick="abrirNuevaPlantilla()">
+                + Nueva plantilla
+            </button>
+
+        </div>
+
+        <div class="plantillas-grid" id="plantillasPersonalizadas"></div>
+
+    </div>
+
+</div>
+
+
+<!-- =========================
+     MODAL EDITOR
+========================= -->
+
+<div class="modal" id="modalPlantilla">
+
+    <div class="modal-contenido">
+
+        <div class="modal-cabecera">
+
+            <h2 id="tituloModal">Nueva plantilla</h2>
+
+            <button class="cerrar-modal" onclick="cerrarModal()">
+                ×
+            </button>
+
+        </div>
+
+
+        <div class="editor">
+
+            <!-- FORMULARIO -->
+
+            <div class="formulario">
+
+                <div class="campo">
+                    <label for="nombrePlantilla">
+                        Nombre de la plantilla
+                    </label>
+
+                    <input
+                        type="text"
+                        id="nombrePlantilla"
+                        placeholder="Ej. Factura profesional"
+                    >
+                </div>
+
+
+                <div class="campo">
+                    <label for="colorPlantilla">
+                        Color principal
+                    </label>
+
+                    <input
+                        type="color"
+                        id="colorPlantilla"
+                        value="#5a4636"
+                    >
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="posicionLogo">
+                        Posición del logo
+                    </label>
+
+                    <select id="posicionLogo">
+
+                        <option value="left">
+                            Izquierda
+                        </option>
+
+                        <option value="center">
+                            Centro
+                        </option>
+
+                        <option value="right">
+                            Derecha
+                        </option>
+
+                    </select>
+
+                </div>
+
+
+                <!-- DATOS CONFIGURACIÓN -->
+
+                <div class="datos-config">
+
+                    <strong>Datos de empresa</strong><br><br>
+
+                    Estos datos no se modifican aquí.
+                    Se utilizan directamente los datos guardados
+                    en <strong>Configuración</strong>.
+
+                    <br><br>
+
+                    <span id="resumenEmpresa">
+                        No hay datos de empresa configurados.
+                    </span>
+
+                </div>
+
+
+                <!-- CAMPOS VISIBLES -->
+
+                <div class="checks">
+
+                    <div class="check">
+
+                        <input
+                            type="checkbox"
+                            id="mostrarTelefono"
+                            checked
+                        >
+
+                        <label for="mostrarTelefono">
+                            Mostrar teléfono
+                        </label>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <input
+                            type="checkbox"
+                            id="mostrarEmail"
+                            checked
+                        >
+
+                        <label for="mostrarEmail">
+                            Mostrar email
+                        </label>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <input
+                            type="checkbox"
+                            id="mostrarIVA"
+                            checked
+                        >
+
+                        <label for="mostrarIVA">
+                            Mostrar IVA
+                        </label>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <input
+                            type="checkbox"
+                            id="mostrarIRPF"
+                        >
+
+                        <label for="mostrarIRPF">
+                            Mostrar IRPF
+                        </label>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <input
+                            type="checkbox"
+                            id="mostrarBanco"
+                            checked
+                        >
+
+                        <label for="mostrarBanco">
+                            Mostrar datos bancarios
+                        </label>
+
+                    </div>
+
+
+                    <div class="check">
+
+                        <input
+                            type="checkbox"
+                            id="mostrarObservaciones"
+                            checked
+                        >
+
+                        <label for="mostrarObservaciones">
+                            Mostrar observaciones
+                        </label>
+
+                    </div>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="observacionesPlantilla">
+                        Observaciones
+                    </label>
+
+                    <textarea
+                        id="observacionesPlantilla"
+                        placeholder="Texto que aparecerá en las facturas..."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="condicionesPlantilla">
+                        Condiciones
+                    </label>
+
+                    <textarea
+                        id="condicionesPlantilla"
+                        placeholder="Condiciones de pago, vencimiento, etc."
+                    ></textarea>
+
+                </div>
+
+
+                <div class="campo">
+
+                    <label for="piePlantilla">
+                        Pie de factura
+                    </label>
+
+                    <input
+                        type="text"
+                        id="piePlantilla"
+                        placeholder="Texto opcional"
+                    >
+
+                </div>
+
+
+                <div class="botones-formulario">
+
+                    <button
+                        class="boton boton-principal"
+                        onclick="guardarPlantilla()"
+                    >
+                        Guardar plantilla
+                    </button>
+
+                    <button
+                        class="boton boton-secundario"
+                        onclick="cerrarModal()"
+                    >
+                        Cancelar
+                    </button>
+
+                </div>
+
+            </div>
+
+
+            <!-- PREVISUALIZACIÓN -->
+
+            <div class="preview-contenedor">
+
+                <div class="preview-titulo">
+                    Vista previa de la factura
+                </div>
+
+                <div
+                    class="factura-preview"
+                    id="facturaPreview"
+                ></div>
+
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+
+<script>
+
+/* =====================================================
+   SESIÓN
+===================================================== */
+
+if (localStorage.getItem("sesionIniciada") !== "true") {
+    window.location.href = "login.html";
+}
+
+
+/* =====================================================
+   VARIABLES
+===================================================== */
+
+let plantillaEditandoId = null;
+
+
+/* =====================================================
+   DATOS DE EMPRESA
+   SE LEEN DIRECTAMENTE DE CONFIGURACIÓN
+===================================================== */
+
+function obtenerDatosEmpresa() {
+
+    try {
+
+        const datos = JSON.parse(
+            localStorage.getItem("datosEmpresa") || "{}"
+        );
+
+        return {
+
+            nombre: datos.nombre || "",
+            nif: datos.nif || "",
+            direccion: datos.direccion || "",
+            cp: datos.cp || "",
+            poblacion: datos.poblacion || "",
+            provincia: datos.provincia || "",
+            telefono: datos.telefono || "",
+            email: datos.email || "",
+            iban: datos.iban || "",
+            logo: datos.logo || ""
+
+        };
+
+    } catch (error) {
+
+        console.error(
+            "Error al cargar los datos de empresa:",
+            error
+        );
+
+        return {
+
+            nombre: "",
+            nif: "",
+            direccion: "",
+            cp: "",
+            poblacion: "",
+            provincia: "",
+            telefono: "",
+            email: "",
+            iban: "",
+            logo: ""
+
+        };
+    }
+}
+
+
+/* =====================================================
+   PLANTILLAS ESTÁNDAR
+===================================================== */
+
+const plantillaEstandar = {
+
+    id: "estandar",
+
+    nombre: "Plantilla estándar",
+
+    color: "#5a4636",
+
+    posicionLogo: "left",
+
+    mostrarTelefono: true,
+
+    mostrarEmail: true,
+
+    mostrarIVA: true,
+
+    mostrarIRPF: false,
+
+    mostrarBanco: true,
+
+    mostrarObservaciones: true,
+
+    observaciones: "",
+
+    pie: "",
+
+    condiciones: ""
+
+};
+
+
+/* =====================================================
+   CARGAR PÁGINA
+===================================================== */
+
+document.addEventListener(
+    "DOMContentLoaded",
+    function() {
+
+        mostrarPlantillasEstandar();
+
+        mostrarPlantillasPersonalizadas();
+
+        actualizarResumenEmpresa();
+
+    }
+);
+
+
+/* =====================================================
+   MOSTRAR ESTÁNDAR
+===================================================== */
+
+function mostrarPlantillasEstandar() {
+
+    const contenedor =
+        document.getElementById("plantillasEstandar");
+
+    contenedor.innerHTML = "";
+
+    contenedor.appendChild(
+        crearTarjetaPlantilla(
+            plantillaEstandar,
+            true
+        )
+    );
+}
+
+
+/* =====================================================
+   OBTENER PERSONALIZADAS
+===================================================== */
+
+function obtenerPlantillas() {
+
+    try {
+
+        return JSON.parse(
+            localStorage.getItem("plantillasFactura") || "[]"
+        );
+
+    } catch (error) {
+
+        console.error(error);
+
+        return [];
+
+    }
+}
+
+
+/* =====================================================
+   GUARDAR PERSONALIZADAS
+===================================================== */
+
+function guardarPlantillas(plantillas) {
+
+    localStorage.setItem(
+        "plantillasFactura",
+        JSON.stringify(plantillas)
+    );
+
+}
+
+
+/* =====================================================
+   MOSTRAR PERSONALIZADAS
+===================================================== */
+
+function mostrarPlantillasPersonalizadas() {
+
+    const contenedor =
+        document.getElementById(
+            "plantillasPersonalizadas"
+        );
+
+    const plantillas =
+        obtenerPlantillas();
+
+    contenedor.innerHTML = "";
+
+    if (plantillas.length === 0) {
+
+        contenedor.innerHTML = `
+            <div class="plantilla-card">
+                <h3>Aún no tienes plantillas</h3>
+
+                <p>
+                    Crea tu primera plantilla personalizada
+                    para definir cómo quieres que aparezcan
+                    tus facturas.
+                </p>
+            </div>
+        `;
+
+        return;
+    }
+
+
+    plantillas.forEach(function(plantilla) {
+
+        contenedor.appendChild(
+            crearTarjetaPlantilla(
+                plantilla,
+                false
+            )
+        );
+
+    });
+
+}
+
+
+/* =====================================================
+   CREAR TARJETA
+===================================================== */
+
+function crearTarjetaPlantilla(
+    plantilla,
+    esEstandar
+) {
+
+    const card =
+        document.createElement("div");
+
+    card.className =
+        "plantilla-card";
+
+
+    const color =
+        plantilla.color || "#5a4636";
+
+
+    card.innerHTML = `
+
+        <div
+            class="plantilla-color"
+            style="background:${color};"
+        ></div>
+
+        <h3>
+            ${escapeHTML(
+                plantilla.nombre || "Sin nombre"
+            )}
+        </h3>
+
+        <p>
+            Logo:
+            ${obtenerTextoLogo(
+                plantilla.posicionLogo
+            )}
+        </p>
+
+        <span class="etiqueta">
+            ${esEstandar
+                ? "Plantilla estándar"
+                : "Personalizada"}
+        </span>
+
+        <div class="acciones">
+
+            <button
+                class="boton boton-secundario"
+                onclick="previsualizarPlantilla('${plantilla.id}')"
+            >
+                Vista previa
+            </button>
+
+            ${
+                esEstandar
+                ? `
+                    <button
+                        class="boton boton-principal"
+                        onclick="usarPlantillaEstandar()"
+                    >
+                        Usar plantilla
+                    </button>
+                  `
+                : `
+                    <button
+                        class="boton boton-principal"
+                        onclick="editarPlantilla('${plantilla.id}')"
+                    >
+                        Editar
+                    </button>
+
+                    <button
+                        class="boton boton-peligro"
+                        onclick="eliminarPlantilla('${plantilla.id}')"
+                    >
+                        Eliminar
+                    </button>
+                  `
+            }
+
+        </div>
+
+    `;
+
+    return card;
+}
+
+
+/* =====================================================
+   TEXTO POSICIÓN LOGO
+===================================================== */
+
+function obtenerTextoLogo(posicion) {
+
+    if (posicion === "center") {
+        return "centrado";
+    }
+
+    if (posicion === "right") {
+        return "a la derecha";
+    }
+
+    return "a la izquierda";
+}
+
+
+/* =====================================================
+   NUEVA PLANTILLA
+===================================================== */
+
+function abrirNuevaPlantilla() {
+
+    plantillaEditandoId = null;
+
+    document.getElementById(
+        "tituloModal"
+    ).textContent = "Nueva plantilla";
+
+    limpiarFormulario();
+
+    actualizarResumenEmpresa();
+
+    actualizarVistaPrevia();
+
+    document.getElementById(
+        "modalPlantilla"
+    ).style.display = "block";
+
+}
+
+
+/* =====================================================
+   LIMPIAR FORMULARIO
+===================================================== */
+
+function limpiarFormulario() {
+
+    document.getElementById(
+        "nombrePlantilla"
+    ).value = "";
+
+    document.getElementById(
+        "colorPlantilla"
+    ).value = "#5a4636";
+
+    document.getElementById(
+        "posicionLogo"
+    ).value = "left";
+
+
+    document.getElementById(
+        "mostrarTelefono"
+    ).checked = true;
+
+    document.getElementById(
+        "mostrarEmail"
+    ).checked = true;
+
+    document.getElementById(
+        "mostrarIVA"
+    ).checked = true;
+
+    document.getElementById(
+        "mostrarIRPF"
+    ).checked = false;
+
+    document.getElementById(
+        "mostrarBanco"
+    ).checked = true;
+
+    document.getElementById(
+        "mostrarObservaciones"
+    ).checked = true;
+
+
+    document.getElementById(
+        "observacionesPlantilla"
+    ).value = "";
+
+
+    document.getElementById(
+        "condicionesPlantilla"
+    ).value = "";
+
+
+    document.getElementById(
+        "piePlantilla"
+    ).value = "";
+
+}
+
+
+/* =====================================================
+   EDITAR PLANTILLA
+===================================================== */
+
+function editarPlantilla(id) {
+
+    const plantillas =
+        obtenerPlantillas();
+
+    const plantilla =
+        plantillas.find(
+            function(item) {
+
+                return String(item.id) === String(id);
+
+            }
+        );
+
+
+    if (!plantilla) {
+
+        alert(
+            "No se ha encontrado la plantilla."
+        );
+
+        return;
+    }
+
+
+    plantillaEditandoId = id;
+
+
+    document.getElementById(
+        "tituloModal"
+    ).textContent =
+        "Editar plantilla";
+
+
+    document.getElementById(
+        "nombrePlantilla"
+    ).value =
+        plantilla.nombre || "";
+
+
+    document.getElementById(
+        "colorPlantilla"
+    ).value =
+        plantilla.color || "#5a4636";
+
+
+    document.getElementById(
+        "posicionLogo"
+    ).value =
+        plantilla.posicionLogo || "left";
+
+
+    document.getElementById(
+        "mostrarTelefono"
+    ).checked =
+        plantilla.mostrarTelefono !== false;
+
+
+    document.getElementById(
+        "mostrarEmail"
+    ).checked =
+        plantilla.mostrarEmail !== false;
+
+
+    document.getElementById(
+        "mostrarIVA"
+    ).checked =
+        plantilla.mostrarIVA !== false;
+
+
+    document.getElementById(
+        "mostrarIRPF"
+    ).checked =
+        plantilla.mostrarIRPF === true;
+
+
+    document.getElementById(
+        "mostrarBanco"
+    ).checked =
+        plantilla.mostrarBanco !== false;
+
+
+    document.getElementById(
+        "mostrarObservaciones"
+    ).checked =
+        plantilla.mostrarObservaciones !== false;
+
+
+    document.getElementById(
+        "observacionesPlantilla"
+    ).value =
+        plantilla.observaciones || "";
+
+
+    document.getElementById(
+        "condicionesPlantilla"
+    ).value =
+        plantilla.condiciones || "";
+
+
+    document.getElementById(
+        "piePlantilla"
+    ).value =
+        plantilla.pie || "";
+
+
+    actualizarResumenEmpresa();
+
+    actualizarVistaPrevia();
+
+
+    document.getElementById(
+        "modalPlantilla"
+    ).style.display = "block";
+
+}
+
+
+/* =====================================================
+   OBTENER DATOS FORMULARIO
+===================================================== */
+
+function obtenerDatosFormulario() {
+
+    return {
+
+        nombre:
+            document.getElementById(
+                "nombrePlantilla"
+            ).value.trim(),
+
+        color:
+            document.getElementById(
+                "colorPlantilla"
+            ).value,
+
+        posicionLogo:
+            document.getElementById(
+                "posicionLogo"
+            ).value,
+
+        mostrarTelefono:
+            document.getElementById(
+                "mostrarTelefono"
+            ).checked,
+
+        mostrarEmail:
+            document.getElementById(
+                "mostrarEmail"
+            ).checked,
+
+        mostrarIVA:
+            document.getElementById(
+                "mostrarIVA"
+            ).checked,
+
+        mostrarIRPF:
+            document.getElementById(
+                "mostrarIRPF"
+            ).checked,
+
+        mostrarBanco:
+            document.getElementById(
+                "mostrarBanco"
+            ).checked,
+
+        mostrarObservaciones:
+            document.getElementById(
+                "mostrarObservaciones"
+            ).checked,
+
+        observaciones:
+            document.getElementById(
+                "observacionesPlantilla"
+            ).value.trim(),
+
+        pie:
+            document.getElementById(
+                "piePlantilla"
+            ).value.trim(),
+
+        condiciones:
+            document.getElementById(
+                "condicionesPlantilla"
+            ).value.trim()
+
+    };
+
+}
+
+
+/* =====================================================
+   GUARDAR PLANTILLA
+===================================================== */
+
+function guardarPlantilla() {
+
+    const datos =
+        obtenerDatosFormulario();
+
+
+    if (!datos.nombre) {
+
+        alert(
+            "Introduce un nombre para la plantilla."
+        );
+
+        return;
+    }
+
+
+    const plantillas =
+        obtenerPlantillas();
+
+
+    if (plantillaEditandoId) {
+
+        const indice =
+            plantillas.findIndex(
+                function(item) {
+
+                    return String(item.id) ===
+                           String(plantillaEditandoId);
+
+                }
+            );
+
+
+        if (indice !== -1) {
+
+            plantillas[indice] = {
+
+                ...plantillas[indice],
+
+                ...datos,
+
+                actualizada:
+                    new Date().toISOString()
+
+            };
+
+        }
+
+    } else {
+
+        const nuevaPlantilla = {
+
+            id:
+                Date.now().toString(),
+
+            ...datos,
+
+            creada:
+                new Date().toISOString(),
+
+            actualizada:
+                new Date().toISOString()
+
+        };
+
+
+        plantillas.push(
+            nuevaPlantilla
+        );
+
+    }
+
+
+    guardarPlantillas(
+        plantillas
+    );
+
+
+    cerrarModal();
+
+    mostrarPlantillasPersonalizadas();
+
+
+    alert(
+        "Plantilla guardada correctamente."
+    );
+
+}
+
+
+/* =====================================================
+   ELIMINAR
+===================================================== */
+
+function eliminarPlantilla(id) {
+
+    const confirmar =
+        confirm(
+            "¿Seguro que quieres eliminar esta plantilla?"
+        );
+
+
+    if (!confirmar) {
+        return;
+    }
+
+
+    const plantillas =
+        obtenerPlantillas();
+
+
+    const nuevas =
+        plantillas.filter(
+            function(item) {
+
+                return String(item.id) !==
+                       String(id);
+
+            }
+        );
+
+
+    guardarPlantillas(
+        nuevas
+    );
+
+
+    mostrarPlantillasPersonalizadas();
+
+}
+
+
+/* =====================================================
+   USAR ESTÁNDAR
+===================================================== */
+
+function usarPlantillaEstandar() {
+
+    localStorage.setItem(
+        "plantillaFacturaSeleccionada",
+        JSON.stringify(
+            plantillaEstandar
+        )
+    );
+
+
+    alert(
+        "Plantilla estándar seleccionada."
+    );
+
+}
+
+
+/* =====================================================
+   PREVISUALIZAR
+===================================================== */
+
+function previsualizarPlantilla(id) {
+
+    let plantilla = null;
+
+
+    if (id === "estandar") {
+
+        plantilla =
+            plantillaEstandar;
+
+    } else {
+
+        const plantillas =
+            obtenerPlantillas();
+
+        plantilla =
+            plantillas.find(
+                function(item) {
+
+                    return String(item.id) ===
+                           String(id);
+
+                }
+            );
+
+    }
+
+
+    if (!plantilla) {
+        return;
+    }
+
+
+    plantillaEditandoId = null;
+
+
+    document.getElementById(
+        "tituloModal"
+    ).textContent =
+        "Vista previa";
+
+
+    cargarDatosEnFormulario(
+        plantilla
+    );
+
+
+    actualizarResumenEmpresa();
+
+    actualizarVistaPrevia();
+
+
+    document.getElementById(
+        "modalPlantilla"
+    ).style.display = "block";
+
+}
+
+
+/* =====================================================
+   CARGAR PLANTILLA EN FORMULARIO
+===================================================== */
+
+function cargarDatosEnFormulario(
+    plantilla
+) {
+
+    document.getElementById(
+        "nombrePlantilla"
+    ).value =
+        plantilla.nombre || "";
+
+
+    document.getElementById(
+        "colorPlantilla"
+    ).value =
+        plantilla.color || "#5a4636";
+
+
+    document.getElementById(
+        "posicionLogo"
+    ).value =
+        plantilla.posicionLogo || "left";
+
+
+    document.getElementById(
+        "mostrarTelefono"
+    ).checked =
+        plantilla.mostrarTelefono !== false;
+
+
+    document.getElementById(
+        "mostrarEmail"
+    ).checked =
+        plantilla.mostrarEmail !== false;
+
+
+    document.getElementById(
+        "mostrarIVA"
+    ).checked =
+        plantilla.mostrarIVA !== false;
+
+
+    document.getElementById(
+        "mostrarIRPF"
+    ).checked =
+        plantilla.mostrarIRPF === true;
+
+
+    document.getElementById(
+        "mostrarBanco"
+    ).checked =
+        plantilla.mostrarBanco !== false;
+
+
+    document.getElementById(
+        "mostrarObservaciones"
+    ).checked =
+        plantilla.mostrarObservaciones !== false;
+
+
+    document.getElementById(
+        "observacionesPlantilla"
+    ).value =
+        plantilla.observaciones || "";
+
+
+    document.getElementById(
+        "condicionesPlantilla"
+    ).value =
+        plantilla.condiciones || "";
+
+
+    document.getElementById(
+        "piePlantilla"
+    ).value =
+        plantilla.pie || "";
+
+}
+
+
+/* =====================================================
+   RESUMEN EMPRESA
+===================================================== */
+
+function actualizarResumenEmpresa() {
+
+    const empresa =
+        obtenerDatosEmpresa();
+
+
+    const resumen =
+        document.getElementById(
+            "resumenEmpresa"
+        );
+
+
+    if (!empresa.nombre) {
+
+        resumen.innerHTML =
+            "No hay datos de empresa configurados. " +
+            "Ve a Configuración para introducirlos.";
+
+        return;
+    }
+
+
+    resumen.innerHTML = `
+
+        <strong>
+            ${escapeHTML(empresa.nombre)}
+        </strong>
+
+        ${
+            empresa.nif
+            ? `<br>NIF/CIF: ${escapeHTML(empresa.nif)}`
+            : ""
+        }
+
+        ${
+            empresa.telefono
+            ? `<br>Teléfono: ${escapeHTML(empresa.telefono)}`
+            : ""
+        }
+
+        ${
+            empresa.email
+            ? `<br>Email: ${escapeHTML(empresa.email)}`
+            : ""
+        }
+
+        ${
+            empresa.iban
+            ? `<br>IBAN: ${escapeHTML(empresa.iban)}`
+            : ""
+        }
+
+    `;
+
+}
+
+
+/* =====================================================
+   VISTA PREVIA
+===================================================== */
+
+function actualizarVistaPrevia() {
+
+    const empresa =
+        obtenerDatosEmpresa();
+
+
+    const datos =
+        obtenerDatosFormulario();
+
+
+    const preview =
+        document.getElementById(
+            "facturaPreview"
+        );
+
+
+    const color =
+        datos.color || "#5a4636";
+
+
+    let direccionCompleta = "";
+
+
+    if (empresa.direccion) {
+
+        direccionCompleta +=
+            escapeHTML(
+                empresa.direccion
+            );
+
+    }
+
+
+    const poblacion = [
+
+        empresa.cp,
+        empresa.poblacion,
+        empresa.provincia
+
+    ].filter(Boolean).join(" · ");
+
+
+    if (poblacion) {
+
+        if (direccionCompleta) {
+            direccionCompleta += "<br>";
+        }
+
+        direccionCompleta +=
+            escapeHTML(
+                poblacion
+            );
+
+    }
+
+
+    let contacto = [];
+
+
+    if (
+        datos.mostrarTelefono &&
+        empresa.telefono
+    ) {
+
+        contacto.push(
+            "Tel. " +
+            escapeHTML(
+                empresa.telefono
+            )
+        );
+
+    }
+
+
+    if (
+        datos.mostrarEmail &&
+        empresa.email
+    ) {
+
+        contacto.push(
+            escapeHTML(
+                empresa.email
+            )
+        );
+
+    }
+
+
+    if (contacto.length) {
+
+        if (direccionCompleta) {
+            direccionCompleta += "<br>";
+        }
+
+        direccionCompleta +=
+            contacto.join(" · ");
+
+    }
+
+
+    let logoHTML = "";
+
+
+    if (empresa.logo) {
+
+        logoHTML = `
+
+            <img
+                src="${empresa.logo}"
+                class="empresa-logo"
+                alt="Logo de la empresa"
+            >
+
+        `;
+
+    }
+
+
+    let datosEmpresaHTML = "";
+
+
+    if (empresa.nif) {
+
+        datosEmpresaHTML +=
+            `NIF/CIF: ${escapeHTML(
+                empresa.nif
+            )}<br>`;
+
+    }
+
+
+    if (direccionCompleta) {
+
+        datosEmpresaHTML +=
+            direccionCompleta;
+
+    }
+
+
+    let observacionesHTML = "";
+
+
+    if (
+        datos.mostrarObservaciones &&
+        datos.observaciones
+    ) {
+
+        observacionesHTML = `
+
+            <div class="bloque-final">
+
+                <strong>
+                    Observaciones
+                </strong>
+
+                ${escapeHTML(
+                    datos.observaciones
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+
+    let bancoHTML = "";
+
+
+    if (
+        datos.mostrarBanco &&
+        empresa.iban
+    ) {
+
+        bancoHTML = `
+
+            <div class="bloque-final">
+
+                <strong>
+                    Datos bancarios
+                </strong>
+
+                IBAN:
+                ${escapeHTML(
+                    empresa.iban
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+
+    let condicionesHTML = "";
+
+
+    if (datos.condiciones) {
+
+        condicionesHTML = `
+
+            <div class="bloque-final">
+
+                <strong>
+                    Condiciones
+                </strong>
+
+                ${escapeHTML(
+                    datos.condiciones
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+
+    let pieHTML = "";
+
+
+    if (datos.pie) {
+
+        pieHTML = `
+
+            <div class="pie-factura">
+
+                ${escapeHTML(
+                    datos.pie
+                )}
+
+            </div>
+
+        `;
+
+    }
+
+
+    const ivaHTML =
+        datos.mostrarIVA
+        ? `
+            <div class="total-linea">
+                <span>IVA (21%)</span>
+                <span>210,00 €</span>
+            </div>
+          `
+        : "";
+
+
+    const irpfHTML =
+        datos.mostrarIRPF
+        ? `
+            <div class="total-linea">
+                <span>IRPF (-15%)</span>
+                <span>-150,00 €</span>
+            </div>
+          `
+        : "";
+
+
+    preview.innerHTML = `
+
+        <div
+            class="factura-cabecera logo-${datos.posicionLogo}"
+            style="border-bottom-color:${color};"
+        >
+
+            <div class="empresa">
+
+                ${logoHTML}
+
+                <div
+                    class="empresa-nombre"
+                    style="color:${color};"
+                >
+                    ${
+                        empresa.nombre
+                        ? escapeHTML(
+                            empresa.nombre
+                        )
+                        : "Nombre de empresa"
+                    }
+                </div>
+
+                <div class="empresa-datos">
+
+                    ${datosEmpresaHTML}
+
+                </div>
+
+            </div>
+
+
+            <div class="datos-factura">
+
+                <div
+                    class="datos-factura-titulo"
+                    style="color:${color};"
+                >
+                    FACTURA
+                </div>
+
+                <div>
+                    <strong>Nº:</strong>
+                    2026-0001
+                </div>
+
+                <div>
+                    <strong>Fecha:</strong>
+                    23/09/2026
+                </div
+                <div>
+                    <strong>Vencimiento:</strong>
+                    23/10/2026
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <div class="cliente">
+
+            <div class="cliente-titulo">
+                CLIENTE
+            </div>
+
+            <div class="cliente-linea">
+                <strong>
+                    Cliente de ejemplo
+                </strong>
+            </div>
+
+            <div class="cliente-linea">
+                12345678A
+            </div>
+
+            <div class="cliente-linea">
+                Calle Ejemplo, 25
+            </div>
+
+            <div class="cliente-linea">
+                03201 · Elche · Alicante
+            </div>
+
+        </div>
+
+
+        <table class="tabla-factura">
+
+            <thead>
+
+                <tr
+                    style="background:${color};"
+                >
+
+                    <th>
+                        DESCRIPCIÓN
+                    </th>
+
+                    <th>
+                        CANT.
+                    </th>
+
+                    <th>
+                        PRECIO
+                    </th>
+
+                    <th>
+                        TOTAL
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody>
+
+                <tr>
+
+                    <td>
+                        Servicio / producto de ejemplo
+                    </td>
+
+                    <td>
+                        1
+                    </td>
+
+                    <td>
+                        1.000,00 €
+                    </td>
+
+                    <td>
+                        1.000,00 €
+                    </td>
+
+                </tr>
+
+                <tr>
+
+                    <td>
+                        Segundo concepto
+                    </td>
+
+                    <td>
+                        2
+                    </td>
+
+                    <td>
+                        500,00 €
+                    </td>
+
+                    <td>
+                        1.000,00 €
+                    </td>
+
+                </tr>
+
+            </tbody>
+
+        </table>
+
+
+        <div class="totales">
+
+            <div class="total-linea">
+
+                <span>
+                    Base imponible
+                </span>
+
+                <span>
+                    2.000,00 €
+                </span>
+
+            </div>
+
+
+            ${ivaHTML}
+
+
+            ${irpfHTML}
+
+
+            <div
+                class="total-linea total-final"
+                style="border-top-color:${color};"
+            >
+
+                <span>
+                    TOTAL
+                </span>
+
+                <span>
+                    2.420,00 €
+                </span>
+
+            </div>
+
+        </div>
+
+
+        ${observacionesHTML}
+
+
+        ${bancoHTML}
+
+
+        ${condicionesHTML}
+
+
+        ${pieHTML}
+
+    `;
+
+}
+
+
+/* =====================================================
+   ACTUALIZAR PREVIEW AL CAMBIAR
+===================================================== */
+
+document.addEventListener(
+    "input",
+    function(event) {
+
+        if (
+            event.target.closest(
+                "#modalPlantilla"
+            )
+        ) {
+
+            actualizarVistaPrevia();
+
+        }
+
+    }
+);
+
+
+document.addEventListener(
+    "change",
+    function(event) {
+
+        if (
+            event.target.closest(
+                "#modalPlantilla"
+            )
+        ) {
+
+            actualizarVistaPrevia();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   CERRAR MODAL
+===================================================== */
+
+function cerrarModal() {
+
+    document.getElementById(
+        "modalPlantilla"
+    ).style.display = "none";
+
+    plantillaEditandoId = null;
+
+}
+
+
+/* =====================================================
+   CERRAR AL HACER CLICK FUERA
+===================================================== */
+
+window.addEventListener(
+    "click",
+    function(event) {
+
+        const modal =
+            document.getElementById(
+                "modalPlantilla"
+            );
+
+        if (event.target === modal) {
+
+            cerrarModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ESCAPE
+===================================================== */
+
+document.addEventListener(
+    "keydown",
+    function(event) {
+
+        if (event.key === "Escape") {
+
+            cerrarModal();
+
+        }
+
+    }
+);
+
+
+/* =====================================================
+   ESCAPAR HTML
+===================================================== */
+
+function escapeHTML(texto) {
+
+    return String(texto || "")
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+
+}
+
+
+/* =====================================================
+   CERRAR SESIÓN
+===================================================== */
+
+function cerrarSesion() {
+
+    localStorage.removeItem(
+        "sesionIniciada"
+    );
+
+    window.location.href =
+        "login.html";
+
+}
+
+</script>
+
+</body>
+</html>

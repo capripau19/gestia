@@ -1,0 +1,566 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Proveedores</title>
+
+    <style>
+        * {
+            box-sizing: border-box;
+        }
+
+        body {
+            margin: 0;
+            font-family: Arial, sans-serif;
+            background-color: #f4f6f8;
+            color: #333;
+        }
+
+        .contenedor {
+            width: 95%;
+            max-width: 1200px;
+            margin: 30px auto;
+        }
+
+        .volver {
+            display: inline-block;
+            margin-bottom: 20px;
+            text-decoration: none;
+            color: #2563eb;
+            font-weight: bold;
+        }
+
+        h1 {
+            margin-bottom: 20px;
+        }
+
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        button {
+            border: none;
+            border-radius: 6px;
+            padding: 10px 16px;
+            cursor: pointer;
+            font-size: 14px;
+        }
+
+        .btn-nuevo {
+            background-color: #2563eb;
+            color: white;
+        }
+
+        .btn-nuevo:hover {
+            background-color: #1d4ed8;
+        }
+
+        .buscador {
+            width: 100%;
+            max-width: 350px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .formulario {
+            display: none;
+            background: white;
+            padding: 25px;
+            border-radius: 10px;
+            margin-bottom: 25px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        .formulario h2 {
+            margin-top: 0;
+        }
+
+        .grupo {
+            margin-bottom: 15px;
+        }
+
+        .grupo label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: bold;
+        }
+
+        .grupo input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 6px;
+            font-size: 14px;
+        }
+
+        .botones-formulario {
+            display: flex;
+            gap: 10px;
+            margin-top: 20px;
+        }
+
+        .btn-guardar {
+            background-color: #16a34a;
+            color: white;
+        }
+
+        .btn-cancelar {
+            background-color: #6b7280;
+            color: white;
+        }
+
+        .tabla-contenedor {
+            background: white;
+            border-radius: 10px;
+            overflow-x: auto;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            min-width: 850px;
+        }
+
+        th,
+        td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8fafc;
+        }
+
+        .acciones {
+            display: flex;
+            gap: 6px;
+        }
+
+        .btn-editar {
+            background-color: #f59e0b;
+            color: white;
+        }
+
+        .btn-eliminar {
+            background-color: #dc2626;
+            color: white;
+        }
+
+        .sin-datos {
+            text-align: center;
+            padding: 30px;
+            color: #777;
+        }
+    </style>
+</head>
+
+<body>
+
+<div class="contenedor">
+
+    <a href="dashboard.html" class="volver">← Volver al panel</a>
+
+    <div class="cabecera">
+        <h1>Proveedores</h1>
+
+        <button class="btn-nuevo" id="nuevoProveedor">
+            + Nuevo proveedor
+        </button>
+    </div>
+
+    <input
+        type="text"
+        id="buscarProveedor"
+        class="buscador"
+        placeholder="Buscar proveedor..."
+    >
+
+    <br><br>
+
+    <!-- FORMULARIO -->
+    <div class="formulario" id="formularioProveedor">
+
+        <h2 id="tituloFormulario">Nuevo proveedor</h2>
+
+        <form id="proveedorForm">
+
+            <div class="grupo">
+                <label for="proveedorNombre">Nombre / Razón social</label>
+                <input
+                    type="text"
+                    id="proveedorNombre"
+                    required
+                >
+            </div>
+
+            <div class="grupo">
+                <label for="proveedorNif">NIF / CIF</label>
+                <input
+                    type="text"
+                    id="proveedorNif"
+                    required
+                >
+            </div>
+
+            <div class="grupo">
+                <label for="proveedorTelefono">Teléfono</label>
+                <input
+                    type="text"
+                    id="proveedorTelefono"
+                >
+            </div>
+
+            <div class="grupo">
+                <label for="proveedorEmail">Correo electrónico</label>
+                <input
+                    type="email"
+                    id="proveedorEmail"
+                >
+            </div>
+
+            <div class="grupo">
+                <label for="proveedorDireccion">Dirección</label>
+                <input
+                    type="text"
+                    id="proveedorDireccion"
+                >
+            </div>
+
+            <div class="botones-formulario">
+
+                <button type="submit" class="btn-guardar">
+                    Guardar proveedor
+                </button>
+
+                <button
+                    type="button"
+                    class="btn-cancelar"
+                    id="cancelarProveedor"
+                >
+                    Cancelar
+                </button>
+
+            </div>
+
+        </form>
+
+    </div>
+
+
+    <!-- TABLA -->
+    <div class="tabla-contenedor">
+
+        <table>
+
+            <thead>
+                <tr>
+                    <th>Nombre / Razón social</th>
+                    <th>NIF / CIF</th>
+                    <th>Teléfono</th>
+                    <th>Correo electrónico</th>
+                    <th>Dirección</th>
+                    <th>Acciones</th>
+                </tr>
+            </thead>
+
+            <tbody id="listaProveedores">
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+
+<script>
+
+    // Comprobar sesión
+    if (localStorage.getItem("sesionIniciada") !== "true") {
+        window.location.href = "login.html";
+    }
+
+
+    // Obtener proveedores guardados
+    let proveedores = JSON.parse(
+        localStorage.getItem("proveedores")
+    ) || [];
+
+
+    // Elementos
+    const nuevoProveedor = document.getElementById("nuevoProveedor");
+    const formularioProveedor = document.getElementById("formularioProveedor");
+    const proveedorForm = document.getElementById("proveedorForm");
+    const cancelarProveedor = document.getElementById("cancelarProveedor");
+    const listaProveedores = document.getElementById("listaProveedores");
+    const buscarProveedor = document.getElementById("buscarProveedor");
+    const tituloFormulario = document.getElementById("tituloFormulario");
+
+
+    // Mostrar proveedores
+    function mostrarProveedores(filtro = "") {
+
+        listaProveedores.innerHTML = "";
+
+        const textoBusqueda = filtro.toLowerCase();
+
+        const proveedoresFiltrados = proveedores.filter(function(proveedor) {
+
+            return (
+                proveedor.nombre.toLowerCase().includes(textoBusqueda) ||
+                proveedor.nif.toLowerCase().includes(textoBusqueda) ||
+                proveedor.telefono.toLowerCase().includes(textoBusqueda) ||
+                proveedor.email.toLowerCase().includes(textoBusqueda)
+            );
+
+        });
+
+
+        if (proveedoresFiltrados.length === 0) {
+
+            listaProveedores.innerHTML = `
+                <tr>
+                    <td colspan="6" class="sin-datos">
+                        No hay proveedores registrados.
+                    </td>
+                </tr>
+            `;
+
+            return;
+        }
+
+
+        proveedoresFiltrados.forEach(function(proveedor) {
+
+            const indiceReal = proveedores.indexOf(proveedor);
+
+            const fila = document.createElement("tr");
+
+            fila.innerHTML = `
+
+                <td>${proveedor.nombre}</td>
+
+                <td>${proveedor.nif}</td>
+
+                <td>${proveedor.telefono}</td>
+
+                <td>${proveedor.email}</td>
+
+                <td>${proveedor.direccion}</td>
+
+                <td>
+
+                    <div class="acciones">
+
+                        <button
+                            class="btn-editar"
+                            onclick="editarProveedor(${indiceReal})"
+                        >
+                            Editar
+                        </button>
+
+                        <button
+                            class="btn-eliminar"
+                            onclick="eliminarProveedor(${indiceReal})"
+                        >
+                            Eliminar
+                        </button>
+
+                    </div>
+
+                </td>
+            `;
+
+            listaProveedores.appendChild(fila);
+
+        });
+
+    }
+
+
+    // Nuevo proveedor
+    nuevoProveedor.addEventListener("click", function() {
+
+        proveedorForm.reset();
+
+        delete proveedorForm.dataset.editando;
+
+        tituloFormulario.textContent = "Nuevo proveedor";
+
+        formularioProveedor.style.display = "block";
+
+        window.scrollTo({
+            top: formularioProveedor.offsetTop,
+            behavior: "smooth"
+        });
+
+    });
+
+
+    // Guardar proveedor
+    proveedorForm.addEventListener("submit", function(event) {
+
+        event.preventDefault();
+
+
+        const proveedor = {
+
+            nombre: document.getElementById("proveedorNombre").value.trim(),
+
+            nif: document.getElementById("proveedorNif").value.trim(),
+
+            telefono: document.getElementById("proveedorTelefono").value.trim(),
+
+            email: document.getElementById("proveedorEmail").value.trim(),
+
+            direccion: document.getElementById("proveedorDireccion").value.trim()
+
+        };
+
+
+        const indiceEditando = proveedorForm.dataset.editando;
+
+
+        // Editar
+        if (indiceEditando !== undefined) {
+
+            proveedores[indiceEditando] = proveedor;
+
+            alert("Proveedor actualizado correctamente.");
+
+        }
+
+        // Crear
+        else {
+
+            proveedores.push(proveedor);
+
+            alert("Proveedor añadido correctamente.");
+
+        }
+
+
+        // Guardar
+        localStorage.setItem(
+            "proveedores",
+            JSON.stringify(proveedores)
+        );
+
+
+        proveedorForm.reset();
+
+        delete proveedorForm.dataset.editando;
+
+        formularioProveedor.style.display = "none";
+
+        mostrarProveedores();
+
+    });
+
+
+    // Cancelar
+    cancelarProveedor.addEventListener("click", function() {
+
+        proveedorForm.reset();
+
+        delete proveedorForm.dataset.editando;
+
+        formularioProveedor.style.display = "none";
+
+    });
+
+
+    // Editar proveedor
+    function editarProveedor(indice) {
+
+        const proveedor = proveedores[indice];
+
+
+        document.getElementById("proveedorNombre").value =
+            proveedor.nombre;
+
+        document.getElementById("proveedorNif").value =
+            proveedor.nif;
+
+        document.getElementById("proveedorTelefono").value =
+            proveedor.telefono;
+
+        document.getElementById("proveedorEmail").value =
+            proveedor.email;
+
+        document.getElementById("proveedorDireccion").value =
+            proveedor.direccion;
+
+
+        proveedorForm.dataset.editando = indice;
+
+        tituloFormulario.textContent = "Editar proveedor";
+
+        formularioProveedor.style.display = "block";
+
+
+        window.scrollTo({
+            top: formularioProveedor.offsetTop,
+            behavior: "smooth"
+        });
+
+    }
+
+
+    // Eliminar proveedor
+    function eliminarProveedor(indice) {
+
+        const proveedor = proveedores[indice];
+
+
+        const confirmar = confirm(
+            "¿Seguro que quieres eliminar al proveedor " +
+            proveedor.nombre +
+            "?"
+        );
+
+
+        if (!confirmar) {
+            return;
+        }
+
+
+        proveedores.splice(indice, 1);
+
+
+        localStorage.setItem(
+            "proveedores",
+            JSON.stringify(proveedores)
+        );
+
+
+        mostrarProveedores();
+
+    }
+
+
+    // Buscar
+    buscarProveedor.addEventListener("input", function() {
+
+        mostrarProveedores(this.value);
+
+    });
+
+
+    // Cargar al iniciar
+    mostrarProveedores();
+
+</script>
+
+</body>
+</html>

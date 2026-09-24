@@ -1,0 +1,3210 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Gestia - Panel de control</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background: #f6f1e9;
+            color: #3f3b37;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           ESTRUCTURA
+        ========================= */
+
+        .app {
+            display: flex;
+            min-height: 100vh;
+        }
+
+
+        /* =========================
+           MENÚ LATERAL
+        ========================= */
+
+        .sidebar {
+
+            width: 245px;
+
+            background: #fffdf9;
+
+            border-right: 1px solid #e6ded4;
+
+            padding: 28px 18px;
+
+            position: fixed;
+
+            left: 0;
+            top: 0;
+            bottom: 0;
+        }
+
+
+        .logo {
+
+            font-size: 29px;
+
+            font-weight: bold;
+
+            color: #6f6254;
+
+            padding: 0 15px;
+
+            margin-bottom: 40px;
+        }
+
+
+        .menu-title {
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 1px;
+
+            color: #9a9188;
+
+            padding: 0 15px;
+
+            margin-bottom: 10px;
+        }
+
+
+        .menu {
+            list-style: none;
+        }
+
+
+        .menu li {
+            margin-bottom: 4px;
+        }
+
+
+        .menu a {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+
+            padding: 12px 15px;
+
+            border-radius: 10px;
+
+            text-decoration: none;
+
+            color: #625c56;
+
+            font-size: 14px;
+
+            transition: 0.2s;
+        }
+
+
+        .menu a:hover {
+
+            background: #f4eee5;
+
+            color: #51483f;
+        }
+
+
+        .menu a.active {
+
+            background: #eee5da;
+
+            color: #665542;
+
+            font-weight: bold;
+        }
+
+
+        .icon {
+
+            width: 22px;
+
+            text-align: center;
+
+            font-size: 16px;
+        }
+
+
+        .sidebar-bottom {
+
+            position: absolute;
+
+            left: 18px;
+            right: 18px;
+            bottom: 25px;
+        }
+
+
+        .logout {
+
+            width: 100%;
+
+            border: none;
+
+            background: transparent;
+
+            text-align: left;
+
+            padding: 12px 15px;
+
+            border-radius: 10px;
+
+            color: #776f67;
+
+            cursor: pointer;
+
+            font-size: 14px;
+        }
+
+
+        .logout:hover {
+            background: #f4eee5;
+        }
+
+
+        /* =========================
+           CONTENIDO
+        ========================= */
+
+        .main {
+
+            margin-left: 245px;
+
+            width: calc(100% - 245px);
+
+            padding: 35px 45px;
+        }
+
+
+        /* =========================
+           CABECERA
+        ========================= */
+
+        .topbar {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 25px;
+
+            gap: 20px;
+        }
+
+
+        .welcome h1 {
+
+            font-size: 28px;
+
+            margin-bottom: 7px;
+
+            color: #3f3b37;
+        }
+
+
+        .welcome p {
+
+            color: #817970;
+
+            font-size: 14px;
+        }
+
+
+        .profile {
+
+            display: flex;
+
+            align-items: center;
+
+            gap: 12px;
+        }
+
+
+        .profile-info {
+            text-align: right;
+        }
+
+
+        .profile-name {
+
+            font-size: 14px;
+
+            font-weight: bold;
+
+            color: #4d4741;
+        }
+
+
+        .profile-company {
+
+            font-size: 12px;
+
+            color: #898078;
+
+            margin-top: 3px;
+        }
+
+
+        .avatar {
+
+            width: 42px;
+
+            height: 42px;
+
+            border-radius: 50%;
+
+            background: #8c7761;
+
+            color: white;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-weight: bold;
+        }
+
+
+        /* =========================
+           SELECTOR DE PERIODO
+        ========================= */
+
+        .periodo-panel {
+
+            background: #fffdf9;
+
+            border: 1px solid #e8e0d7;
+
+            border-radius: 16px;
+
+            padding: 18px 22px;
+
+            margin-bottom: 25px;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: space-between;
+
+            gap: 20px;
+
+            flex-wrap: wrap;
+        }
+
+
+        .periodo-texto h2 {
+
+            font-size: 16px;
+
+            color: #49433d;
+
+            margin-bottom: 4px;
+        }
+
+
+        .periodo-texto p {
+
+            font-size: 12px;
+
+            color: #918880;
+        }
+
+
+        .periodo-controles {
+
+            display: flex;
+
+            gap: 10px;
+
+            align-items: center;
+        }
+
+
+        .periodo-controles select {
+
+            padding: 10px 13px;
+
+            border: 1px solid #ddd3c8;
+
+            border-radius: 8px;
+
+            background: white;
+
+            color: #514b45;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           TARJETAS PRINCIPALES
+        ========================= */
+
+        .stats {
+
+            display: grid;
+
+            grid-template-columns: repeat(4, 1fr);
+
+            gap: 18px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .stat-card {
+
+            background: #fffdf9;
+
+            border: 1px solid #e8e0d7;
+
+            border-radius: 16px;
+
+            padding: 23px;
+
+            box-shadow: 0 5px 18px rgba(70, 60, 50, 0.04);
+        }
+
+
+        .stat-top {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 15px;
+        }
+
+
+        .stat-title {
+
+            color: #817970;
+
+            font-size: 13px;
+        }
+
+
+        .stat-icon {
+
+            width: 34px;
+
+            height: 34px;
+
+            border-radius: 9px;
+
+            background: #f4eee5;
+
+            display: flex;
+
+            align-items: center;
+
+            justify-content: center;
+
+            font-size: 16px;
+        }
+
+
+        .stat-value {
+
+            font-size: 25px;
+
+            font-weight: bold;
+
+            color: #49433d;
+        }
+
+
+        .stat-description {
+
+            margin-top: 7px;
+
+            font-size: 12px;
+
+            color: #9a9188;
+        }
+
+
+        /* =========================
+           BLOQUE FISCAL
+        ========================= */
+
+        .fiscal-grid {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 22px;
+
+            margin-bottom: 25px;
+        }
+
+
+        .fiscal-card {
+
+            background: #fffdf9;
+
+            border: 1px solid #e8e0d7;
+
+            border-radius: 16px;
+
+            padding: 25px;
+        }
+
+
+        .fiscal-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 20px;
+        }
+
+
+        .fiscal-header h2 {
+
+            font-size: 18px;
+
+            color: #49433d;
+        }
+
+
+        .fiscal-periodo {
+
+            font-size: 11px;
+
+            color: #958b82;
+        }
+
+
+        .fiscal-row {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            padding: 13px 0;
+
+            border-bottom: 1px solid #eee7df;
+        }
+
+
+        .fiscal-row:last-child {
+            border-bottom: none;
+        }
+
+
+        .fiscal-label {
+
+            font-size: 13px;
+
+            color: #625c56;
+        }
+
+
+        .fiscal-value {
+
+            font-size: 15px;
+
+            font-weight: bold;
+
+            color: #4a443e;
+        }
+
+
+        .fiscal-total {
+
+            margin-top: 15px;
+
+            padding: 16px;
+
+            border-radius: 10px;
+
+            background: #f4eee5;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+        }
+
+
+        .fiscal-total span:first-child {
+
+            font-size: 13px;
+
+            font-weight: bold;
+
+            color: #5d5145;
+        }
+
+
+        .fiscal-total span:last-child {
+
+            font-size: 19px;
+
+            font-weight: bold;
+
+            color: #665542;
+        }
+
+
+        /* =========================
+           CONTENIDO INFERIOR
+        ========================= */
+
+        .content-grid {
+
+            display: grid;
+
+            grid-template-columns: 1.5fr 1fr;
+
+            gap: 22px;
+        }
+
+
+        .panel {
+
+            background: #fffdf9;
+
+            border: 1px solid #e8e0d7;
+
+            border-radius: 16px;
+
+            padding: 25px;
+        }
+
+
+        .panel-header {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            margin-bottom: 22px;
+        }
+
+
+        .panel-header h2 {
+
+            font-size: 17px;
+
+            color: #49433d;
+        }
+
+
+        .panel-link {
+
+            border: none;
+
+            background: transparent;
+
+            color: #8c7761;
+
+            font-size: 13px;
+
+            cursor: pointer;
+        }
+
+
+        /* =========================
+           TABLA
+        ========================= */
+
+        table {
+
+            width: 100%;
+
+            border-collapse: collapse;
+        }
+
+
+        th {
+
+            text-align: left;
+
+            font-size: 11px;
+
+            text-transform: uppercase;
+
+            letter-spacing: 0.5px;
+
+            color: #999087;
+
+            padding: 10px;
+
+            border-bottom: 1px solid #eee7df;
+        }
+
+
+        td {
+
+            padding: 14px 10px;
+
+            font-size: 13px;
+
+            border-bottom: 1px solid #f0ebe5;
+
+            color: #5e5852;
+        }
+
+
+        .amount {
+
+            font-weight: bold;
+
+            color: #4a443e;
+        }
+
+
+        .status {
+
+            display: inline-block;
+
+            padding: 5px 9px;
+
+            border-radius: 20px;
+
+            background: #f3eadf;
+
+            color: #776653;
+
+            font-size: 11px;
+        }
+
+
+        .sin-datos {
+
+            text-align: center;
+
+            padding: 25px;
+
+            color: #999087;
+        }
+
+
+        /* =========================
+           ACCIONES RÁPIDAS
+        ========================= */
+
+        .quick-actions {
+
+            display: grid;
+
+            grid-template-columns: 1fr 1fr;
+
+            gap: 12px;
+        }
+
+
+        .quick-action {
+
+            border: 1px solid #e8e0d7;
+
+            background: #faf7f2;
+
+            padding: 17px;
+
+            border-radius: 12px;
+
+            cursor: pointer;
+
+            text-align: left;
+
+            transition: 0.2s;
+        }
+
+
+        .quick-action:hover {
+
+            background: #f4eee5;
+
+            transform: translateY(-1px);
+        }
+
+
+        .quick-action .action-icon {
+
+            font-size: 20px;
+
+            margin-bottom: 9px;
+        }
+
+
+        .quick-action strong {
+
+            display: block;
+
+            font-size: 13px;
+
+            color: #4d4741;
+
+            margin-bottom: 4px;
+        }
+
+
+        .quick-action span {
+
+            font-size: 11px;
+
+            color: #8b837b;
+        }
+
+
+        /* =========================
+           RESPONSIVE
+        ========================= */
+
+        @media (max-width: 1100px) {
+
+            .stats {
+
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .fiscal-grid {
+
+                grid-template-columns: 1fr;
+            }
+
+            .content-grid {
+
+                grid-template-columns: 1fr;
+            }
+        }
+
+
+        @media (max-width: 700px) {
+
+            .sidebar {
+
+                width: 70px;
+
+                padding: 25px 8px;
+            }
+
+            .logo {
+
+                font-size: 0;
+
+                text-align: center;
+            }
+
+            .logo::after {
+
+                content: "G";
+
+                font-size: 25px;
+            }
+
+            .menu-title {
+
+                display: none;
+            }
+
+            .menu a {
+
+                justify-content: center;
+
+                padding: 12px;
+            }
+
+            .menu a span:not(.icon) {
+
+                display: none;
+            }
+
+            .sidebar-bottom {
+
+                left: 8px;
+
+                right: 8px;
+            }
+
+            .logout {
+
+                text-align: center;
+
+                padding: 12px 5px;
+            }
+
+            .main {
+
+                margin-left: 70px;
+
+                width: calc(100% - 70px);
+
+                padding: 25px 18px;
+            }
+
+            .stats {
+
+                grid-template-columns: 1fr;
+            }
+
+            .topbar {
+
+                align-items: flex-start;
+            }
+
+            .profile-info {
+
+                display: none;
+            }
+
+            .periodo-controles {
+
+                width: 100%;
+
+                display: grid;
+
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .periodo-controles select {
+
+                width: 100%;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="app">
+
+
+    <!-- =========================
+         MENÚ LATERAL
+    ========================== -->
+
+    <aside class="sidebar">
+
+        <div class="logo">
+            gestia
+        </div>
+
+
+        <div class="menu-title">
+            Gestión
+        </div>
+
+
+        <ul class="menu">
+
+            <li>
+                <a href="dashboard.html" class="active">
+                    <span class="icon">⌂</span>
+                    <span>Inicio</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="clientes.html">
+                    <span class="icon">♙</span>
+                    <span>Clientes</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="proveedores.html">
+                    <span class="icon">▣</span>
+                    <span>Proveedores</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="presupuestos.html">
+                    <span class="icon">◫</span>
+                    <span>Presupuestos</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="facturas.html">
+                    <span class="icon">▤</span>
+                    <span>Facturas</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="facturas-recibidas.html">
+                    <span class="icon">€</span>
+                    <span>Gastos</span>
+                </a>
+            </li>
+
+            <li>
+                <a href="servicios.html">
+                    <span class="icon">S</span>
+                    <span>Servicios</span>
+                </a>
+            </li>  
+
+            <li>
+                <a href="#">
+                    <span class="icon">▧</span>
+                    <span>Albaranes</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <span class="icon">⌘</span>
+                    <span>Trabajos</span>
+                </a>
+            </li>
+
+
+            <li>
+                <a href="#">
+                    <span class="icon">◒</span>
+                    <span>Informes</span>
+                </a>
+            </li>
+
+        </ul>
+
+
+        <div class="sidebar-bottom">
+
+            <button
+                class="logout"
+                onclick="cerrarSesion()">
+
+                ⚙ &nbsp; Configuración / Salir
+
+            </button>
+
+        </div>
+
+    </aside>
+
+
+
+    <!-- =========================
+         CONTENIDO
+    ========================== -->
+
+    <main class="main">
+
+
+        <!-- CABECERA -->
+
+        <div class="topbar">
+
+            <div class="welcome">
+
+                <h1>
+                    Hola, <span id="nombreUsuario">usuario</span> 👋
+                </h1>
+
+                <p>
+                    Aquí tienes un resumen de tu negocio.
+                </p>
+
+            </div>
+
+
+            <div class="profile">
+
+                <div class="profile-info">
+
+                    <div
+                        class="profile-name"
+                        id="perfilNombre">
+
+                        Usuario
+
+                    </div>
+
+                    <div
+                        class="profile-company"
+                        id="perfilEmpresa">
+
+                        Mi empresa
+
+                    </div>
+
+                </div>
+
+
+                <div
+                    class="avatar"
+                    id="avatar">
+
+                    U
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             SELECTOR DE PERIODO
+        ========================== -->
+
+        <div class="periodo-panel">
+
+            <div class="periodo-texto">
+
+                <h2>
+                    Resumen del periodo
+                </h2>
+
+                <p id="textoPeriodo">
+                    Selecciona el periodo que quieres consultar.
+                </p>
+
+            </div>
+
+
+            <div class="periodo-controles">
+
+                <select id="selectorAnio"></select>
+
+                <select id="selectorPeriodo">
+
+                    <option value="todo">
+                        Todo el año
+                    </option>
+
+                    <option value="t1">
+                        1.º trimestre
+                    </option>
+
+                    <option value="t2">
+                        2.º trimestre
+                    </option>
+
+                    <option value="t3">
+                        3.º trimestre
+                    </option>
+
+                    <option value="t4">
+                        4.º trimestre
+                    </option>
+
+                    <option value="0">
+                        Enero
+                    </option>
+
+                    <option value="1">
+                        Febrero
+                    </option>
+
+                    <option value="2">
+                        Marzo
+                    </option>
+
+                    <option value="3">
+                        Abril
+                    </option>
+
+                    <option value="4">
+                        Mayo
+                    </option>
+
+                    <option value="5">
+                        Junio
+                    </option>
+
+                    <option value="6">
+                        Julio
+                    </option>
+
+                    <option value="7">
+                        Agosto
+                    </option>
+
+                    <option value="8">
+                        Septiembre
+                    </option>
+
+                    <option value="9">
+                        Octubre
+                    </option>
+
+                    <option value="10">
+                        Noviembre
+                    </option>
+
+                    <option value="11">
+                        Diciembre
+                    </option>
+
+                </select>
+
+                <div style="margin-left: 10px;">
+
+                    <label for="selectorServicio">
+                        Servicio
+                    </label>
+
+                    <select id="selectorServicio">
+
+                        <option value="todos">
+                            Todos los servicios
+                        </option>
+
+                    </select>
+
+                </div>
+
+             </div>
+
+    </div>
+
+
+
+        <!-- =========================
+             ESTADÍSTICAS
+        ========================== -->
+
+        <div class="stats">
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-title">
+                        Facturación
+                    </span>
+
+                    <span class="stat-icon">
+                        €
+                    </span>
+
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="totalFacturado">
+
+                    0,00 €
+
+                </div>
+
+                <div class="stat-description">
+                    Total de facturas emitidas
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-title">
+                        Pendiente de cobro
+                    </span>
+
+                    <span class="stat-icon">
+                        ◷
+                    </span>
+
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="pendienteCobro">
+
+                    0,00 €
+
+                </div>
+
+                <div class="stat-description">
+                    Facturas pendientes
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-title">
+                        Gastos
+                    </span>
+
+                    <span class="stat-icon">
+                        ↓
+                    </span>
+
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="totalGastos">
+
+                    0,00 €
+
+                </div>
+
+                <div class="stat-description">
+                    Facturas recibidas
+                </div>
+
+            </div>
+
+
+            <div class="stat-card">
+
+                <div class="stat-top">
+
+                    <span class="stat-title">
+                        Beneficio estimado
+                    </span>
+
+                    <span class="stat-icon">
+                        ↑
+                    </span>
+
+                </div>
+
+                <div
+                    class="stat-value"
+                    id="beneficio">
+
+                    0,00 €
+
+                </div>
+
+                <div class="stat-description">
+                    Ingresos menos gastos
+                </div>
+
+            </div>
+
+        </div>
+
+
+
+        <!-- =========================
+             IVA E IRPF
+        ========================== -->
+
+        <div class="fiscal-grid">
+
+
+            <!-- IVA -->
+
+            <div class="fiscal-card">
+
+                <div class="fiscal-header">
+
+                    <h2>
+                        IVA
+                    </h2>
+
+                    <span
+                        class="fiscal-periodo"
+                        id="periodoIva">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <div class="fiscal-row">
+
+                    <span class="fiscal-label">
+                        IVA repercutido
+                    </span>
+
+                    <span
+                        class="fiscal-value"
+                        id="ivaRepercutido">
+
+                        0,00 €
+
+                    </span>
+
+                </div>
+
+
+                <div class="fiscal-row">
+
+                    <span class="fiscal-label">
+                        IVA soportado
+                    </span>
+
+                    <span
+                        class="fiscal-value"
+                        id="ivaSoportado">
+
+                        0,00 €
+
+                    </span>
+
+                </div>
+
+
+                <div class="fiscal-total">
+
+                    <span>
+                        IVA a liquidar
+                    </span>
+
+                    <span id="ivaLiquidar">
+                        0,00 €
+                    </span>
+
+                </div>
+
+            </div>
+
+
+
+            <!-- IRPF -->
+
+            <div class="fiscal-card">
+
+                <div class="fiscal-header">
+
+                    <h2>
+                        IRPF
+                    </h2>
+
+                    <span
+                        class="fiscal-periodo"
+                        id="periodoIrpf">
+
+                        2026
+
+                    </span>
+
+                </div>
+
+
+                <div class="fiscal-card">
+    <h3>IRPF estimado</h3>
+
+    <p>Rendimiento neto acumulado</p>
+    <strong id="rendimientoNetoIRPF">0,00 €</strong>
+
+    <p>20 % pago fraccionado</p>
+    <strong id="pagoFraccionadoIRPF">0,00 €</strong>
+
+    <p>Retenciones IRPF</p>
+    <strong id="retencionesIRPF">0,00 €</strong>
+
+    <p>IRPF estimado a ingresar</p>
+    <strong id="irpfEstimadoIngresar">0,00 €</strong>
+</div>
+
+            </div>
+
+        </div>
+
+
+
+
+
+        <!-- =========================
+             ÚLTIMAS FACTURAS
+        ========================== -->
+
+        <div class="content-grid">
+
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <h2>
+                        Facturas del periodo
+                    </h2>
+
+                    <button
+                        class="panel-link"
+                        onclick="window.location.href='facturas.html'">
+
+                        Ver todas
+
+                    </button>
+
+                </div>
+
+
+                <div style="overflow-x:auto;">
+
+                    <table>
+
+                        <thead>
+
+                            <tr>
+
+                                <th>
+                                    Factura
+                                </th>
+
+                                <th>
+                                    Cliente
+                                </th>
+
+                                <th>
+                                    Fecha
+                                </th>
+
+                                <th>
+                                    Importe
+                                </th>
+
+                                <th>
+                                    Estado
+                                </th>
+
+                            </tr>
+
+                        </thead>
+
+
+                        <tbody id="listaUltimasFacturas">
+
+                        </tbody>
+
+                    </table>
+
+                </div>
+
+            <div class="dashboard-card" style="
+    margin-top: 25px;
+    background: #ffffff;
+    border-radius: 12px;
+    padding: 20px;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.06);
+">
+
+    <h3 style="
+        margin: 0 0 20px 0;
+        color: #222;
+    ">
+        Gastos del periodo
+    </h3>
+
+    
+
+
+
+    <div style="
+        overflow-x: auto;
+    ">
+
+        <table style="
+            width: 100%;
+            border-collapse: collapse;
+            background: #ffffff;
+        ">
+
+            <thead>
+
+                <tr style="
+                    background: #f5f6f8;
+                    border-bottom: 1px solid #ddd;
+                ">
+
+                    <th style="padding: 12px; text-align: left;">
+                        Fecha
+                    </th>
+
+                    <th style="padding: 12px; text-align: left;">
+                        Nº factura
+                    </th>
+
+                    <th style="padding: 12px; text-align: left;">
+                        Proveedor
+                    </th>
+
+                    <th style="padding: 12px; text-align: left;">
+                        Concepto
+                    </th>
+
+                    <th style="padding: 12px; text-align: right;">
+                        Base
+                    </th>
+
+                    <th style="padding: 12px; text-align: right;">
+                        IVA
+                    </th>
+
+                    <th style="padding: 12px; text-align: right;">
+                        Total
+                    </th>
+
+                    <th style="padding: 12px; text-align: left;">
+                        Estado
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="listaGastosPeriodo">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+<!-- =========================
+     PAGOS PENDIENTES
+========================== -->
+
+<div class="panel" style="
+    grid-column: 1 / -1;
+">
+
+    <div class="panel-header">
+
+        <h2>
+            Pagos pendientes
+        </h2>
+
+    </div>
+
+    <div style="margin-bottom: 15px;">
+
+        <strong>
+            Total pendiente:
+        </strong>
+
+        <span id="totalPagosPendientes">
+            0,00 €
+        </span>
+
+    </div>
+
+    <div style="overflow-x: auto;">
+
+        <table>
+
+            <thead>
+
+                <tr>
+
+                    <th>
+                        Fecha de pago
+                    </th>
+
+                    <th>
+                        Nº factura
+                    </th>
+
+                    <th>
+                        Proveedor
+                    </th>
+
+                    <th>
+                        Importe
+                    </th>
+
+                    <th>
+                        Estado
+                    </th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="listaPagosPendientes">
+
+            </tbody>
+
+        </table>
+
+    </div>
+
+</div>
+
+            <!-- =========================
+                 ACCIONES RÁPIDAS
+            ========================== -->
+
+            <div class="panel">
+
+
+                <div class="panel-header">
+
+                    <h2>
+                        Acciones rápidas
+                    </h2>
+
+                </div>
+
+
+                <div class="quick-actions">
+
+
+                    <button
+                        class="quick-action"
+                        onclick="window.location.href='clientes.html'">
+
+                        <div class="action-icon">
+                            👤
+                        </div>
+
+                        <strong>
+                            Nuevo cliente
+                        </strong>
+
+                        <span>
+                            Añadir un cliente
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick-action"
+                        onclick="window.location.href='presupuestos.html'">
+
+                        <div class="action-icon">
+                            📄
+                        </div>
+
+                        <strong>
+                            Nuevo presupuesto
+                        </strong>
+
+                        <span>
+                            Crear presupuesto
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick-action"
+                        onclick="window.location.href='facturas.html'">
+
+                        <div class="action-icon">
+                            🧾
+                        </div>
+
+                        <strong>
+                            Nueva factura
+                        </strong>
+
+                        <span>
+                            Crear una factura
+                        </span>
+
+                    </button>
+
+
+                    <button
+                        class="quick-action"
+                        onclick="window.location.href='facturas-recibidas.html'">
+
+                        <div class="action-icon">
+                            💳
+                        </div>
+
+                        <strong>
+                            Nueva factura recibida
+                        </strong>
+
+                        <span>
+                            Registrar un gasto
+                        </span>
+
+                    </button>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+    </main>
+
+</div>
+
+
+
+<script>
+
+
+    /* =========================
+   CARGAR SERVICIOS DASHBOARD
+========================= */
+
+function cargarServiciosDashboard() {
+
+    const select =
+        document.getElementById(
+            "selectorServicio"
+        );
+
+    if (!select) {
+        return;
+    }
+
+    const servicios =
+        JSON.parse(
+            localStorage.getItem(
+                "servicios"
+            )
+        ) || [];
+
+    select.innerHTML = `
+        <option value="todos">
+            Todos los servicios
+        </option>
+    `;
+
+    servicios.forEach(
+        function(servicio) {
+
+            const option =
+                document.createElement(
+                    "option"
+                );
+
+            option.value =
+                servicio.nombre;
+
+            option.textContent =
+                servicio.nombre;
+
+            select.appendChild(
+                option
+            );
+
+        }
+    );
+}
+    /* =========================
+       USUARIO
+    ========================= */
+
+    const usuario =
+        JSON.parse(
+            localStorage.getItem(
+                "gestiaUsuarioActual"
+            )
+        );
+
+
+    if (!usuario) {
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    if (usuario) {
+
+        document.getElementById(
+            "nombreUsuario"
+        ).textContent =
+            usuario.nombre.split(" ")[0];
+
+
+        document.getElementById(
+            "perfilNombre"
+        ).textContent =
+            usuario.nombre;
+
+
+        document.getElementById(
+            "perfilEmpresa"
+        ).textContent =
+            usuario.empresa;
+
+
+        document.getElementById(
+            "avatar"
+        ).textContent =
+            usuario.nombre
+                .charAt(0)
+                .toUpperCase();
+
+    }
+
+
+    /* =========================
+       FORMATO DE EUROS
+    ========================= */
+
+    function euros(valor) {
+
+        return Number(valor || 0)
+            .toLocaleString(
+                "es-ES",
+                {
+                    minimumFractionDigits: 2,
+                    maximumFractionDigits: 2
+                }
+            ) + " €";
+
+    }
+
+
+    /* =========================
+       OBTENER FACTURAS
+    ========================= */
+
+    function obtenerFacturas() {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "facturas"
+            )
+        ) || [];
+
+    }
+
+
+    /* =========================
+       OBTENER FACTURAS RECIBIDAS
+    ========================= */
+
+    function obtenerFacturasRecibidas() {
+
+        return JSON.parse(
+            localStorage.getItem(
+                "facturasRecibidas"
+            )
+        ) || [];
+
+    }
+
+
+    /* =========================
+       FECHA
+    ========================= */
+
+    function obtenerFecha(fecha) {
+
+        if (!fecha) {
+            return null;
+        }
+
+        const partes =
+            fecha.split("-");
+
+        if (partes.length !== 3) {
+            return null;
+        }
+
+        return new Date(
+            Number(partes[0]),
+            Number(partes[1]) - 1,
+            Number(partes[2])
+        );
+
+    }
+
+
+    /* =========================
+       COMPROBAR PERIODO
+    ========================= */
+
+    function perteneceAlPeriodo(
+        fechaTexto,
+        anio,
+        periodo
+    ) {
+
+        const fecha =
+            obtenerFecha(fechaTexto);
+
+        if (!fecha) {
+            return false;
+        }
+
+
+        if (
+            fecha.getFullYear() !==
+            Number(anio)
+        ) {
+
+            return false;
+
+        }
+        
+
+
+        if (periodo === "todo") {
+
+            return true;
+
+        }
+
+
+        if (periodo === "t1") {
+
+            return fecha.getMonth() >= 0 &&
+                   fecha.getMonth() <= 2;
+
+        }
+
+
+        if (periodo === "t2") {
+
+            return fecha.getMonth() >= 3 &&
+                   fecha.getMonth() <= 5;
+
+        }
+
+
+        if (periodo === "t3") {
+
+            return fecha.getMonth() >= 6 &&
+                   fecha.getMonth() <= 8;
+
+        }
+
+
+        if (periodo === "t4") {
+
+            return fecha.getMonth() >= 9 &&
+                   fecha.getMonth() <= 11;
+
+        }
+
+
+        return fecha.getMonth() ===
+            Number(periodo);
+
+    }
+
+
+    /* =========================
+       CARGAR AÑOS
+    ========================= */
+
+    function cargarAnios() {
+
+        const selector =
+            document.getElementById(
+                "selectorAnio"
+            );
+
+
+        const facturas =
+            obtenerFacturas();
+
+
+        const recibidas =
+            obtenerFacturasRecibidas();
+
+
+        const anios =
+            new Set();
+
+
+        facturas.forEach(
+            function(factura) {
+
+                const fecha =
+                    obtenerFecha(
+                        factura.fecha
+                    );
+
+                if (fecha) {
+
+                    anios.add(
+                        fecha.getFullYear()
+                    );
+
+                }
+
+            }
+        );
+
+
+        recibidas.forEach(
+            function(factura) {
+
+                const fecha =
+                    obtenerFecha(
+                        factura.fecha
+                    );
+
+                if (fecha) {
+
+                    anios.add(
+                        fecha.getFullYear()
+                    );
+
+                }
+
+            }
+        );
+
+
+        // Si no hay facturas, mostrar año actual
+
+        if (anios.size === 0) {
+
+            anios.add(
+                new Date().getFullYear()
+            );
+
+        }
+
+
+        selector.innerHTML = "";
+
+
+        Array.from(anios)
+            .sort(function(a, b) {
+                return b - a;
+            })
+            .forEach(
+                function(anio) {
+
+                    const opcion =
+                        document.createElement(
+                            "option"
+                        );
+
+                    opcion.value =
+                        anio;
+
+                    opcion.textContent =
+                        anio;
+
+                    selector.appendChild(
+                        opcion
+                    );
+
+                }
+            );
+
+
+        selector.value =
+            new Date().getFullYear();
+
+        if (
+            !selector.value
+        ) {
+
+            selector.selectedIndex =
+                0;
+
+        }
+
+    }
+
+
+    /* =========================
+       CALCULAR DASHBOARD
+    ========================= */
+
+    function actualizarDashboard() {
+
+
+        const anio =
+            document.getElementById(
+                "selectorAnio"
+            ).value;
+
+
+        const periodo =
+            document.getElementById(
+                "selectorPeriodo"
+            ).value;
+
+
+        const facturas =
+            obtenerFacturas();
+
+
+        const recibidas =
+            obtenerFacturasRecibidas();
+
+
+        /* =========================
+           FILTRAR
+        ========================= */
+
+        /* =========================
+   FILTRAR
+========================= */
+
+const servicioSeleccionado =
+    document.getElementById(
+        "selectorServicio"
+    ).value;
+
+
+    const facturasPeriodo =
+        facturas.filter(
+            function(factura) {
+
+                const pertenecePeriodo =
+                    perteneceAlPeriodo(
+                        factura.fecha,
+                        anio,
+                        periodo
+                    );
+
+                const perteneceServicio =
+                    servicioSeleccionado === "todos" ||
+                    factura.servicio === servicioSeleccionado;
+
+                return (
+                    pertenecePeriodo &&
+                    perteneceServicio
+                );
+
+            }
+        );
+
+
+    const recibidasPeriodo =
+        recibidas.filter(
+            function(factura) {
+
+                const pertenecePeriodo =
+                    perteneceAlPeriodo(
+                        factura.fecha,
+                        anio,
+                        periodo
+                    );
+
+                const perteneceServicio =
+                    servicioSeleccionado === "todos" ||
+                    factura.servicio === servicioSeleccionado;
+
+                return (
+                    pertenecePeriodo &&
+                    perteneceServicio
+                );
+
+            }
+        );
+
+
+        /* =========================
+           FACTURACIÓN
+        ========================= */
+
+        const totalFacturado =
+            facturasPeriodo.reduce(
+                function(total, factura) {
+
+                    return total +
+                        Number(
+                            factura.base || 0
+                        );
+
+                },
+                0
+            );
+
+
+        /* =========================
+           PENDIENTE COBRO
+        ========================= */
+
+        const pendienteCobro =
+            facturasPeriodo.reduce(
+                function(total, factura) {
+
+                    const estado =
+                        String(
+                            factura.estado || ""
+                        ).toLowerCase();
+
+
+                    if (
+                        estado.includes("pendiente")
+                    ) {
+
+                        return total +
+                            Number(
+                                factura.total || 0
+                            );
+
+                    }
+
+                    return total;
+
+                },
+                0
+            );
+
+
+        /* =========================
+           GASTOS
+        ========================= */
+
+        const totalGastos =
+            recibidasPeriodo.reduce(
+                function(total, factura) {
+
+                    return total +
+                        Number(
+                            factura.base || 0
+                        );
+
+                },
+                0
+            );
+
+
+        /* =========================
+           BENEFICIO
+        ========================= */
+
+        const beneficio =
+            totalFacturado -
+            totalGastos;
+
+
+        /* =========================
+           IVA REPERCUTIDO
+        ========================= */
+
+        const ivaRepercutido =
+            facturasPeriodo.reduce(
+                function(total, factura) {
+
+                    const base =
+                        Number(
+                            factura.base || 0
+                        );
+
+                    const porcentaje =
+                        Number(
+                            factura.iva || 0
+                        );
+
+                    return total +
+                        (
+                            base *
+                            porcentaje /
+                            100
+                        );
+
+                },
+                0
+            );
+
+
+        /* =========================
+           IVA SOPORTADO
+        ========================= */
+
+        const ivaSoportado =
+            recibidasPeriodo.reduce(
+                function(total, factura) {
+
+                    const base =
+                        Number(
+                            factura.base || 0
+                        );
+
+                    const porcentaje =
+                        Number(
+                            factura.iva || 0
+                        );
+
+                    return total +
+                        (
+                            base *
+                            porcentaje /
+                            100
+                        );
+
+                },
+                0
+            );
+
+
+        /* =========================
+           IVA A LIQUIDAR
+        ========================= */
+
+        const ivaLiquidar =
+            ivaRepercutido -
+            ivaSoportado;
+
+
+        /* =========================
+           IRPF
+        ========================= */
+
+                /*
+         * IRPF ESTIMADO - MODELO 130
+         *
+         * El cálculo se realiza sobre el beneficio
+         * acumulado del periodo seleccionado.
+         *
+         * Beneficio = ingresos - gastos
+         * IRPF estimado = beneficio x 20%
+         *
+         * Las retenciones de IRPF de las facturas
+         * emitidas se descuentan del resultado.
+         */
+
+        const ingresosIRPF =
+            facturasPeriodo.reduce(
+                function(total, factura) {
+
+                    return total +
+                        Number(
+                            factura.base || 0
+                        );
+
+                },
+                0
+            );
+
+
+        const gastosIRPF =
+            recibidasPeriodo.reduce(
+                function(total, factura) {
+
+                    return total +
+                        Number(
+                            factura.base || 0
+                        );
+
+                },
+                0
+            );
+
+
+        const rendimientoNetoIRPF =
+            ingresosIRPF -
+            gastosIRPF;
+
+
+        const pagoFraccionadoIRPF =
+            rendimientoNetoIRPF > 0
+                ? rendimientoNetoIRPF * 0.20
+                : 0;
+
+
+        const retencionesIRPF =
+            facturasPeriodo.reduce(
+                function(total, factura) {
+
+                    return total +
+                        Number(
+                            factura.irpfImporte || 0
+                        );
+
+                },
+                0
+            );
+
+
+        const irpfEstimadoIngresar =
+            Math.max(
+                0,
+                pagoFraccionadoIRPF -
+                retencionesIRPF
+            );
+
+
+        /* =========================
+           MOSTRAR DATOS
+        ========================= */
+
+        document.getElementById(
+            "totalFacturado"
+        ).textContent =
+            euros(totalFacturado);
+
+
+        document.getElementById(
+            "pendienteCobro"
+        ).textContent =
+            euros(pendienteCobro);
+
+
+        document.getElementById(
+            "totalGastos"
+        ).textContent =
+            euros(totalGastos);
+
+
+        document.getElementById(
+            "beneficio"
+        ).textContent =
+            euros(beneficio);
+
+
+        document.getElementById(
+            "ivaRepercutido"
+        ).textContent =
+            euros(ivaRepercutido);
+
+
+        document.getElementById(
+            "ivaSoportado"
+        ).textContent =
+            euros(ivaSoportado);
+
+
+        document.getElementById(
+            "ivaLiquidar"
+        ).textContent =
+            euros(ivaLiquidar);
+
+
+        document.getElementById("rendimientoNetoIRPF").textContent =
+         euros(rendimientoNetoIRPF);
+
+document.getElementById("pagoFraccionadoIRPF").textContent =
+    euros(pagoFraccionadoIRPF);
+
+document.getElementById("retencionesIRPF").textContent =
+    euros(retencionesIRPF);
+
+document.getElementById("irpfEstimadoIngresar").textContent =
+    euros(irpfEstimadoIngresar);
+
+        document.getElementById(
+            "periodoIva"
+        ).textContent =
+            anio;
+
+
+        document.getElementById(
+            "periodoIrpf"
+        ).textContent =
+            anio;
+
+
+        document.getElementById(
+            "textoPeriodo"
+        ).textContent =
+            obtenerNombrePeriodo(periodo) +
+            " de " +
+            anio;
+
+
+        mostrarUltimasFacturas(
+            facturasPeriodo
+        );
+
+    }
+    
+
+
+    /* =========================
+       NOMBRE DEL PERIODO
+    ========================= */
+
+    function obtenerNombrePeriodo(periodo) {
+
+        const nombres = {
+
+            todo: "Todo el año",
+
+            t1: "1.º trimestre",
+
+            t2: "2.º trimestre",
+
+            t3: "3.º trimestre",
+
+            t4: "4.º trimestre",
+
+            0: "Enero",
+
+            1: "Febrero",
+
+            2: "Marzo",
+
+            3: "Abril",
+
+            4: "Mayo",
+
+            5: "Junio",
+
+            6: "Julio",
+
+            7: "Agosto",
+
+            8: "Septiembre",
+
+            9: "Octubre",
+
+            10: "Noviembre",
+
+            11: "Diciembre"
+
+        };
+
+
+        return nombres[periodo] ||
+            "Periodo seleccionado";
+
+    }
+
+
+    /* =========================
+       MOSTRAR FACTURAS
+    ========================= */
+
+    function mostrarUltimasFacturas(
+        facturas
+    ) {
+
+        const tabla =
+            document.getElementById(
+                "listaUltimasFacturas"
+            );
+
+
+        tabla.innerHTML = "";
+
+
+        if (
+            facturas.length === 0
+        ) {
+
+            tabla.innerHTML = `
+
+                <tr>
+
+                    <td
+                        colspan="5"
+                        class="sin-datos">
+
+                        No hay facturas en este periodo.
+
+                    </td>
+
+                </tr>
+
+            `;
+
+            return;
+
+        }
+
+
+        const ultimas =
+            [...facturas]
+                .sort(
+                    function(a, b) {
+
+                        return String(
+                            b.fecha || ""
+                        ).localeCompare(
+                            String(
+                                a.fecha || ""
+                            )
+                        );
+
+                    }
+                )
+                .slice(0, 5);
+
+
+        ultimas.forEach(
+            function(factura) {
+
+                const fila =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        ${factura.numero || "-"}
+                    </td>
+
+                    <td>
+                        ${factura.cliente || "-"}
+                    </td>
+
+                    <td>
+                        ${formatearFecha(
+                            factura.fecha
+                        )}
+                    </td>
+
+                    <td class="amount">
+                        ${euros(
+                            factura.total
+                        )}
+                    </td>
+
+                    <td>
+
+                        <span class="status">
+                            ${factura.estado || "-"}
+                        </span>
+
+                    </td>
+
+                `;
+
+
+                tabla.appendChild(
+                    fila
+                );
+
+            }
+        );
+
+    }
+
+            
+
+    /* =========================
+       FORMATEAR FECHA
+    ========================= */
+
+    function formatearFecha(fecha) {
+
+        if (!fecha) {
+            return "-";
+        }
+
+
+        const partes =
+            fecha.split("-");
+
+
+        if (
+            partes.length !== 3
+        ) {
+
+            return fecha;
+
+        }
+
+
+        return (
+            partes[2] +
+            "/" +
+            partes[1] +
+            "/" +
+            partes[0]
+        );
+
+    }
+
+
+    /* =========================
+       CAMBIO DE PERIODO
+    ========================= */
+
+    document
+        .getElementById(
+            "selectorAnio"
+        )
+        .addEventListener(
+            "change",
+            actualizarDashboard
+        );
+
+
+    document
+        .getElementById(
+            "selectorPeriodo"
+        )
+        .addEventListener(
+            "change",
+            actualizarDashboard
+        );
+
+
+    /* =========================
+       CERRAR SESIÓN
+    ========================= */
+
+    function cerrarSesion() {
+
+        localStorage.removeItem(
+            "gestiaUsuarioActual"
+        );
+
+        localStorage.removeItem(
+            "sesionIniciada"
+        );
+
+        window.location.href =
+            "login.html";
+
+    }
+
+
+    /* =========================
+       INICIAR DASHBOARD
+    ========================= */
+
+    cargarAnios();
+    cargarServiciosDashboard();
+
+    actualizarDashboard();
+    mostrarGastosPeriodo();
+    mostrarPagosPendientes();
+
+document
+    .getElementById("selectorAnio")
+    .addEventListener(
+        "change",
+        function() {
+            actualizarDashboard();
+            mostrarGastosPeriodo();
+            mostrarPagosPendientes();
+        }
+    );
+
+document
+    .getElementById("selectorPeriodo")
+    .addEventListener(
+        "change",
+        function() {
+            actualizarDashboard();
+            mostrarGastosPeriodo();
+            mostrarPagosPendientes();
+        }
+    );
+
+ document
+    .getElementById("selectorServicio")
+    .addEventListener(
+        "change",
+        function() {
+            actualizarDashboard();
+            mostrarGastosPeriodo();
+            mostrarPagosPendientes();
+        }
+    );
+
+function mostrarGastosPeriodo() {
+
+    const lista =
+        document.getElementById("listaGastosPeriodo");
+
+    if (!lista) {
+        return;
+    }
+
+    const facturasRecibidas =
+        JSON.parse(
+            localStorage.getItem("facturasRecibidas")
+        ) || [];
+
+    const anio =
+        document.getElementById("selectorAnio").value;
+
+    const periodo =
+        document.getElementById("selectorPeriodo").value;
+
+    const servicioSeleccionado =
+    document.getElementById(
+        "selectorServicio"
+    ).value;
+
+    function obtenerFechaGasto(fechaTexto) {
+
+        if (!fechaTexto) {
+            return null;
+        }
+
+        const partes =
+            fechaTexto.split("-");
+
+        if (partes.length !== 3) {
+            return null;
+        }
+
+        return new Date(
+            Number(partes[0]),
+            Number(partes[1]) - 1,
+            Number(partes[2])
+        );
+    }
+
+    const gastosPeriodo =
+        facturasRecibidas.filter(function(factura) {
+
+            const fecha =
+                obtenerFechaGasto(factura.fecha);
+
+            if (!fecha) {
+                return false;
+            }
+
+            if (
+                fecha.getFullYear() !==
+                Number(anio)
+            ) {
+                return false;
+            }
+
+            const mes =
+                fecha.getMonth();
+
+            const perteneceServicio =
+                servicioSeleccionado === "todos" ||
+                !factura.servicio ||
+                factura.servicio === servicioSeleccionado;
+
+            if (!perteneceServicio) {
+                return false;
+            }
+            
+
+            if (periodo === "todo") {
+                return true;
+            }
+
+            if (periodo === "t1") {
+                return mes >= 0 && mes <= 2;
+            }
+
+            if (periodo === "t2") {
+                return mes >= 3 && mes <= 5;
+            }
+
+            if (periodo === "t3") {
+                return mes >= 6 && mes <= 8;
+            }
+
+            if (periodo === "t4") {
+                return mes >= 9 && mes <= 11;
+            }
+
+            const mesSeleccionado =
+                Number(periodo);
+
+            return mes === mesSeleccionado;
+
+        });
+
+    lista.innerHTML = "";
+
+    if (gastosPeriodo.length === 0) {
+
+        lista.innerHTML = `
+            <tr>
+                <td colspan="8"
+                    style="text-align:center; padding:20px;">
+                    No hay gastos en este periodo.
+                </td>
+            </tr>
+        `;
+
+        return;
+    }
+
+    gastosPeriodo.forEach(function(factura) {
+
+        const fila =
+            document.createElement("tr");
+
+        fila.innerHTML = `
+            <td>${factura.fecha || ""}</td>
+            <td>${factura.numero || ""}</td>
+            <td>${factura.proveedor || ""}</td>
+            <td>${factura.concepto || ""}</td>
+            <td>${Number(factura.base || 0).toFixed(2)} €</td>
+            <td>${Number(factura.iva || 0).toFixed(2)} €</td>
+            <td>${Number(factura.total || 0).toFixed(2)} €</td>
+            <td>${factura.estado || ""}</td>
+        `;
+
+        lista.appendChild(fila);
+
+    });
+}
+
+/* =========================
+   PAGOS PENDIENTES
+========================= */
+
+function mostrarPagosPendientes() {
+
+    const lista =
+        document.getElementById(
+            "listaPagosPendientes"
+        );
+
+    const totalElemento =
+        document.getElementById(
+            "totalPagosPendientes"
+        );
+
+    if (!lista || !totalElemento) {
+        return;
+    }
+
+    const facturasRecibidas =
+        JSON.parse(
+            localStorage.getItem(
+                "facturasRecibidas"
+            )
+        ) || [];
+
+    const anio =
+        document.getElementById(
+            "selectorAnio"
+        ).value;
+
+    const periodo =
+        document.getElementById(
+            "selectorPeriodo"
+        ).value;
+
+
+    const servicioSeleccionado =
+    document.getElementById(
+        "selectorServicio"
+    ).value;
+
+
+    const pagosPendientes =
+        facturasRecibidas.filter(
+            function(factura) {
+
+                const estado =
+                    String(
+                        factura.estado || ""
+                    )
+                    .toLowerCase()
+                    .trim();
+
+                if (
+                    !estado.includes("pendiente")
+                ) {
+                    return false;
+                }
+
+                const perteneceServicio =
+                    servicioSeleccionado === "todos" ||
+                    factura.servicio === servicioSeleccionado;
+
+                if (!perteneceServicio) {
+                    return false;
+                }
+
+
+                /*
+                 * Para los pagos pendientes utilizamos
+                 * la fecha de pago indicada por el usuario.
+                 */
+
+                const fechaPago =
+                    factura.fechaPago;
+
+                if (!fechaPago) {
+                    return false;
+                }
+
+
+                return perteneceAlPeriodo(
+                    fechaPago,
+                    anio,
+                    periodo
+                );
+
+            }
+        );
+
+
+    lista.innerHTML = "";
+
+
+    /* =========================
+       TOTAL PENDIENTE
+    ========================= */
+
+    const totalPendiente =
+        pagosPendientes.reduce(
+            function(total, factura) {
+
+                return total +
+                    Number(
+                        factura.total || 0
+                    );
+
+            },
+            0
+        );
+
+
+    totalElemento.textContent =
+        euros(totalPendiente);
+
+
+    /* =========================
+       SIN DATOS
+    ========================= */
+
+    if (
+        pagosPendientes.length === 0
+    ) {
+
+        lista.innerHTML = `
+
+            <tr>
+
+                <td
+                    colspan="5"
+                    class="sin-datos">
+
+                    No hay pagos pendientes
+                    en este periodo.
+
+                </td>
+
+            </tr>
+
+        `;
+
+        return;
+
+    }
+
+
+    /* =========================
+       MOSTRAR PAGOS
+    ========================= */
+
+    pagosPendientes
+        .sort(
+            function(a, b) {
+
+                return String(
+                    a.fechaPago || ""
+                ).localeCompare(
+                    String(
+                        b.fechaPago || ""
+                    )
+                );
+
+            }
+        )
+        .forEach(
+            function(factura) {
+
+                const fila =
+                    document.createElement(
+                        "tr"
+                    );
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        ${formatearFecha(
+                            factura.fechaPago
+                        )}
+                    </td>
+
+                    <td>
+                        ${factura.numero || "-"}
+                    </td>
+
+                    <td>
+                        ${factura.proveedor || "-"}
+                    </td>
+
+                    <td class="amount">
+                        ${euros(
+                            factura.total
+                        )}
+                    </td>
+
+                    <td>
+
+                        <span class="status">
+                            ${factura.estado || "Pendiente"}
+                        </span>
+
+                    </td>
+
+                `;
+
+
+                lista.appendChild(
+                    fila
+                );
+
+            }
+        );
+
+}
+
+   
+    mostrarGastosPeriodo();
+
+</script>
+  
+
+
+
+
+</body>
+
+</html>

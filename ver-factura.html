@@ -1,0 +1,571 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Gestia - Factura</title>
+
+    <style>
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+            background: #f5f5f5;
+            padding: 30px;
+            color: #222;
+        }
+
+        .pagina-factura {
+            max-width: 900px;
+            margin: auto;
+            background: white;
+            padding: 50px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.08);
+        }
+
+        .cabecera {
+            display: flex;
+            justify-content: space-between;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .empresa h1 {
+            margin-bottom: 10px;
+            font-size: 24px;
+        }
+
+        .empresa p {
+            margin-bottom: 4px;
+        }
+
+        .datos-factura {
+            text-align: right;
+        }
+
+        .datos-factura h2 {
+            font-size: 28px;
+            margin-bottom: 15px;
+        }
+
+        .datos-factura p {
+            margin-bottom: 5px;
+        }
+
+        .cliente {
+            border: 1px solid #ddd;
+            padding: 18px;
+            margin-bottom: 35px;
+        }
+
+        .cliente h3 {
+            margin-bottom: 10px;
+            font-size: 14px;
+            text-transform: uppercase;
+        }
+
+        .tabla-lineas {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 25px;
+        }
+
+        .tabla-lineas th,
+        .tabla-lineas td {
+            padding: 12px;
+            border-bottom: 1px solid #ddd;
+            text-align: left;
+        }
+
+        .tabla-lineas th {
+            background: #f5f5f5;
+        }
+
+        .tabla-lineas th:nth-child(n+2),
+        .tabla-lineas td:nth-child(n+2) {
+            text-align: right;
+        }
+
+        .totales {
+            width: 300px;
+            margin-left: auto;
+        }
+
+        .fila-total {
+            display: flex;
+            justify-content: space-between;
+            padding: 8px 0;
+        }
+
+        .fila-total.total-final {
+            font-size: 20px;
+            font-weight: bold;
+            border-top: 2px solid #222;
+            margin-top: 8px;
+            padding-top: 12px;
+        }
+
+        .estado {
+            margin-top: 30px;
+            font-weight: bold;
+        }
+
+        .botones {
+            max-width: 900px;
+            margin: 20px auto 0;
+            display: flex;
+            gap: 10px;
+        }
+
+        button {
+            padding: 10px 18px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #222;
+            color: white;
+        }
+
+        @media print {
+
+            body {
+                background: white;
+                padding: 0;
+            }
+
+            .pagina-factura {
+                box-shadow: none;
+                max-width: none;
+            }
+
+            .botones {
+                display: none;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+<body>
+
+    <div class="pagina-factura">
+
+        <div class="cabecera">
+
+            <div class="empresa">
+
+                <h1 id="nombreEmpresa">
+                    Mi empresa
+                </h1>
+
+                <p id="direccionEmpresa"></p>
+
+                <p id="nifEmpresa"></p>
+
+                <p id="telefonoEmpresa"></p>
+
+                <p id="emailEmpresa"></p>
+
+            </div>
+
+            <div class="datos-factura">
+
+                <h2>FACTURA</h2>
+
+                <p>
+                    <strong>Nº:</strong>
+                    <span id="numeroFactura"></span>
+                </p>
+
+                <p>
+                    <strong>Fecha:</strong>
+                    <span id="fechaFactura"></span>
+                </p>
+
+                <p>
+                    <strong>Vencimiento:</strong>
+                    <span id="vencimientoFactura"></span>
+                </p>
+
+            </div>
+
+        </div>
+
+
+        <div class="cliente">
+
+            <h3>Facturar a</h3>
+
+            <div id="datosCliente">
+
+    <p>
+        <strong id="clienteFactura"></strong>
+    </p>
+
+</div>
+
+        </div>
+
+
+        <table class="tabla-lineas">
+
+            <thead>
+
+                <tr>
+
+                    <th>Concepto</th>
+
+                    <th>Cantidad</th>
+
+                    <th>Precio</th>
+
+                    <th>Total</th>
+
+                </tr>
+
+            </thead>
+
+            <tbody id="lineasFactura">
+
+            </tbody>
+
+        </table>
+
+
+        <div class="totales">
+
+            <div class="fila-total">
+
+                <span>Base imponible</span>
+
+                <span id="baseFactura"></span>
+
+            </div>
+
+            <div class="fila-total">
+
+                <span>IVA</span>
+
+                <span id="ivaFactura"></span>
+
+            </div>
+
+            <div class="fila-total">
+
+                <span>Importe IVA</span>
+
+                <span id="importeIVAFactura"></span>
+
+            </div>
+
+            <div class="fila-total total-final">
+
+                <span>TOTAL</span>
+
+                <span id="totalFactura"></span>
+
+            </div>
+
+        </div>
+
+
+        <div class="estado">
+
+            Estado:
+            <span id="estadoFactura"></span>
+
+        </div>
+
+    </div>
+
+
+    <div class="botones">
+
+        <button onclick="window.print()">
+            Imprimir / Guardar PDF
+        </button>
+
+        <button onclick="history.back()">
+            Volver
+        </button>
+
+    </div>
+
+
+    <script>
+
+        if (
+            localStorage.getItem("sesionIniciada")
+            !== "true"
+        ) {
+
+            window.location.href = "login.html";
+
+        }
+
+
+        const parametros =
+            new URLSearchParams(
+                window.location.search
+            );
+
+        const index =
+            parseInt(
+                parametros.get("index")
+            );
+
+
+        const facturas =
+            JSON.parse(
+                localStorage.getItem("facturas")
+            ) || [];
+
+
+        const factura =
+            facturas[index];
+
+
+        if (!factura) {
+
+            document.body.innerHTML =
+                "<h2>Factura no encontrada</h2>";
+
+        } else {
+
+
+            const datosEmpresa =
+                JSON.parse(
+                    localStorage.getItem("datosEmpresa")
+                ) || {};
+
+
+            document.getElementById(
+                "nombreEmpresa"
+            ).textContent =
+                datosEmpresa.nombre ||
+                datosEmpresa.razonSocial ||
+                "Mi empresa";
+
+
+            document.getElementById(
+                "direccionEmpresa"
+            ).textContent =
+                datosEmpresa.direccion || "";
+
+
+            document.getElementById(
+                "nifEmpresa"
+            ).textContent =
+                datosEmpresa.nif
+                ? "NIF: " + datosEmpresa.nif
+                : "";
+
+
+            document.getElementById(
+                "telefonoEmpresa"
+            ).textContent =
+                datosEmpresa.telefono || "";
+
+
+            document.getElementById(
+                "emailEmpresa"
+            ).textContent =
+                datosEmpresa.email || "";
+
+
+            document.getElementById(
+                "numeroFactura"
+            ).textContent =
+                factura.numero || "";
+
+
+            document.getElementById(
+                "fechaFactura"
+            ).textContent =
+                factura.fecha || "";
+
+
+            document.getElementById(
+                "vencimientoFactura"
+            ).textContent =
+                factura.vencimiento || "";
+
+
+            document.getElementById(
+                "clienteFactura"
+            ).textContent =
+                factura.cliente || "";
+           const clientesGuardados =
+    JSON.parse(
+        localStorage.getItem("clientes")
+    ) || [];
+
+const cliente =
+    clientesGuardados.find(
+        function(c) {
+            return c.nombre === factura.cliente;
+        }
+    );
+
+if (cliente) {
+
+    document.getElementById("datosCliente").innerHTML = `
+        <p><strong>${cliente.nombre}</strong></p>
+        <p>${cliente.empresa}</p>
+        <p>NIF/CIF: ${cliente.nif}</p>
+        <p>Teléfono: ${cliente.telefono}</p>
+        <p>Email: ${cliente.email}</p>
+    `;
+
+}
+
+const clienteEncontrado = 
+    clientes.find(
+        function(cliente) {
+            return cliente.nombre === factura.cliente;
+        }
+    );
+
+
+
+
+            document.getElementById(
+                "baseFactura"
+            ).textContent =
+                Number(factura.base || 0)
+                .toFixed(2) + " €";
+
+
+            document.getElementById(
+                "ivaFactura"
+            ).textContent =
+                (factura.iva || 0) + "%";
+
+
+            document.getElementById(
+                "importeIVAFactura"
+            ).textContent =
+                Number(factura.importeIVA || 0)
+                .toFixed(2) + " €";
+
+
+            document.getElementById(
+                "totalFactura"
+            ).textContent =
+                Number(factura.total || 0)
+                .toFixed(2) + " €";
+
+
+            document.getElementById(
+                "estadoFactura"
+            ).textContent =
+                factura.estado || "";
+
+
+            const tbody =
+                document.getElementById(
+                    "lineasFactura"
+                );
+
+
+            if (
+                factura.lineas &&
+                factura.lineas.length > 0
+            ) {
+
+                factura.lineas.forEach(
+                    function(linea) {
+
+                        const fila =
+                            document.createElement("tr");
+
+
+                        fila.innerHTML = `
+
+                            <td>
+                                ${linea.concepto || ""}
+                            </td>
+
+                            <td>
+                                ${linea.cantidad || 0}
+                            </td>
+
+                            <td>
+                                ${Number(
+                                    linea.precio || 0
+                                ).toFixed(2)} €
+                            </td>
+
+                            <td>
+                                ${Number(
+                                    linea.total || 0
+                                ).toFixed(2)} €
+                            </td>
+
+                        `;
+
+                        tbody.appendChild(fila);
+
+                    }
+                );
+
+            } else {
+
+                /*
+                 * Las facturas antiguas no tienen líneas.
+                 * Mostramos una línea con el servicio
+                 * para que sigan viéndose correctamente.
+                 */
+
+                const fila =
+                    document.createElement("tr");
+
+
+                fila.innerHTML = `
+
+                    <td>
+                        ${factura.servicio || ""}
+                    </td>
+
+                    <td>
+                        1
+                    </td>
+
+                    <td>
+                        ${Number(
+                            factura.base || 0
+                        ).toFixed(2)} €
+                    </td>
+
+                    <td>
+                        ${Number(
+                            factura.base || 0
+                        ).toFixed(2)} €
+                    </td>
+
+                `;
+
+
+                tbody.appendChild(fila);
+
+            }
+
+        }
+
+    </script>
+
+</body>
+
+</html>
